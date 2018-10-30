@@ -1,0 +1,25 @@
+{
+  "name": "backend-rootchain",
+  "version": "1.0.0",
+  "description": "",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "ganache:start": "cd test/ganache && bash ganache-test.sh",
+    "ganache:kill": "kill $(cat test/ganache/ganache.pid)",
+    "test": "truffle test test/gateway/Gateway.test.js",
+    "test:token": "truffle test test/token/ERC20/ERC20.test.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "loom-js": "^1.17.0",
+    "web3": "^1.0.0-beta.35"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-bignumber": "^2.0.2"
+  }
+}
