@@ -31,6 +31,9 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
   // The token being sold
   IERC20 private _token;
 
+  // Needed to compute current rate
+  uint256 private _openingTime;
+
   // Evolving rates
   uint256 private _firstDayRate;
   uint256 private _rate;
@@ -53,6 +56,7 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
     Crowdsale(rate, wallet, token)
     TimedCrowdsale(openingTime, closingTime)
   {
+    _openingTime = openingTime;
     _token = token;
     _firstDayRate = firstDayRate;
     _rate = rate;
@@ -64,7 +68,7 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
   // Note that the rate() function remains available as it is inherited from the
   // Crowdsale contract.
   function getCurrentRate() public view returns (uint256) {
-    if (now < (startTime.add(24 hours))) {
+    if (now < (_openingTime.add(24 hours))) {
       return _firstDayRate;
     } else {
       return _rate;
