@@ -2,7 +2,7 @@ pragma solidity ^0.4.24;
 
 import "./crowdsale/validation/TimedCrowdsale.sol";
 import "./crowdsale/distribution/FinalizableCrowdsale.sol";
-import "./token/ERC20/IERC20.sol";
+import "./token/IERC20.sol";
 import "./math/SafeMath.sol";
 
 /**
@@ -34,6 +34,8 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
   // Evolving rates
   uint256 private _firstDayRate;
   uint256 private _rate;
+
+  uint256 private _closingTime;
 
   // Address where unsold funds are sent at finalization
   address private _pool;

@@ -1,9 +1,9 @@
 // Copy-paste from https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol
 pragma solidity ^0.4.24;
 
-import "../token/ERC20/IERC20.sol";
+import "../token/IERC20.sol";
 import "../math/SafeMath.sol";
-import "../token/ERC20/SafeERC20.sol";
+import "../token/SafeERC20.sol";
 import "../utils/ReentrancyGuard.sol";
 
 /**
