@@ -90,7 +90,7 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
   // the admin prevent finalization maliciously.
   function _finalization() internal {
     super._finalization();
-    remainingBalance = _token.balanceOf(address(this));
+    uint256 remainingBalance = _token.balanceOf(address(this));
     _deliverTokens(_pool, remainingBalance);
   }
 }
