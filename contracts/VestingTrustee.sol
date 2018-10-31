@@ -12,12 +12,12 @@ contract VestingTrustee is Ownable {
     IERC20 public token;
 
     struct Grant {
-    uint256 value;
-    uint256 start;
-    uint256 cliff;
-    uint256 end;
-    uint256 transferred;
-    bool revokable;
+        uint256 value;
+        uint256 start;
+        uint256 cliff;
+        uint256 end;
+        uint256 transferred;
+        bool revokable;
     }
 
     // Grants holder.
@@ -61,12 +61,12 @@ contract VestingTrustee is Ownable {
 
         // Assign a new grant.
         grants[_to] = Grant({
-        value: _value,
-        start: _start,
-        cliff: _cliff,
-        end: _end,
-        transferred: 0,
-        revokable: _revokable
+            value: _value,
+            start: _start,
+            cliff: _cliff,
+            end: _end,
+            transferred: 0,
+            revokable: _revokable
         });
 
         // Tokens granted, reduce the total amount available for vesting.
