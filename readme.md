@@ -1,5 +1,7 @@
 # Hey mainchain contracts
 
+This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**.
+
 > 📘 If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
 
 
@@ -14,12 +16,24 @@ A **bug bounty** program will likely be considered for product-specific smart co
 ## 📮 Contracts addresses
 ~~Will be populated after production deployment.~~
 
+## 🎯 Design principles
 
-## 🔭 Overview
+More than 95% of the mainchain codebase relies on standard, open-source, previously audited contracts. The Token Generation Event (TGE) smart contracts are mostly out-of-box OpenZeppelin's library contracts, while the Gateway contract leverage Loom Network's example.
+
+This approach has been chosen deliberately so that the Hey Team can:
+- Get a faster time-to-market
+- Decrease security auditing complexity and cost while minimising the likelihood of bugs
+- Increase TGE's participants' trust
+- Spend more time and energy on specificities of the Hey product that are mostly present on the sidechain contracts ecosystem, and which are the differentiating factor and competitive advantage of Hey as a platform
+
+The Hey Team has taken great care to track provenance of open-source components, and has made sure to thoroughly review each component internally to get a deep grasp of their interface and implementation.
+
+
+## 🔭 Codebase overview
 
 
 ### Introduction
-This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**. These consist of four main contracts.
+This repository consists of four main contracts.
 
 The two main contracts supporting Hey's platform are:
 - The **HeyToken**, which is a plain ERC20 token using OpenZeppelin's `SimpleToken` [implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/67dac7ae9960fd1790671a315cde56c901db5271/contracts/examples/SimpleToken.sol)
