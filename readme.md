@@ -50,8 +50,8 @@ Note that for the VestingTrustee contract, Hey has changed the variable names to
 
 ### Code taken *as basis* for custom Hey contracts
 
-| Domain | File        | Provider           | Source  | Changes made |
-| ----- | ------- | ------------- |------------- |------ |------ |
+| Domain | File   | Provider           | Source  | Modifications brought |
+| ----- | ------- | ------------- |------------- |------ |
 | Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 capabilities |
 | Utils | Pausable.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/lifecycle/Pausable.sol) | Allow only owner to pause contract |
