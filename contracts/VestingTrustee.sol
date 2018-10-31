@@ -5,7 +5,7 @@ import './ownership/Ownable.sol';
 import './token/IERC20.sol';
 
 /// @title Vesting trustee contract for Sirin Labs token.
-contract SirinVestingTrustee is Ownable {
+contract VestingTrustee is Ownable {
     using SafeMath for uint256;
 
     // The address of the SRN ERC20 token.
