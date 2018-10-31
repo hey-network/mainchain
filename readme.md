@@ -1,6 +1,8 @@
 # Hey mainchain contracts
 
 ## Overview
+
+### Introduction
 This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**. These consist of four main contracts.
 
 The two main contracts supporting Hey's platform are:
@@ -13,15 +15,32 @@ Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
 
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
 
-## Contracts diagram
+### Contracts addresses
+*Will be populated after production deployment.*
 
-### Token, Crowdsale, VestingTrustee
+### Contracts diagram
 
-### Gateway
+#### Token, Crowdsale, VestingTrustee
 
-## Reliance on verified code
+#### Gateway
+
+## Reliance on audited open-source code
 The vast majority of Hey's sidechain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
 
 | Domain | File        | Provider           | Source  | Commit hash |
 | ------------- | ------------- | ------------- |------------- |------------- |
 | Token | ERC20.sol | OpenZeppelin | source | commit |
+
+## Token characteristics and test cases
+
+### Requirements
+
+### Test cases
+
+## Crowdsale characteristics and test cases
+
+### Requirements
+
+### Test cases
+
+## Deployment dynamics
