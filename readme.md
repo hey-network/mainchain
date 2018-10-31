@@ -91,7 +91,7 @@ The first deployment phase intends on making the platform fully ready for the TG
 - 1,000,000,000 tokens minted
 - 300,000,000 tokens on Pool account
 - `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers accounts
-- `PRESALE_VESTED` (for presale buyers) + <span style="color:red">200,000,000</span> (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
+- `PRESALE_VESTED` (for presale buyers) + ~~200,000,000~~ (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
 - (500,000,000 - `PRESALE`) of tokens controlled by the HeyCrowdSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
 - HeyCrowdsale contract ready to accept ETH payments against HEY tokens
 - HeyCrowdsale contract funneling incoming ETH to Wallet account
@@ -103,8 +103,8 @@ All actions performed below should originate from the TGEAdmin account. After de
 
 1. **Deploy HeyToken** (no constructor parameters needed)
 2. **Deploy HeyCrowdSale**, with constructor parameters:
-    - `openingTime`: TBC
-    - `closingTime`: TBC
+    - `openingTime`: ~~TBC~~
+    - `closingTime`: ~~TBC~~
     - `firstDayRate`: 5500
     - `rate`: 5000
     - `wallet`: Wallet account address
@@ -115,16 +115,16 @@ All actions performed below should originate from the TGEAdmin account. After de
 4. **Send** 300,000,000 tokens to Pool account
 5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
 6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
-7. **Send** `PRESALE_VESTED` + 200,000,000 tokens to the VestingTrustee contract address (from previous step)
+7. **Send** `PRESALE_VESTED` + ~~200,000,000~~ tokens to the VestingTrustee contract address (from previous step)
 8. **Call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
     - `to`: presale buyer account
     - `value`: presale tokens amount purchased (must include 18 decimals)
-    - `start`: current time (TBC)
-    - `cliff`: time of vesting end (TBC)
-    - `end`: time of vesting end (TBC)
+    - `start`: ~~current time~~
+    - `cliff`: ~~TBC~~
+    - `end`: ~~TBC~~
     - `revokable`: false
 
-This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).
+This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). ~~The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).~~
 
 ### Second phase: Gateway
 This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
