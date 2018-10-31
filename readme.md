@@ -6,7 +6,7 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 
 ## ⚠️ Disclaimers
-This code and its readme is **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available.
+This code and its readme are **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available once their recommendation has been processed.
 
 Through this document, elements that are **~~stricken through~~** should be considered **even more work in progress** as they are still subject to potentially significant changes.
 
