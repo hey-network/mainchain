@@ -32,7 +32,7 @@ contract('Gateway', function([_, owner, redeemer]) {
     });
 
     it('lets an existing validator add new validators (TODO)', async function () {
-      // TODO: first implement the validator modification signature helper
+      // TODO: first implement validator modification signature helper
     });
   });
 
