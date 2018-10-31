@@ -1,3 +1,4 @@
+![](https://travis-ci.org/hey-network/mainchain.svg?branch=master)
 # Hey mainchain contracts
 
 This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**.
