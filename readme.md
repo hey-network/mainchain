@@ -40,7 +40,7 @@ The two main contracts supporting Hey's platform are:
 - The **Gateway**, which allows users to redeem Hey tokens when providing the rightly signed message (see full architecture). This is a stripped-down version of Loom Network's `Transfer Gateway` [implementation](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) to keep only ERC20 withdrawal capabilities.
 
 Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
-- The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from Hey's team. This is heavily inspired by SirinLab's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
+- The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from Hey's team. This is heavily inspired by SirinLab and Stox's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
 - The **HeyCrowdsale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol) with limited customisation.
 
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
@@ -89,7 +89,7 @@ Note that the Pausable contract leverages a version of the contract that predate
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
 | Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
-| TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to OpenZeppelin naming syntax (underscores) |
+| TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to latest Solidity best practices |
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to HeyToken token |
 
 
@@ -160,7 +160,7 @@ All actions performed below should originate from the TGEAdmin account. After de
 5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
 6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
 7. **Send** `PRESALE_VESTED` + ~~200,000,000~~ tokens to the VestingTrustee contract address (from previous step)
-8. **Call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
+8. **Call** the `createGrant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
     - `to`: presale buyer account
     - `value`: presale tokens amount purchased (must include 18 decimals)
     - `start`: ~~current time~~
