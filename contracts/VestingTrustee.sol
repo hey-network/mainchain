@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.4.24g;
 
 import './math/SafeMath.sol';
 import './ownership/Ownable.sol';
@@ -32,7 +32,7 @@ contract VestingTrustee is Ownable {
 
     /// @dev Constructor that initializes the address of the SirnSmartToken contract.
     /// @param _token SirinSmartToken The address of the previously deployed SirnSmartToken smart contract.
-    function SirinVestingTrustee(IERC20 _token) {
+    function VestingTrustee(IERC20 _token) {
         require(_token != address(0));
 
         token = _token;
