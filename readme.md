@@ -50,11 +50,11 @@ Note that for the VestingTrustee contract, Hey has changed the variable names to
 
 ### Code taken *as basis* for custom Hey contracts
 
-| Domain | File        | Provider           | Source  | Commit hash | Changes made |
+| Domain | File        | Provider           | Source  | Changes made |
 | ----- | ------- | ------------- |------------- |------ |------ |
-| Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 | Set tokens parameters (`supply`, `name`, `symbol`) |
-| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) | a14917efcb17081878f90ce33d29b280fe6f00da | Keep only ERC20 capabilities |
-| Utils | Pausable.sol | OpenZeppelin | [source]() | Allow only owner to pause contract |
+| Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
+| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 capabilities |
+| Utils | Pausable.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/lifecycle/Pausable.sol) | Allow only owner to pause contract |
 
 ## Token characteristics and test cases
 
