@@ -2,6 +2,7 @@
 
 > 📘 If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
 
+
 ## ⚠️ Disclaimers
 This code and its readme is **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available.
 
@@ -9,10 +10,13 @@ Through this document, elements that are **~~stricken through~~** should be cons
 
 A **bug bounty** program will likely be considered for product-specific smart contracts (both on the sidechain and mainchain). Stay tuned if you are a Solidity nerd and are excited by this opportunity.
 
+
 ## 📮 Contracts addresses
 ~~Will be populated after production deployment.~~
 
+
 ## 🔭 Overview
+
 
 ### Introduction
 This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**. These consist of four main contracts.
@@ -27,16 +31,22 @@ Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
 
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
 
-### Contracts diagram
 
-#### Token, Crowdsale, VestingTrustee
+### Contracts diagrams
+These diagrams express the inheritance and usage relationships amongst contracts. Contracts in blue are the ones that effectively get deployed on the mainchain, composing from higher-level contracts.
+
+#### HeyToken, HeyCrowdsale, VestingTrustee
 
 ![TGE contracts diagram](https://raw.githubusercontent.com/hey-network/mainchain/feature/readme/_readme_assets/TGE%20contracts%20diagram.png)
 
 #### Gateway
 
+![Gateway diagram](https://raw.githubusercontent.com/hey-network/mainchain/feature/readme/_readme_assets/Gateway%20diagram.png)
+
+
 ## 💪 Reliance on audited open-source code
 The vast majority of Hey's sidechain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
+
 
 ### Code reused *as-is* with no modification
 
@@ -59,6 +69,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 
 Note that the Pausable contract leverages a version of the contract that predated migration to a Roles-based ownership system. We prefer to stick to a single owner for the sake of simplicity, especially given the limited number of actions that can be performed by the owner in the context of the TGE (that is, only call `pause()`).
 
+
 ### Code taken *as basis* for custom Hey contracts
 
 | Domain | File   | Provider           | Source  | Modifications brought |
@@ -67,19 +78,27 @@ Note that the Pausable contract leverages a version of the contract that predate
 | TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to OpenZeppelin naming syntax (underscores) |
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to HeyToken token |
 
+
 ## 🔵 Token characteristics and test cases
+
 
 ### Characteristics
 
+
 ### Test cases
+
 
 ## 🛒 Crowdsale characteristics and test cases
 
+
 ### Characteristics
+
 
 ### Test cases
 
+
 ## 🚀 Deployment
+
 
 ### First phase: Token and Crowdsale
 The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
@@ -136,6 +155,7 @@ All actions performed below should originate from the TGEAdmin account. After de
     - `revokable`: false
 
 This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). ~~The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).~~
+
 
 ### Second phase: Gateway
 This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
