@@ -2,15 +2,17 @@ pragma solidity ^0.4.24;
 
 import "./crowdsale/validation/TimedCrowdsale.sol";
 import "./crowdsale/distribution/FinalizableCrowdsale.sol";
+import "./lifecycle/Pausable.sol";
 import "./token/IERC20.sol";
 import "./math/SafeMath.sol";
 
 /**
  * @title HeyCrowdsale
- * @dev This code is primarily a copy-paste of OpenZeppelin's Sample Crowdsale:
- * https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SampleCrowdsale.sol
+ * @dev The only deviation from OpenZeppelin's standard Crowdsale example
+ * is a Pausable behaviour to freeze buying of tokens, and a funneling of
+ * unsold tokens to a Pool address when the sale closes.
  */
-contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
+contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
 
   // Needed to compute current rate
   using SafeMath for uint256;
@@ -27,7 +29,7 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
 
   uint256 private _closingTime;
 
-  // Address where unsold funds are sent at finalization
+  // Address where potentially unsold funds are sent at finalization
   address private _pool;
 
   constructor(
@@ -50,11 +52,36 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
     _pool = pool;
   }
 
-  // Inspired by SirinLab's crowdsale contract:
-  // https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol
-  // Note that the rate() function remains available as it is inherited from the
-  // Crowdsale contract.
-  function getCurrentRate() public view returns (uint256) {
+  // Override of parent function to add Pausable behaviour.
+  function _preValidatePurchase(
+    address beneficiary,
+    uint256 weiAmount
+  )
+    internal
+    view
+  {
+    super._preValidatePurchase(beneficiary, weiAmount);
+    require(!paused());
+  }
+
+  // Override of parent function to reflect non-constant rate.
+  function _getTokenAmount(
+    uint256 weiAmount
+  )
+    internal
+    view
+    returns (uint256)
+  {
+    return weiAmount.mul(getCurrentRate());
+  }
+
+  // Note that the default rate() function remains available as it is inherited
+  // from the Crowdsale contract.
+  function getCurrentRate()
+    public
+    view
+    returns (uint256)
+  {
     if (now < (_openingTime.add(24 hours))) {
       return _firstDayRate;
     } else {
@@ -62,20 +89,14 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
     }
   }
 
-  // Override of Crowdsale's default function to reflect changing rate.
-  function _getTokenAmount(uint256 weiAmount)
-    internal view returns (uint256)
-  {
-    return weiAmount.mul(getCurrentRate());
-  }
-
-  // Inheritance of Crowdsale's default internal function for finalization. We extend
-  // it to have all remaining tokens transferred to the Pool where they will be
-  // made redeemable by users after Gateway Validator validation.
+  // Override of parent function. We extend it to have all remaining tokens
+  // transferred to the Pool where they will be made redeemable.
   // This function is called by the public finalize() function. Note interestingly
-  // that this finalize() public function is callable by anyone to avoid having
+  // that the finalize() public function is callable by anyone to avoid having
   // the admin prevent finalization maliciously.
-  function _finalization() internal {
+  function _finalization()
+    internal
+  {
     super._finalization();
     uint256 remainingBalance = _token.balanceOf(address(this));
     _deliverTokens(_pool, remainingBalance);
