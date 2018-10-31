@@ -160,7 +160,7 @@ All actions performed below should originate from the TGEAdmin account. After de
 5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
 6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
 7. **Send** `PRESALE_VESTED` + ~~200,000,000~~ tokens to the VestingTrustee contract address (from previous step)
-8. **Call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
+8. **Call** the `createGrant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
     - `to`: presale buyer account
     - `value`: presale tokens amount purchased (must include 18 decimals)
     - `start`: ~~current time~~
