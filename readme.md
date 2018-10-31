@@ -27,7 +27,7 @@ If you are looking for the social network-related features (e.g., Karma manageme
 ## Reliance on audited open-source code
 The vast majority of Hey's sidechain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
 
-### Code reused 'as-is' with no modification
+### Code reused *as-is* with no modification
 
 | Domain | File        | Provider           | Source  | Commit hash |
 | ------------- | ------------- | ------------- |------------- |------------- |
@@ -45,7 +45,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | Utils | SafeMath.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 |
 | Utils | ReentrancyGuard.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/utils/ReentrancyGuard.sol) | 6d415c508be94ef8391ed6525df365452466da76 |
 
-### Code taken as basis for custom Hey contracts
+### Code taken *as basis* for custom Hey contracts
 
 | Domain | File        | Provider           | Source  | Commit hash |
 | ------------- | ------------- | ------------- |------------- |------------- |
@@ -54,17 +54,40 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) | a14917efcb17081878f90ce33d29b280fe6f00da |
 | Utils | Pausable.sol | OpenZeppelin | [source]() |  |
 
-
 ## Token characteristics and test cases
 
-### Requirements
+### Characteristics
 
 ### Test cases
 
 ## Crowdsale characteristics and test cases
 
-### Requirements
+### Characteristics
 
 ### Test cases
 
-## Deployment dynamics
+## Deployment choreography
+
+### First phase: Token and Crowdsale
+
+#### Prerequisites
+- Connection to the Ethereum mainnet
+- Latest version of contracts builds (run compilation with `truffle compile`)
+- Fully green specs (run tests with `npm t`)
+- Secured control of TGEAdmin account, with enough ETH on account for contract deployment
+- Secured control of Pool account
+- Secured control of Team account
+- Secured control of Wallet account
+- List of presale buyers non-vested addresses with number of tokens per account
+- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any
+
+#### Outcome
+- HeyToken contract deployed
+- 1,000,000,000 tokens minted
+- 300,000,000 tokens on Pool account
+- 100,000,000 tokens on Team account
+- XXX tokens on presale buyers accounts
+- HeyCrowdSale contract deployed
+- XXX tokens controlled by the Team account
+-  of tokens controlled by the HeyCrowdSale contract
+-
