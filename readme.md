@@ -31,6 +31,8 @@ If you are looking for the social network-related features (e.g., Karma manageme
 
 #### Token, Crowdsale, VestingTrustee
 
+[TGE contracts diagram](https://raw.githubusercontent.com/hey-network/mainchain/feature/readme/_readme_assets/TGE%20contracts%20diagram.png)
+
 #### Gateway
 
 ## 💪 Reliance on audited open-source code
