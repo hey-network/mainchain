@@ -37,6 +37,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | TGE | Crowdsale.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol) | 6d415c508be94ef8391ed6525df365452466da76 |
 | TGE | TimedCrowdsale.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/validation/TimedCrowdsale.sol) | 1c5f16ae2659c3c158baebff077cc414fd9c5991 |
 | TGE | FinalizableCrowdsale.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/distribution/FinalizableCrowdsale.sol) | 5bb865218f02a01d0521c9d9a947cdf4bd32e74c |
+| TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | 98ed666c19b77f044e05d8bcec47d62b3e21f88f |
 | Gateway | ValidatorsManagerContract.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ValidatorManagerContract.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
 | Gateway | ECVerify.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ECVerify.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
 | Gateway | ERC20Receiver.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ERC20Receiver.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
@@ -50,7 +51,6 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | Domain | File        | Provider           | Source  | Commit hash |
 | ------------- | ------------- | ------------- |------------- |------------- |
 | Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 |
-| TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | 98ed666c19b77f044e05d8bcec47d62b3e21f88f |
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) | a14917efcb17081878f90ce33d29b280fe6f00da |
 | Utils | Pausable.sol | OpenZeppelin | [source]() |  |
 
@@ -66,7 +66,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 
 ### Test cases
 
-## Deployment choreography
+## Deployment
 
 ### First phase: Token and Crowdsale
 
@@ -78,16 +78,42 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 - Secured control of Pool account
 - Secured control of Team account
 - Secured control of Wallet account
-- List of presale buyers non-vested addresses with number of tokens per account
-- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any
+- List of presale buyers non-vested addresses with number of tokens per account (PRESALE_NON_VESTED tokens in total)
+- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any (PRESALE_VESTED tokens in total)
 
 #### Outcome
 - HeyToken contract deployed
+- HeyCrowdSale contract deployed
+- VestingTrustee contract deployed
 - 1,000,000,000 tokens minted
 - 300,000,000 tokens on Pool account
-- 100,000,000 tokens on Team account
-- XXX tokens on presale buyers accounts
-- HeyCrowdSale contract deployed
-- XXX tokens controlled by the Team account
--  of tokens controlled by the HeyCrowdSale contract
--
+- `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers accounts
+- `PRESALE_VESTED` (for presale buyers) + 200,000,000 (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
+- (500,000,000 - `PRESALE`) of tokens controlled by the HeyCrowdSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
+- HeyCrowdsale contract ready to accept ETH payments against HEY tokens
+- HeyCrowdsale contract funneling incoming ETH to Wallet account
+- HeyCrowdSale contract configured to send potential remaining tokens post-TGE to Pool account
+
+#### Choreography
+1. *From TGEAdmin account*, **deploy HeyToken** (no constructor parameters needed)
+2. *From TGEAdmin account*, **deploy HeyCrowdSale**, with constructor parameters:
+  - `openingTime`: TBC
+  - `closingTime`: TBC
+  - `firstDayRate`: 5500
+  - `rate`: 5000
+  - `wallet`: Wallet account address
+  - `pool`: Pool account address
+  - `token`: HeyToken contract address (from previous step)
+3. *From TGEAdmin account*, **deploy VestingTrustee**, with constructor parameter:
+  - `token`: HeyToken contract address (from previous step)
+4. *From TGEAdmin account*, **send** 300,000,000 tokens to Pool account
+5. *From TGEAdmin account*, **send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
+6. *From TGEAdmin account*, **send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
+7. *From TGEAdmin account*, **send** `PRESALE_VESTED` + 200,000,000 tokens to the VestingTrustee contract address (from previous step)
+8. *From TGEAdmin account*, **call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
+  - `to`: presale buyer account
+  - `value`: presale tokens amount purchased (must include 18 decimals)
+  - `start`: current time (TBC)
+  - `cliff`: time of vesting end (TBC)
+  - `end`: time of vesting end (TBC)
+  - `revokable`: false
