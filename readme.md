@@ -103,26 +103,26 @@ All actions performed below should originate from the TGEAdmin account. After de
 
 1. **Deploy HeyToken** (no constructor parameters needed)
 2. **Deploy HeyCrowdSale**, with constructor parameters:
-  - `openingTime`: TBC
-  - `closingTime`: TBC
-  - `firstDayRate`: 5500
-  - `rate`: 5000
-  - `wallet`: Wallet account address
-  - `pool`: Pool account address
-  - `token`: HeyToken contract address (from previous step)
+    - `openingTime`: TBC
+    - `closingTime`: TBC
+    - `firstDayRate`: 5500
+    - `rate`: 5000
+    - `wallet`: Wallet account address
+    - `pool`: Pool account address
+    - `token`: HeyToken contract address (from previous step)
 3. **Deploy VestingTrustee**, with constructor parameter:
-  - `token`: HeyToken contract address (from previous step)
+    - `token`: HeyToken contract address (from previous step)
 4. **Send** 300,000,000 tokens to Pool account
 5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
 6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
 7. **Send** `PRESALE_VESTED` + 200,000,000 tokens to the VestingTrustee contract address (from previous step)
 8. **Call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
-  - `to`: presale buyer account
-  - `value`: presale tokens amount purchased (must include 18 decimals)
-  - `start`: current time (TBC)
-  - `cliff`: time of vesting end (TBC)
-  - `end`: time of vesting end (TBC)
-  - `revokable`: false
+    - `to`: presale buyer account
+    - `value`: presale tokens amount purchased (must include 18 decimals)
+    - `start`: current time (TBC)
+    - `cliff`: time of vesting end (TBC)
+    - `end`: time of vesting end (TBC)
+    - `revokable`: false
 
 This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).
 
