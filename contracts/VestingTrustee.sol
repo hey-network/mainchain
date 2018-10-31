@@ -1,11 +1,11 @@
 pragma solidity ^0.4.18;
 
 import './math/SafeMath.sol';
-import './ownership/Claimable.sol';
+import './ownership/Ownable.sol';
 import './SirinSmartToken.sol';
 
 /// @title Vesting trustee contract for Sirin Labs token.
-contract SirinVestingTrustee is Claimable {
+contract SirinVestingTrustee is Ownable {
     using SafeMath for uint256;
 
     // The address of the SRN ERC20 token.
