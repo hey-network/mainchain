@@ -81,8 +81,8 @@ The first deployment phase intends on making the platform fully ready for the TG
 - Secured control of Pool account
 - Secured control of Team account
 - Secured control of Wallet account
-- List of presale buyers non-vested addresses with number of tokens per account (PRESALE_NON_VESTED tokens in total)
-- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any (PRESALE_VESTED tokens in total)
+- List of presale buyers non-vested addresses with number of tokens per account (`PRESALE_NON_VESTED` tokens in total)
+- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any (`PRESALE_VESTED` tokens in total)
 
 #### Outcome
 - HeyToken contract deployed
