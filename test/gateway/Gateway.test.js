@@ -21,7 +21,7 @@ contract('Gateway', function([_, owner, redeemer]) {
     this.gateway = await Gateway.new(this.tokenAddress, [approver], 50, 100);
     this.gatewayAddress = await this.gateway.address;
 
-    await this.token.mint(this.gatewayAddress, 100, { from: owner });
+    await this.token.transfer(this.gatewayAddress, 100, { from: owner });
 
     this.nonce = 0;
   })
