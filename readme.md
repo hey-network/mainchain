@@ -51,11 +51,11 @@ These diagrams express the inheritance and usage relationships amongst contracts
 
 #### HeyToken, HeyCrowdsale, VestingTrustee
 
-![TGE contracts diagram](https://raw.githubusercontent.com/hey-network/mainchain/feature/readme/_readme_assets/TGE%20contracts%20diagram.png)
+![TGE contracts diagram](https://raw.githubusercontent.com/hey-network/mainchain/master/readme/_readme_assets/TGE%20contracts%20diagram.png)
 
 #### Gateway
 
-![Gateway diagram](https://raw.githubusercontent.com/hey-network/mainchain/feature/readme/_readme_assets/Gateway%20diagram.png)
+![Gateway diagram](https://raw.githubusercontent.com/hey-network/mainchain/master/readme/_readme_assets/Gateway%20diagram.png)
 
 
 ## 💪 Reliance on audited open-source code
