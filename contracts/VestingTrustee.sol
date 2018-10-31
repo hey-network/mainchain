@@ -4,11 +4,14 @@ import './math/SafeMath.sol';
 import './ownership/Ownable.sol';
 import './token/IERC20.sol';
 
-/// @title Vesting trustee contract for Sirin Labs token.
+/**
+ * @title VestingTrustee
+ * @dev Lends very heavily from SirinLab's own VestingTrustee contract
+ */
 contract VestingTrustee is Ownable {
     using SafeMath for uint256;
 
-    // The address of the SRN ERC20 token.
+    // The address of the ERC20 token to vest.
     IERC20 public token;
 
     struct Grant {
@@ -30,8 +33,8 @@ contract VestingTrustee is Ownable {
     event UnlockGrant(address indexed _holder, uint256 _value);
     event RevokeGrant(address indexed _holder, uint256 _refund);
 
-    /// @dev Constructor that initializes the address of the SirnSmartToken contract.
-    /// @param _token SirinSmartToken The address of the previously deployed SirnSmartToken smart contract.
+    /// @dev Constructor that initializes the address of the ERC20 contract.
+    /// @param _token IERC20 The address of the previously deployed ERC20 smart contract.
     function VestingTrustee(IERC20 _token) {
         require(_token != address(0));
 
@@ -69,7 +72,7 @@ contract VestingTrustee is Ownable {
             revokable: _revokable
         });
 
-        // Tokens granted, reduce the total amount available for vesting.
+        // Tokens granted, increase the total amount vested.
         totalVesting = totalVesting.add(_value);
 
         NewGrant(msg.sender, _to, _value);
@@ -82,7 +85,7 @@ contract VestingTrustee is Ownable {
 
         require(grant.revokable);
 
-        // Send the remaining STX back to the owner.
+        // Send the remaining ERC20 back to the owner.
         uint256 refund = grant.value.sub(grant.transferred);
 
         // Remove the grant.
