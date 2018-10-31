@@ -1,5 +1,15 @@
 # Hey mainchain contracts
 
+## Disclaimers
+
+This code and its readme is **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available.
+
+Through this document, elements that are **~~stricken through~~** should be considered **even more work in progress** as they are still subject to potentially significant changes.
+
+> If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
+
+A **bug bounty** program will likely be considered for product-specific smart contracts (both on the sidechain and mainchain). Stay tuned if you are a Solidity nerd and are excited by this opportunity.
+
 ## Overview
 
 ### Introduction
