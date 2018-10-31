@@ -2,14 +2,14 @@ pragma solidity ^0.4.18;
 
 import './math/SafeMath.sol';
 import './ownership/Ownable.sol';
-import './SirinSmartToken.sol';
+import './token/IERC20.sol';
 
 /// @title Vesting trustee contract for Sirin Labs token.
 contract SirinVestingTrustee is Ownable {
     using SafeMath for uint256;
 
     // The address of the SRN ERC20 token.
-    SirinSmartToken public token;
+    IERC20 public token;
 
     struct Grant {
     uint256 value;
@@ -32,7 +32,7 @@ contract SirinVestingTrustee is Ownable {
 
     /// @dev Constructor that initializes the address of the SirnSmartToken contract.
     /// @param _token SirinSmartToken The address of the previously deployed SirnSmartToken smart contract.
-    function SirinVestingTrustee(SirinSmartToken _token) {
+    function SirinVestingTrustee(IERC20 _token) {
         require(_token != address(0));
 
         token = _token;
