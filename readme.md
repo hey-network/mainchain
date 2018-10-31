@@ -91,7 +91,7 @@ The first deployment phase intends on making the platform fully ready for the TG
 - 1,000,000,000 tokens minted
 - 300,000,000 tokens on Pool account
 - `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers accounts
-- `PRESALE_VESTED` (for presale buyers) + 200,000,000 (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
+- `PRESALE_VESTED` (for presale buyers) + <span style="color:red">200,000,000</span> (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
 - (500,000,000 - `PRESALE`) of tokens controlled by the HeyCrowdSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
 - HeyCrowdsale contract ready to accept ETH payments against HEY tokens
 - HeyCrowdsale contract funneling incoming ETH to Wallet account
