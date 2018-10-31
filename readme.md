@@ -1,16 +1,18 @@
 # Hey mainchain contracts
 
-## Disclaimers
+> 📘 If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
 
+## ⚠️ Disclaimers
 This code and its readme is **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available.
 
 Through this document, elements that are **~~stricken through~~** should be considered **even more work in progress** as they are still subject to potentially significant changes.
 
-> If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
-
 A **bug bounty** program will likely be considered for product-specific smart contracts (both on the sidechain and mainchain). Stay tuned if you are a Solidity nerd and are excited by this opportunity.
 
-## Overview
+## 📮 Contracts addresses
+~~Will be populated after production deployment.~~
+
+## 🔭 Overview
 
 ### Introduction
 This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**. These consist of four main contracts.
@@ -25,16 +27,13 @@ Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
 
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
 
-### Contracts addresses
-*Will be populated after production deployment.*
-
 ### Contracts diagram
 
 #### Token, Crowdsale, VestingTrustee
 
 #### Gateway
 
-## Reliance on audited open-source code
+## 💪 Reliance on audited open-source code
 The vast majority of Hey's sidechain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
 
 ### Code reused *as-is* with no modification
@@ -64,19 +63,19 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to HeyToken token |
 | Utils | Pausable.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/lifecycle/Pausable.sol) | Allow only owner to pause contract instead of using access roles |
 
-## Token characteristics and test cases
+## 🔵 Token characteristics and test cases
 
 ### Characteristics
 
 ### Test cases
 
-## Crowdsale characteristics and test cases
+## 🛒 Crowdsale characteristics and test cases
 
 ### Characteristics
 
 ### Test cases
 
-## Deployment
+## 🚀 Deployment
 
 ### First phase: Token and Crowdsale
 The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
