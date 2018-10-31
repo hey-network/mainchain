@@ -6,23 +6,10 @@ import "./token/IERC20.sol";
 import "./math/SafeMath.sol";
 
 /**
- * @title SampleCrowdsale
- * @dev This is an example of a fully fledged crowdsale.
- * The way to add new features to a base crowdsale is by multiple inheritance.
- * In this example we are providing following extensions:
- * CappedCrowdsale - sets a max boundary for raised funds
- *
- * After adding multiple features it's good practice to run integration tests
- * to ensure that subcontracts works together as intended.
- *
- * This code is primarily a copy-paste of OpenZeppelin's Sample Crowdsale:
+ * @title HeyCrowdsale
+ * @dev This code is primarily a copy-paste of OpenZeppelin's Sample Crowdsale:
  * https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SampleCrowdsale.sol
  */
-// XXX There doesn't seem to be a way to split this line that keeps solium
-// happy. See:
-// https://github.com/duaraghav8/Solium/issues/205
-// --elopio - 2018-05-10
-// solium-disable-next-line max-len
 contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale {
 
   // Needed to compute current rate
