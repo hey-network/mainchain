@@ -46,13 +46,15 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 | Utils | SafeMath.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/math/SafeMath.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 |
 | Utils | ReentrancyGuard.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/utils/ReentrancyGuard.sol) | 6d415c508be94ef8391ed6525df365452466da76 |
 
+Note that for the VestingTrustee contract, Hey has changed the variable names to reflect the repurposing of the contract for Hey's TGE (e.g., changing `Sirin` prefixes to `Hey` prefixes).
+
 ### Code taken *as basis* for custom Hey contracts
 
-| Domain | File        | Provider           | Source  | Commit hash |
+| Domain | File        | Provider           | Source  | Commit hash | Changes made |
 | ------------- | ------------- | ------------- |------------- |------------- |
-| Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 |
-| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) | a14917efcb17081878f90ce33d29b280fe6f00da |
-| Utils | Pausable.sol | OpenZeppelin | [source]() |  |
+| Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | 9b3710465583284b8c4c5d2245749246bb2e0094 | Set tokens parameters (`supply`, `name`, `symbol`) |
+| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) | a14917efcb17081878f90ce33d29b280fe6f00da | Keep only ERC20 capabilities |
+| Utils | Pausable.sol | OpenZeppelin | [source]() | Allow only owner to pause contract |
 
 ## Token characteristics and test cases
 
@@ -69,6 +71,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 ## Deployment
 
 ### First phase: Token and Crowdsale
+The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
 
 #### Prerequisites
 - Connection to the Ethereum mainnet
@@ -95,8 +98,11 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 - HeyCrowdSale contract configured to send potential remaining tokens post-TGE to Pool account
 
 #### Choreography
-1. *From TGEAdmin account*, **deploy HeyToken** (no constructor parameters needed)
-2. *From TGEAdmin account*, **deploy HeyCrowdSale**, with constructor parameters:
+
+All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` on the HeyCrowdsale contract (no other actions allowed on any other contracts). The deployment script is the following:
+
+1. **Deploy HeyToken** (no constructor parameters needed)
+2. **Deploy HeyCrowdSale**, with constructor parameters:
   - `openingTime`: TBC
   - `closingTime`: TBC
   - `firstDayRate`: 5500
@@ -104,16 +110,21 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
   - `wallet`: Wallet account address
   - `pool`: Pool account address
   - `token`: HeyToken contract address (from previous step)
-3. *From TGEAdmin account*, **deploy VestingTrustee**, with constructor parameter:
+3. **Deploy VestingTrustee**, with constructor parameter:
   - `token`: HeyToken contract address (from previous step)
-4. *From TGEAdmin account*, **send** 300,000,000 tokens to Pool account
-5. *From TGEAdmin account*, **send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
-6. *From TGEAdmin account*, **send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
-7. *From TGEAdmin account*, **send** `PRESALE_VESTED` + 200,000,000 tokens to the VestingTrustee contract address (from previous step)
-8. *From TGEAdmin account*, **call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
+4. **Send** 300,000,000 tokens to Pool account
+5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
+6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
+7. **Send** `PRESALE_VESTED` + 200,000,000 tokens to the VestingTrustee contract address (from previous step)
+8. **Call** the `grant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:
   - `to`: presale buyer account
   - `value`: presale tokens amount purchased (must include 18 decimals)
   - `start`: current time (TBC)
   - `cliff`: time of vesting end (TBC)
   - `end`: time of vesting end (TBC)
   - `revokable`: false
+
+This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).
+
+### Second phase: Gateway
+This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
