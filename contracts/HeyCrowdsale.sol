@@ -52,6 +52,22 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         _pool = pool;
     }
 
+    // Note that the default rate() function remains available as it is inherited
+    // from the Crowdsale contract.
+    function getCurrentRate()
+        public
+        view
+        returns (uint256)
+    {
+        if (now < (_openingTime.add(24 hours))) {
+            return _firstDayRate;
+        } else {
+            return _rate;
+        }
+    }
+
+    // INTERNAL FUNCTIONS
+
     // Override of parent function to add Pausable behaviour.
     function _preValidatePurchase(
         address beneficiary,
@@ -73,20 +89,6 @@ contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         returns (uint256)
     {
         return weiAmount.mul(getCurrentRate());
-    }
-
-    // Note that the default rate() function remains available as it is inherited
-    // from the Crowdsale contract.
-    function getCurrentRate()
-        public
-        view
-        returns (uint256)
-    {
-        if (now < (_openingTime.add(24 hours))) {
-            return _firstDayRate;
-        } else {
-            return _rate;
-        }
     }
 
     // Override of parent function. We extend it to have all remaining tokens
