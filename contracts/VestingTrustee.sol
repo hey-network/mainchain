@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import './math/SafeMath.sol';
-import './ownership/Ownable.sol';
-import './token/IERC20.sol';
+import "./math/SafeMath.sol";
+import "./ownership/Ownable.sol";
+import "./token/IERC20.sol";
 
 /**
  * @title VestingTrustee
@@ -35,7 +35,11 @@ contract VestingTrustee is Ownable {
 
     /// @dev Constructor that initializes the address of the ERC20 contract.
     /// @param _token IERC20 The address of the previously deployed ERC20 smart contract.
-    constructor(IERC20 _token) public {
+    constructor(
+        IERC20 _token
+    )
+        public
+    {
         require(_token != address(0));
 
         token = _token;
@@ -49,13 +53,15 @@ contract VestingTrustee is Ownable {
     /// @param _end uint256 The end of the vesting period.
     /// @param _revokable bool Whether the grant is revokable or not.
     function createGrant(
-      address _to,
-      uint256 _value,
-      uint256 _start,
-      uint256 _cliff,
-      uint256 _end,
-      bool _revokable
-    ) public onlyOwner
+        address _to,
+        uint256 _value,
+        uint256 _start,
+        uint256 _cliff,
+        uint256 _end,
+        bool _revokable
+    )
+        public
+        onlyOwner
     {
         require(_to != address(0));
         require(_value > 0);
@@ -87,7 +93,12 @@ contract VestingTrustee is Ownable {
 
     /// @dev Revoke the grant of tokens of a specifed address.
     /// @param _holder The address which will have its tokens revoked.
-    function revoke(address _holder) public onlyOwner {
+    function revoke(
+        address _holder
+    )
+        public
+        onlyOwner
+    {
         Grant storage grant = grants[_holder];
 
         require(grant.revokable);
@@ -108,7 +119,14 @@ contract VestingTrustee is Ownable {
     /// @param _holder address The address of the holder.
     /// @param _time uint256 The specific time.
     /// @return a uint256 representing a holder's total amount of vested tokens.
-    function vestedTokens(address _holder, uint256 _time) public constant returns (uint256) {
+    function vestedTokens(
+        address _holder,
+        uint256 _time
+    )
+        public
+        view
+        returns (uint256)
+    {
         Grant storage grant = grants[_holder];
         if (grant.value == 0) {
             return 0;
@@ -135,7 +153,14 @@ contract VestingTrustee is Ownable {
     ///   |    .          |
     ///   +===+===========+---------+----------> time
     ///     Start       Cliff      End
-    function calculateVestedTokens(Grant _grant, uint256 _time) private pure returns (uint256) {
+    function calculateVestedTokens(
+        Grant _grant,
+        uint256 _time
+    )
+        private
+        pure
+        returns (uint256)
+    {
         // If we're before the cliff, then nothing is vested.
         if (_time < _grant.cliff) {
             return 0;
@@ -152,7 +177,9 @@ contract VestingTrustee is Ownable {
 
     /// @dev Unlock vested tokens and transfer them to their holder.
     /// @return a uint256 representing the amount of vested tokens transferred to their holder.
-    function unlockVestedTokens() public {
+    function unlockVestedTokens()
+        public
+    {
         Grant storage grant = grants[msg.sender];
         require(grant.value != 0);
 
