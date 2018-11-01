@@ -1,4 +1,6 @@
 ![](https://travis-ci.org/hey-network/mainchain.svg?branch=master)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
+
 # Hey mainchain contracts
 
 This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**.
