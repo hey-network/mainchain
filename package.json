@@ -12,7 +12,12 @@
   },
   "scripts": {
     "lint": "solium --dir ./contracts --fix",
-    "test": "truffle test"
+    "test": "truffle test",
+    "mythril:token": "npm run mythril contracts/Token.sol",
+    "mythril:token-sale": "npm run mythril contracts/TokenSale.sol",
+    "mythril:gateway": "npm run mythril contracts/Gateway.sol",
+    "mythril:vesting-trustee": "npm run mythril contracts/VestingTrustee.sol",
+    "mythril": "myth --solc-args \"openzeppelin-solidity/=$(pwd)/node_modules/openzeppelin-solidity/\" -x"
   },
   "author": "",
   "license": "ISC",
