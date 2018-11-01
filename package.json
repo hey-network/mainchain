@@ -13,7 +13,7 @@
   "scripts": {
     "ganache:start": "cd test/ganache && bash ganache-test.sh",
     "ganache:kill": "kill $(cat test/ganache/ganache.pid)",
-    "test": "truffle test test/gateway/Gateway.test.js",
+    "test": "nyc --reporter=text truffle test test/gateway/Gateway.test.js",
     "test:token": "truffle test test/token/ERC20/ERC20.test.js"
   },
   "author": "",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
-    "chai-bignumber": "^2.0.2"
+    "chai-bignumber": "^2.0.2",
+    "solidity-coverage": "^0.5.11"
   }
 }
