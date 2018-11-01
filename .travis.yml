@@ -34,9 +34,9 @@ before_script:
 
 script:
   - npm run test
+  - solidity-coverage
 
 # after_success:
 
 after_script:
-  - solidity-coverage
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
