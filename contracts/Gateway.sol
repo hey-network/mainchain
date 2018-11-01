@@ -13,9 +13,9 @@ contract Gateway is ERC20Receiver, ValidatorsManagerContract {
     using SafeMath for uint256;
 
     // From user to ERC20 balance
-    mapping (address => uint256) balances;
+    mapping (address => uint256) public balances;
     // ERC20 contract address (HEY token)
-    address tokenAddress;
+    address public tokenAddress;
 
     event ERC20Withdrawn(address indexed owner, uint256 value);
     event ERC20Received(address from, uint256 amount);

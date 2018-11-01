@@ -53,6 +53,7 @@ contract Token is ERC20, EmergencyERC20Drain {
         address to,
         uint value
     )
+        public
         validDestination(to)
         returns (bool)
     {
@@ -70,6 +71,7 @@ contract Token is ERC20, EmergencyERC20Drain {
         address to,
         uint value
     )
+        public
         validDestination(to)
         returns (bool)
     {
