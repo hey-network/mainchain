@@ -29,28 +29,27 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.24;\n\n/**\n * @title ERC20 token receiver interface\n * @dev Interface for any contract that wants to support safeTransfers\n * from ERC20 asset contracts.\n */\ncontract ERC20Receiver {\n    /**\n    * @dev Magic value to be returned upon successful reception of an ERC20 token\n    * Equals to `bytes4(keccak256(\"onERC20Received(address,uint256,bytes)\"))`,\n    * which can be also obtained as `ERC20Receiver(0).onERC20Received.selector`\n    */\n    bytes4 constant ERC20_RECEIVED = 0xbc04f0af;\n\n    function onERC20Received(address _from, uint256 amount) public returns(bytes4);\n}\n",
+  "source": "pragma solidity 0.4.24;\n\n/**\n * @title ERC20 token receiver interface\n * @dev Interface for any contract that wants to support safeTransfers\n * from ERC20 asset contracts.\n */\ncontract ERC20Receiver {\n    /**\n    * @dev Magic value to be returned upon successful reception of an ERC20 token\n    * Equals to `bytes4(keccak256(\"onERC20Received(address,uint256,bytes)\"))`,\n    * which can be also obtained as `ERC20Receiver(0).onERC20Received.selector`\n    */\n    bytes4 constant ERC20_RECEIVED = 0xbc04f0af;\n\n    function onERC20Received(address _from, uint256 amount) public returns(bytes4);\n}\n",
   "sourcePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
   "ast": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
     "exportedSymbols": {
       "ERC20Receiver": [
-        845
+        902
       ]
     },
-    "id": 846,
+    "id": 903,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 832,
+        "id": 889,
         "literals": [
           "solidity",
-          "^",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:5"
+        "src": "0:23:6"
       },
       {
         "baseContracts": [],
@@ -58,20 +57,20 @@
         "contractKind": "contract",
         "documentation": "@title ERC20 token receiver interface\n@dev Interface for any contract that wants to support safeTransfers\nfrom ERC20 asset contracts.",
         "fullyImplemented": false,
-        "id": 845,
+        "id": 902,
         "linearizedBaseContracts": [
-          845
+          902
         ],
         "name": "ERC20Receiver",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 835,
+            "id": 892,
             "name": "ERC20_RECEIVED",
             "nodeType": "VariableDeclaration",
-            "scope": 845,
-            "src": "462:43:5",
+            "scope": 902,
+            "src": "461:43:6",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -79,10 +78,10 @@
               "typeString": "bytes4"
             },
             "typeName": {
-              "id": 833,
+              "id": 890,
               "name": "bytes4",
               "nodeType": "ElementaryTypeName",
-              "src": "462:6:5",
+              "src": "461:6:6",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes4",
                 "typeString": "bytes4"
@@ -91,14 +90,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "30786263303466306166",
-              "id": 834,
+              "id": 891,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "495:10:5",
+              "src": "494:10:6",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3154440367_by_1",
@@ -111,7 +110,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 844,
+            "id": 901,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -119,16 +118,16 @@
             "name": "onERC20Received",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 840,
+              "id": 897,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 837,
+                  "id": 894,
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "537:13:5",
+                  "scope": 901,
+                  "src": "536:13:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -136,10 +135,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 836,
+                    "id": 893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "537:7:5",
+                    "src": "536:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -150,11 +149,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 839,
+                  "id": 896,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "552:14:5",
+                  "scope": 901,
+                  "src": "551:14:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -162,10 +161,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 838,
+                    "id": 895,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "552:7:5",
+                    "src": "551:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -175,20 +174,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "536:31:5"
+              "src": "535:31:6"
             },
             "payable": false,
             "returnParameters": {
-              "id": 843,
+              "id": 900,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 842,
+                  "id": 899,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "583:6:5",
+                  "scope": 901,
+                  "src": "582:6:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -196,10 +195,10 @@
                     "typeString": "bytes4"
                   },
                   "typeName": {
-                    "id": 841,
+                    "id": 898,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
-                    "src": "583:6:5",
+                    "src": "582:6:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes4",
                       "typeString": "bytes4"
@@ -209,41 +208,40 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "582:8:5"
+              "src": "581:8:6"
             },
-            "scope": 845,
-            "src": "512:79:5",
+            "scope": 902,
+            "src": "511:79:6",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 846,
-        "src": "177:416:5"
+        "scope": 903,
+        "src": "176:416:6"
       }
     ],
-    "src": "0:594:5"
+    "src": "0:593:6"
   },
   "legacyAST": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
     "exportedSymbols": {
       "ERC20Receiver": [
-        845
+        902
       ]
     },
-    "id": 846,
+    "id": 903,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 832,
+        "id": 889,
         "literals": [
           "solidity",
-          "^",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:5"
+        "src": "0:23:6"
       },
       {
         "baseContracts": [],
@@ -251,20 +249,20 @@
         "contractKind": "contract",
         "documentation": "@title ERC20 token receiver interface\n@dev Interface for any contract that wants to support safeTransfers\nfrom ERC20 asset contracts.",
         "fullyImplemented": false,
-        "id": 845,
+        "id": 902,
         "linearizedBaseContracts": [
-          845
+          902
         ],
         "name": "ERC20Receiver",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
             "constant": true,
-            "id": 835,
+            "id": 892,
             "name": "ERC20_RECEIVED",
             "nodeType": "VariableDeclaration",
-            "scope": 845,
-            "src": "462:43:5",
+            "scope": 902,
+            "src": "461:43:6",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -272,10 +270,10 @@
               "typeString": "bytes4"
             },
             "typeName": {
-              "id": 833,
+              "id": 890,
               "name": "bytes4",
               "nodeType": "ElementaryTypeName",
-              "src": "462:6:5",
+              "src": "461:6:6",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes4",
                 "typeString": "bytes4"
@@ -284,14 +282,14 @@
             "value": {
               "argumentTypes": null,
               "hexValue": "30786263303466306166",
-              "id": 834,
+              "id": 891,
               "isConstant": false,
               "isLValue": false,
               "isPure": true,
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "495:10:5",
+              "src": "494:10:6",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3154440367_by_1",
@@ -304,7 +302,7 @@
           {
             "body": null,
             "documentation": null,
-            "id": 844,
+            "id": 901,
             "implemented": false,
             "isConstructor": false,
             "isDeclaredConst": false,
@@ -312,16 +310,16 @@
             "name": "onERC20Received",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 840,
+              "id": 897,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 837,
+                  "id": 894,
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "537:13:5",
+                  "scope": 901,
+                  "src": "536:13:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -329,10 +327,10 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 836,
+                    "id": 893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "537:7:5",
+                    "src": "536:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -343,11 +341,11 @@
                 },
                 {
                   "constant": false,
-                  "id": 839,
+                  "id": 896,
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "552:14:5",
+                  "scope": 901,
+                  "src": "551:14:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -355,10 +353,10 @@
                     "typeString": "uint256"
                   },
                   "typeName": {
-                    "id": 838,
+                    "id": 895,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "552:7:5",
+                    "src": "551:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -368,20 +366,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "536:31:5"
+              "src": "535:31:6"
             },
             "payable": false,
             "returnParameters": {
-              "id": 843,
+              "id": 900,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 842,
+                  "id": 899,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 844,
-                  "src": "583:6:5",
+                  "scope": 901,
+                  "src": "582:6:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -389,10 +387,10 @@
                     "typeString": "bytes4"
                   },
                   "typeName": {
-                    "id": 841,
+                    "id": 898,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
-                    "src": "583:6:5",
+                    "src": "582:6:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes4",
                       "typeString": "bytes4"
@@ -402,20 +400,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "582:8:5"
+              "src": "581:8:6"
             },
-            "scope": 845,
-            "src": "512:79:5",
+            "scope": 902,
+            "src": "511:79:6",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
-        "scope": 846,
-        "src": "177:416:5"
+        "scope": 903,
+        "src": "176:416:6"
       }
     ],
-    "src": "0:594:5"
+    "src": "0:593:6"
   },
   "compiler": {
     "name": "solc",
@@ -423,5 +421,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-11-01T13:42:22.764Z"
+  "updatedAt": "2018-11-01T14:00:10.900Z"
 }
