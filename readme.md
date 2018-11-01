@@ -1,5 +1,6 @@
 ![](https://travis-ci.org/hey-network/mainchain.svg?branch=master)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2abd2b958d7fed6203e4/test_coverage)](https://codeclimate.com/github/hey-network/mainchain/test_coverage)
+[![Maintainability](https://api.codeclimate.com/v1/badges/2abd2b958d7fed6203e4/maintainability)](https://codeclimate.com/github/hey-network/mainchain/maintainability)
 
 # Hey mainchain contracts
 
