@@ -22,6 +22,7 @@ before_install:
   - export CXX="g++-4.8"
   - npm install -g npm@latest
   - npm install -g truffle
+  - npm install -g solidity-coverage
 
 install:
   - npm install
@@ -33,6 +34,9 @@ before_script:
 
 script:
   - npm run test
+
+after_success:
+  - solidity-coverage
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
