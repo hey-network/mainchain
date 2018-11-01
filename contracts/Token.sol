@@ -1,6 +1,7 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
+import "./utils/EmergencyERC20Drain.sol";
 
 /**
 * @title Hey Token
@@ -10,7 +11,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 * This code is litterally a copy-paste of OpenZeppelin's Simple Token:
 * https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol
 */
-contract Token is ERC20 {
+contract Token is ERC20, EmergencyERC20Drain {
 
     string public constant name = "HeyToken";
     string public constant symbol = "HEY";
