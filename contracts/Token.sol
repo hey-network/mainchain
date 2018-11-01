@@ -23,12 +23,12 @@ contract Token is ERC20, EmergencyERC20Drain {
     * @dev From Consensys recommendations:
     * https://consensys.github.io/smart-contract-best-practices/tokens/
     * Prevent sending of the token to invalid addresses.
+    * Note that the address(0) check is already performed under ERC20 standard.
     */
     modifier validDestination(
         address to
     )
     {
-        require(to != address(0));
         require(to != address(this));
         _;
     }
