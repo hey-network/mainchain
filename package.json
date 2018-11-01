@@ -13,11 +13,12 @@
   "scripts": {
     "lint": "solium --dir ./contracts --fix",
     "test": "truffle test",
-    "mythril:token": "npm run mythril contracts/Token.sol",
-    "mythril:token-sale": "npm run mythril contracts/TokenSale.sol",
-    "mythril:gateway": "npm run mythril contracts/Gateway.sol",
-    "mythril:vesting-trustee": "npm run mythril contracts/VestingTrustee.sol",
-    "mythril": "myth --solc-args \"openzeppelin-solidity/=$(pwd)/node_modules/openzeppelin-solidity/\" -x"
+    "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
+    "mythril:token": "npm run mythrill contracts/Token.sol",
+    "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
+    "mythril:gateway": "npm run mythrill contracts/Gateway.sol",
+    "mythril:vesting-trustee": "npm run mythrill contracts/VestingTrustee.sol",
+    "mythrill": "myth --solc-args \"openzeppelin-solidity/=$(pwd)/node_modules/openzeppelin-solidity/\" -x"
   },
   "author": "",
   "license": "ISC",

@@ -29,7 +29,7 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity 0.4.24;\n\n/**\n * @title ERC20 token receiver interface\n * @dev Interface for any contract that wants to support safeTransfers\n * from ERC20 asset contracts.\n */\ncontract ERC20Receiver {\n    /**\n    * @dev Magic value to be returned upon successful reception of an ERC20 token\n    * Equals to `bytes4(keccak256(\"onERC20Received(address,uint256,bytes)\"))`,\n    * which can be also obtained as `ERC20Receiver(0).onERC20Received.selector`\n    */\n    bytes4 constant ERC20_RECEIVED = 0xbc04f0af;\n\n    function onERC20Received(address _from, uint256 amount) public returns(bytes4);\n}\n",
+  "source": "pragma solidity ^0.4.24;\n\n/**\n * @title ERC20 token receiver interface\n * @dev Interface for any contract that wants to support safeTransfers\n * from ERC20 asset contracts.\n */\ncontract ERC20Receiver {\n    /**\n    * @dev Magic value to be returned upon successful reception of an ERC20 token\n    * Equals to `bytes4(keccak256(\"onERC20Received(address,uint256,bytes)\"))`,\n    * which can be also obtained as `ERC20Receiver(0).onERC20Received.selector`\n    */\n    bytes4 constant ERC20_RECEIVED = 0xbc04f0af;\n\n    function onERC20Received(address _from, uint256 amount) public returns(bytes4);\n}\n",
   "sourcePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
   "ast": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
@@ -45,11 +45,12 @@
         "id": 889,
         "literals": [
           "solidity",
+          "^",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:6"
+        "src": "0:24:6"
       },
       {
         "baseContracts": [],
@@ -70,7 +71,7 @@
             "name": "ERC20_RECEIVED",
             "nodeType": "VariableDeclaration",
             "scope": 902,
-            "src": "461:43:6",
+            "src": "462:43:6",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -81,7 +82,7 @@
               "id": 890,
               "name": "bytes4",
               "nodeType": "ElementaryTypeName",
-              "src": "461:6:6",
+              "src": "462:6:6",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes4",
                 "typeString": "bytes4"
@@ -97,7 +98,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "494:10:6",
+              "src": "495:10:6",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3154440367_by_1",
@@ -127,7 +128,7 @@
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "536:13:6",
+                  "src": "537:13:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -138,7 +139,7 @@
                     "id": 893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "536:7:6",
+                    "src": "537:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -153,7 +154,7 @@
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "551:14:6",
+                  "src": "552:14:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -164,7 +165,7 @@
                     "id": 895,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "551:7:6",
+                    "src": "552:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -174,7 +175,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "535:31:6"
+              "src": "536:31:6"
             },
             "payable": false,
             "returnParameters": {
@@ -187,7 +188,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "582:6:6",
+                  "src": "583:6:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -198,7 +199,7 @@
                     "id": 898,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
-                    "src": "582:6:6",
+                    "src": "583:6:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes4",
                       "typeString": "bytes4"
@@ -208,20 +209,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "581:8:6"
+              "src": "582:8:6"
             },
             "scope": 902,
-            "src": "511:79:6",
+            "src": "512:79:6",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
         "scope": 903,
-        "src": "176:416:6"
+        "src": "177:416:6"
       }
     ],
-    "src": "0:593:6"
+    "src": "0:594:6"
   },
   "legacyAST": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/gateway/ERC20Receiver.sol",
@@ -237,11 +238,12 @@
         "id": 889,
         "literals": [
           "solidity",
+          "^",
           "0.4",
           ".24"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:23:6"
+        "src": "0:24:6"
       },
       {
         "baseContracts": [],
@@ -262,7 +264,7 @@
             "name": "ERC20_RECEIVED",
             "nodeType": "VariableDeclaration",
             "scope": 902,
-            "src": "461:43:6",
+            "src": "462:43:6",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
@@ -273,7 +275,7 @@
               "id": 890,
               "name": "bytes4",
               "nodeType": "ElementaryTypeName",
-              "src": "461:6:6",
+              "src": "462:6:6",
               "typeDescriptions": {
                 "typeIdentifier": "t_bytes4",
                 "typeString": "bytes4"
@@ -289,7 +291,7 @@
               "kind": "number",
               "lValueRequested": false,
               "nodeType": "Literal",
-              "src": "494:10:6",
+              "src": "495:10:6",
               "subdenomination": null,
               "typeDescriptions": {
                 "typeIdentifier": "t_rational_3154440367_by_1",
@@ -319,7 +321,7 @@
                   "name": "_from",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "536:13:6",
+                  "src": "537:13:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -330,7 +332,7 @@
                     "id": 893,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "536:7:6",
+                    "src": "537:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -345,7 +347,7 @@
                   "name": "amount",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "551:14:6",
+                  "src": "552:14:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -356,7 +358,7 @@
                     "id": 895,
                     "name": "uint256",
                     "nodeType": "ElementaryTypeName",
-                    "src": "551:7:6",
+                    "src": "552:7:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_uint256",
                       "typeString": "uint256"
@@ -366,7 +368,7 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "535:31:6"
+              "src": "536:31:6"
             },
             "payable": false,
             "returnParameters": {
@@ -379,7 +381,7 @@
                   "name": "",
                   "nodeType": "VariableDeclaration",
                   "scope": 901,
-                  "src": "582:6:6",
+                  "src": "583:6:6",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -390,7 +392,7 @@
                     "id": 898,
                     "name": "bytes4",
                     "nodeType": "ElementaryTypeName",
-                    "src": "582:6:6",
+                    "src": "583:6:6",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bytes4",
                       "typeString": "bytes4"
@@ -400,20 +402,20 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "581:8:6"
+              "src": "582:8:6"
             },
             "scope": 902,
-            "src": "511:79:6",
+            "src": "512:79:6",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           }
         ],
         "scope": 903,
-        "src": "176:416:6"
+        "src": "177:416:6"
       }
     ],
-    "src": "0:593:6"
+    "src": "0:594:6"
   },
   "compiler": {
     "name": "solc",
@@ -421,5 +423,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.1",
-  "updatedAt": "2018-11-01T14:00:10.900Z"
+  "updatedAt": "2018-11-01T14:28:59.574Z"
 }

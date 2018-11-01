@@ -177,3 +177,11 @@ This deployment script is executed via a `nodejs` script using an `HDWallet` ove
 
 ### Second phase: Gateway
 This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
+
+## Security checks
+
+### Tools used to check the code
+- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
+- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
+- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
+- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
