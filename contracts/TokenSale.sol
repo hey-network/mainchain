@@ -29,8 +29,6 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
     uint256 private _firstDayRate;
     uint256 private _rate;
 
-    uint256 private _closingTime;
-
     // Address where potentially unsold funds are sent at finalization
     address private _pool;
 
@@ -47,11 +45,14 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         Crowdsale(rate, wallet, token)
         TimedCrowdsale(openingTime, closingTime)
     {
+        require(firstDayRate > 0);
+        require(pool != address(0));
+
         _openingTime = openingTime;
-        _token = token;
         _firstDayRate = firstDayRate;
         _rate = rate;
         _pool = pool;
+        _token = token;
     }
 
     // Note that the default rate() function remains available as it is inherited

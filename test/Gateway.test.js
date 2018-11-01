@@ -1,8 +1,8 @@
-const { assertRevert } = require('../helpers/assertRevert');
+const { assertRevert } = require('./helpers/assertRevert');
 const {
   approver,
   getSignature
-} = require('../helpers/signer');
+} = require('./helpers/signer');
 
 const Gateway = artifacts.require('Gateway');
 const Token = artifacts.require('Token');

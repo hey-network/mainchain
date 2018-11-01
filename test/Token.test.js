@@ -1,6 +1,6 @@
-const shouldFail = require('../helpers/shouldFail');
-const expectEvent = require('../helpers/expectEvent');
-const { ZERO_ADDRESS } = require('../helpers/constants');
+const shouldFail = require('./helpers/shouldFail');
+const expectEvent = require('./helpers/expectEvent');
+const { ZERO_ADDRESS } = require('./helpers/constants');
 
 const Token = artifacts.require('Token');
 const ERC20Mock = artifacts.require('ERC20Mock');

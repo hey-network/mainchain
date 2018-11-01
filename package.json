@@ -13,6 +13,7 @@
   "scripts": {
     "lint": "solium --dir ./contracts --fix",
     "test": "truffle test",
+    "test:token-sale": "truffle test test/TokenSale.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
     "mythril:token": "npm run mythrill contracts/Token.sol",
     "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
