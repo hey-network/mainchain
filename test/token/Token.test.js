@@ -3,6 +3,7 @@ const expectEvent = require('../helpers/expectEvent');
 const { ZERO_ADDRESS } = require('../helpers/constants');
 
 const Token = artifacts.require('Token');
+const ERC20Mock = artifacts.require('ERC20Mock');
 
 const BigNumber = web3.BigNumber;
 
@@ -195,6 +196,40 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
         // each test hook is defined.
         const to = this.token.address
         await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
+      });
+    });
+  });
+
+  // Note that here the case where the owner tries to train the Hey Token itself
+  // is non-existent by construction since the contract has been built in a way
+  // that it cannot receive any of its own tokens in the first place (using the
+  // validDestination modifier).
+  describe('drain', function () {
+    context('when another ERC20 token has been deposited to the contract', function () {
+      const amount = 100;
+
+      beforeEach(async function () {
+        this.otherToken = await ERC20Mock.new(anotherAccount, amount);
+        await this.otherToken.transfer(this.token.address, amount, { from: anotherAccount });
+      });
+
+      context('when the sender is the owner', function () {
+        it('allows to transfer the full amount deposited to the owner', async function () {
+          (await this.otherToken.balanceOf(this.token.address)).should.be.bignumber.equal(amount);
+
+          await this.token.drain(this.otherToken.address, amount, { from: owner });
+
+          (await this.otherToken.balanceOf(this.token.address)).should.be.bignumber.equal(0);
+          (await this.otherToken.balanceOf(owner)).should.be.bignumber.equal(amount);
+        });
+      });
+
+      context('when the sender isn\'t the owner', function () {
+        const from = anotherAccount;
+
+        it('reverts', async function () {
+          await shouldFail.reverting(this.token.drain(this.otherToken.address, amount, { from }));
+        });
       });
     });
   });
