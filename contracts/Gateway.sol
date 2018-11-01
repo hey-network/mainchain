@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "./math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./gateway/ValidatorsManagerContract.sol";
 import "./gateway/ERC20Receiver.sol";
 

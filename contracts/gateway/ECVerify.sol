@@ -12,9 +12,9 @@ library ECVerify {
         bytes32 hash,
         bytes signature
     )
-        internal
-        pure
-        returns (address)
+    internal
+    pure
+    returns (address)
     {
         require(signature.length == 66, "Signature must contain 66 bytes");
         SignatureMode mode = SignatureMode(uint8(signature[0]));

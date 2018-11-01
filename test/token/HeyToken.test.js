@@ -1,5 +1,5 @@
-const { assertRevert } = require('../../helpers/assertRevert');
-const expectEvent = require('../../helpers/expectEvent');
+const { assertRevert } = require('../helpers/assertRevert');
+const expectEvent = require('../helpers/expectEvent');
 
 const Token = artifacts.require('HeyToken');
 
@@ -9,7 +9,7 @@ require('chai')
   .use(require('chai-bignumber')(BigNumber))
   .should();
 
-contract('ERC20', function ([_, owner, recipient, anotherAccount]) {
+contract('HeyToken', function ([_, owner, recipient, anotherAccount]) {
   const ZERO_ADDRESS = '0x0000000000000000000000000000000000000000';
   const TOTAL_SUPPLY = 1e9*1e18;
 

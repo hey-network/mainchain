@@ -1,6 +1,6 @@
 pragma solidity ^0.4.24;
 
-import "../ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ECVerify.sol";
 
 contract ValidatorsManagerContract is Ownable {
@@ -69,7 +69,7 @@ contract ValidatorsManagerContract is Ownable {
         returns (bool)
     {
         // owner is a permanent validator
-        if (_address == owner) {
+        if (_address == owner()) {
             return true;
         }
         return validators[_address];

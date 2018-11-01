@@ -1,10 +1,10 @@
 pragma solidity ^0.4.24;
 
-import "./crowdsale/validation/TimedCrowdsale.sol";
-import "./crowdsale/distribution/FinalizableCrowdsale.sol";
-import "./lifecycle/Pausable.sol";
-import "./token/IERC20.sol";
-import "./math/SafeMath.sol";
+import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
+import "openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
+import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
 * @title HeyCrowdsale

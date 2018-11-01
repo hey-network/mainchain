@@ -1,8 +1,8 @@
 pragma solidity ^0.4.24;
 
-import "./math/SafeMath.sol";
-import "./ownership/Ownable.sol";
-import "./token/IERC20.sol";
+import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
+import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
+import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
  * @title VestingTrustee
