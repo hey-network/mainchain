@@ -6,7 +6,9 @@ node_js:
   - "10.11"
 
 env:
-  - CXX=g++-4.8
+  global:
+    - CXX=g++-4.8
+    - CC_TEST_REPORTER_ID=83238dc5069a6d904fe721bad6f2b030e036cb0fa46bfc75fb695b26326add22
 
 addons:
   apt:
@@ -20,9 +22,21 @@ before_install:
   - export CXX="g++-4.8"
   - npm install -g npm@latest
   - npm install -g truffle
+  - npm install -g solidity-coverage
 
 install:
   - npm install
 
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
   - npm run test
+
+after_success:
+  - solidity-coverage
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT

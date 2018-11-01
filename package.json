@@ -6,14 +6,12 @@
   },
   "description": "",
   "main": "truffle-config.js",
+  "repository": "github:hey-network/mainchain",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "ganache:start": "cd test/ganache && bash ganache-test.sh",
-    "ganache:kill": "kill $(cat test/ganache/ganache.pid)",
-    "test": "truffle test test/gateway/Gateway.test.js",
-    "test:token": "truffle test test/token/ERC20/ERC20.test.js"
+    "test": "truffle test"
   },
   "author": "",
   "license": "ISC",
