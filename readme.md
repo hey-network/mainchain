@@ -40,12 +40,12 @@ The Hey Team has taken great care to track provenance of open-source components,
 This repository consists of four main contracts.
 
 The two main contracts supporting Hey's platform are:
-- The **HeyToken**, which is a plain ERC20 token using OpenZeppelin's `SimpleToken` [implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/67dac7ae9960fd1790671a315cde56c901db5271/contracts/examples/SimpleToken.sol)
+- The **Token**, which is a plain ERC20 token using OpenZeppelin's `SimpleToken` [implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/67dac7ae9960fd1790671a315cde56c901db5271/contracts/examples/SimpleToken.sol)
 - The **Gateway**, which allows users to redeem Hey tokens when providing the rightly signed message (see full architecture). This is a stripped-down version of Loom Network's `Transfer Gateway` [implementation](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) to keep only ERC20 withdrawal capabilities.
 
 Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
 - The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from Hey's team. This is heavily inspired by SirinLab and Stox's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
-- The **HeyCrowdsale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol) with limited customisation.
+- The **TokenSale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol) with limited customisation.
 
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
 
@@ -53,7 +53,7 @@ If you are looking for the social network-related features (e.g., Karma manageme
 ### Contracts diagrams
 These diagrams express the inheritance and usage relationships amongst contracts. Contracts in blue are the ones that effectively get deployed on the mainchain, composing from higher-level contracts.
 
-#### HeyToken, HeyCrowdsale, VestingTrustee
+#### Token, TokenSale, VestingTrustee
 
 ![TGE contracts diagram](https://raw.githubusercontent.com/hey-network/mainchain/master/_readme_assets/TGE%20contracts%20diagram.png)
 
@@ -92,9 +92,9 @@ Note that the Pausable contract leverages a version of the contract that predate
 
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
-| Token | HeyToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
+| Token | Token.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
 | TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to latest Solidity best practices |
-| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to HeyToken token |
+| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Token token |
 
 
 ## 🔵 Token characteristics and test cases
@@ -106,7 +106,7 @@ Note that the Pausable contract leverages a version of the contract that predate
 ### Test cases
 
 
-## 🛒 Crowdsale characteristics and test cases
+## 🛒 TokenSale characteristics and test cases
 
 
 ### Characteristics
@@ -118,7 +118,7 @@ Note that the Pausable contract leverages a version of the contract that predate
 ## 🚀 Deployment
 
 
-### First phase: Token and Crowdsale
+### First phase: Token and TokenSale
 The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
 
 #### Prerequisites
@@ -133,35 +133,35 @@ The first deployment phase intends on making the platform fully ready for the TG
 - List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any (`PRESALE_VESTED` tokens in total)
 
 #### Outcome
-- HeyToken contract deployed
-- HeyCrowdSale contract deployed
+- Token contract deployed
+- TokenSale contract deployed
 - VestingTrustee contract deployed
 - 1,000,000,000 tokens minted
 - 300,000,000 tokens on Pool account
 - `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers accounts
 - `PRESALE_VESTED` (for presale buyers) + ~~200,000,000~~ (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
-- (500,000,000 - `PRESALE`) of tokens controlled by the HeyCrowdSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
-- HeyCrowdsale contract ready to accept ETH payments against HEY tokens
-- HeyCrowdsale contract funneling incoming ETH to Wallet account
-- HeyCrowdSale contract configured to send potential remaining tokens post-TGE to Pool account
+- (500,000,000 - `PRESALE`) of tokens controlled by the TokenSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
+- TokenSale contract ready to accept ETH payments against HEY tokens
+- TokenSale contract funneling incoming ETH to Wallet account
+- TokenSale contract configured to send potential remaining tokens post-TGE to Pool account
 
 #### Choreography
 
-All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` on the HeyCrowdsale contract (no other actions allowed on any other contracts). The deployment script is the following:
+All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` on the TokenSale contract (no other actions allowed on any other contracts). The deployment script is the following:
 
-1. **Deploy HeyToken** (no constructor parameters needed)
-2. **Deploy HeyCrowdSale**, with constructor parameters:
+1. **Deploy Token** (no constructor parameters needed)
+2. **Deploy TokenSale**, with constructor parameters:
     - `openingTime`: ~~TBC~~
     - `closingTime`: ~~TBC~~
     - `firstDayRate`: 5500
     - `rate`: 5000
     - `wallet`: Wallet account address
     - `pool`: Pool account address
-    - `token`: HeyToken contract address (from previous step)
+    - `token`: Token contract address (from previous step)
 3. **Deploy VestingTrustee**, with constructor parameter:
-    - `token`: HeyToken contract address (from previous step)
+    - `token`: Token contract address (from previous step)
 4. **Send** 300,000,000 tokens to Pool account
-5. **Send** (500,000,000 - `PRESALE`) tokens to the HeyCrowdSale contract address
+5. **Send** (500,000,000 - `PRESALE`) tokens to the TokenSale contract address
 6. **Send** `PRESALE_NON_VESTED` tokens in total to presale non-vested buyers accounts as per the distribution list (multiple transactions)
 7. **Send** `PRESALE_VESTED` + ~~200,000,000~~ tokens to the VestingTrustee contract address (from previous step)
 8. **Call** the `createGrant()` function on the VestingTrustee contract once for each presale vested buyer as well as for the Team account with following parameters:

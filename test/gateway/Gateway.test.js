@@ -5,7 +5,7 @@ const {
 } = require('../helpers/signer');
 
 const Gateway = artifacts.require('Gateway');
-const Token = artifacts.require('HeyToken');
+const Token = artifacts.require('Token');
 
 const BigNumber = web3.BigNumber;
 

@@ -1,7 +1,7 @@
 const { assertRevert } = require('../helpers/assertRevert');
 const expectEvent = require('../helpers/expectEvent');
 
-const Token = artifacts.require('HeyToken');
+const Token = artifacts.require('Token');
 
 const BigNumber = web3.BigNumber;
 

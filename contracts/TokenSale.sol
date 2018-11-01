@@ -7,12 +7,14 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /**
-* @title HeyCrowdsale
-* @dev The only deviation from OpenZeppelin's standard Crowdsale example
+* @title Hey Crowdsale
+* @dev The only deviations from OpenZeppelin's standard Crowdsale example
 * is a Pausable behaviour to freeze buying of tokens, and a funneling of
 * unsold tokens to a Pool address when the sale closes.
+* Note that we are naming this contract 'TokenSale' to not redeclare the parent
+* Crowdsale contract, from which Sale indirectly inherits.
 */
-contract HeyCrowdsale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
+contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
 
     // Needed to compute current rate
     using SafeMath for uint256;

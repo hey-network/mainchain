@@ -3,14 +3,14 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/token/ERC20/ERC20.sol";
 
 /**
-* @title SimpleToken
+* @title Hey Token
 * @dev Very simple ERC20 Token example, where all tokens are pre-assigned to the creator.
 * Note they can later distribute these tokens as they wish using `transfer` and other
 * `ERC20` functions.
 * This code is litterally a copy-paste of OpenZeppelin's Simple Token:
 * https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol
 */
-contract HeyToken is ERC20 {
+contract Token is ERC20 {
 
     string public constant name = "HeyToken";
     string public constant symbol = "HEY";
