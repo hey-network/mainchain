@@ -308,12 +308,12 @@ The first deployment phase intends on making the platform fully ready for the TG
 - `PRESALE_VESTED` (for presale buyers) + ~~200,000,000~~ (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
 - (500,000,000 - `PRESALE`) of tokens controlled by the TokenSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
 - TokenSale contract ready to accept ETH payments against HEY tokens
-- TokenSale contract funneling incoming ETH to Wallet account
+- TokenSale contract funnelling incoming ETH to Wallet account
 - TokenSale contract configured to send potential remaining tokens post-TGE to Pool account
 
 #### Choreography
 
-All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` on the TokenSale contract (no other actions allowed on any other contracts). The deployment script is the following:
+All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` and `finalize()` on the TokenSale contract, as well as `drain()` on the Token contract. The deployment script is the following:
 
 1. **Deploy Token** (no constructor parameters needed)
 2. **Deploy TokenSale**, with constructor parameters:
