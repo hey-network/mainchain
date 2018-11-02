@@ -116,14 +116,16 @@ The Hey Token has the following parameters:
 | Decimals | 18 | |
 | Total supply | 1,000,000 | Minted to owner address at creation |
 
-### Additional behaviours
+#### Additional behaviours
 
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
-- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey T okens to the Hey Token contract itself
-- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to salvage any ERC20 tokens sent to the contract by mistake by draining them to the owner address
+- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
+- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to salvage any ERC20 tokens sent to the contract by mistake by draining them to the owner address. It does so with the `drain()` functions.
 
 ### Specifications and related tests
+
+The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
 | Characteristic | Test command        | Comment |
 | ------------- | ------------- | ------------- |
@@ -131,8 +133,9 @@ The Hey Token extends the ERC20 specifications to include two additional securit
 | Symbol is `HEY` | `npm run test:token:symbol` | |
 | Number of decimals is `18` | `npm run test:token:decimals` | |
 | Total supply is `1,000,000,000` | `npm run test:token:supply` | |
-
-
+| Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` | |
+| Conforms to ERC20 transfers interface | `npm run test:token:transfers` | Tests `transfer()` and `transferFrom()` since they are extended to include the `validDestination` behaviour |
+| Allows owner to drain ERC20 tokens sent by mistake | `npm run test:token:drain` | |
 
 ### Characteristics
 

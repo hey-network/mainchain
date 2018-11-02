@@ -45,7 +45,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
 
   // Since we extend the 'transfer' method, we ensure that all standard specs
   // are still valid (these tests are a copy-paste from OpenZeppelin's ERC20 tests).
-  describe('transfer', function () {
+  describe('transfer (function extension)', function () {
     describe('when the recipient is not the zero address', function () {
       const to = recipient;
 
@@ -88,19 +88,21 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
       });
     });
 
-    describe('when the recipient is the token contract itself', function () {
-      it('reverts', async function () {
-        // 'token' does not exist outside 'it' because of the way our before
-        // each test hook is defined.
-        const to = this.token.address
-        await shouldFail.reverting(this.token.transfer(to, TOTAL_SUPPLY, { from: owner }));
+    describe('valid destination', function () {
+      describe('when the recipient is the token contract itself', function () {
+        it('reverts', async function () {
+          // 'token' does not exist outside 'it' because of the way our before
+          // each test hook is defined.
+          const to = this.token.address
+          await shouldFail.reverting(this.token.transfer(to, TOTAL_SUPPLY, { from: owner }));
+        });
       });
     });
   });
 
   // Since we extend the 'transfer' method, we ensure that all standard specs
   // are still valid (these tests are a copy-paste from OpenZeppelin's ERC20 tests).
-  describe('transfer from', function () {
+  describe('transfer from (function extension)', function () {
     const spender = recipient;
 
     describe('when the recipient is not the zero address', function () {
@@ -184,18 +186,20 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
       });
     });
 
-    describe('when the recipient is the token contract itself', function () {
-      const amount = TOTAL_SUPPLY;
+    describe('valid destination', function () {
+      describe('when the recipient is the token contract itself', function () {
+        const amount = TOTAL_SUPPLY;
 
-      beforeEach(async function () {
-        await this.token.approve(spender, amount, { from: owner });
-      });
+        beforeEach(async function () {
+          await this.token.approve(spender, amount, { from: owner });
+        });
 
-      it('reverts', async function () {
-        // 'token' does not exist outside 'it' because of the way our before
-        // each test hook is defined.
-        const to = this.token.address
-        await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
+        it('reverts', async function () {
+          // 'token' does not exist outside 'it' because of the way our before
+          // each test hook is defined.
+          const to = this.token.address
+          await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
+        });
       });
     });
   });
