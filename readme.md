@@ -127,15 +127,17 @@ The Hey Token extends the ERC20 specifications to include two additional securit
 
 The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
-| Characteristic | Test command |
-| ------------- | ------------- |
-| Name is `HeyToken` | `npm run test:token:name` |
-| Symbol is `HEY` | `npm run test:token:symbol` |
-| Number of decimals is `18` | `npm run test:token:decimals` |
-| Total supply is `1,000,000,000` | `npm run test:token:supply` |
-| Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` |
-| Conforms to ERC20 transfers interface (required check due to extention of `transfer()` and `transferFrom()` functions) | `npm run test:token:transfers` |
-| Allows owner to drain ERC20 tokens sent by mistake | `npm run test:token:drain` |
+| Specification # | Description | Test command |
+| --- | ------------- | ------------- |
+| 1 | Name is `HeyToken` | `npm run test:token:name` |
+| 2 | Symbol is `HEY` | `npm run test:token:symbol` |
+| 3 | Number of decimals is `18` | `npm run test:token:decimals` |
+| 4 | Total supply is `1,000,000,000` | `npm run test:token:supply` |
+| 5 | Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` |
+| 6 | Conforms to ERC20 transfers interface | `npm run test:token:transfers` |
+| 7 | Allows owner to drain ERC20 tokens sent by mistake | `npm run test:token:drain` |
+
+Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
 
 ### Characteristics
 
