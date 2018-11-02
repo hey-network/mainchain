@@ -123,22 +123,22 @@ The vast majority of Hey's mainchain contracts leverage existing, previously aud
 
 ### Code used as-is
 
-| Domain | File        | Provider           | Source  | Commit hash |
-| ------------- | ------------- | ------------- |------------- |------------- |
-| Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Token | IERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Token | SafeERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| TGE | TimedCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| TGE | FinalizableCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Gateway | ValidatorsManagerContract.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ValidatorManagerContract.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
-| Gateway | ECVerify.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ECVerify.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
-| Gateway | ERC20Receiver.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/ERC20Receiver.sol) | 24ef3c019441c293f2677b273b8eaa37cabc3c91 |
-| Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | | 45c0c072d11dc90f756575d1d644394deb35c594 |
-| Utils | Math.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
-| Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` | |
+| Domain | File        | Provider           | Source  |
+| ------------- | ------------- | ------------- |------------- |
+| Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Token | IERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Token | SafeERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| TGE | TimedCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| TGE | FinalizableCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Gateway | ValidatorsManagerContract.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ValidatorManagerContract.sol) |
+| Gateway | ECVerify.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ECVerify.sol) |
+| Gateway | ERC20Receiver.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ERC20Receiver.sol) |
+| Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | Math.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 
 Note that the Pausable contract leverages a version of the contract that predated migration to a Roles-based ownership system. We prefer to stick to a single owner for the sake of simplicity, especially given the limited number of actions that can be performed by the owner in the context of the TGE (that is, only call `pause()`).
 
