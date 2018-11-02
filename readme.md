@@ -12,13 +12,13 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 - [Disclaimers](#-disclaimers)
 - [Contract addresses](#-contracts-addresses)
+- [Local machine setup](#-local-machine-setup)
+  - [Dependencies](#dependencies)
+  - [Running tests](#running-tests)
 - [Codebase overview](#-codebase-overview)
   - [Design principles](#design-principles)  
   - [Contracts overview](#contracts-overview)  
   - [Architecture diagrams](#architecture-diagrams)
-- [Local machine setup](#-local-machine-setup)
-  - [Dependencies](#dependencies)
-  - [Running tests](#running-tests)
 - [Open-source components](#-open-source-components)
   - [Code used as-is](#code-used-as-is)
   - [Code used as basis](#code-used-as-basis)
@@ -224,6 +224,14 @@ The full token sale test suite can be run with the command `npm run test:token-s
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
 | 5 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
+### VestingTrustee
+
+TODO
+
+### Gateway
+
+TODO
+
 ## 🔒 Security
 
 ### Preliminary analysis
@@ -232,7 +240,7 @@ The full token sale test suite can be run with the command `npm run test:token-s
 - Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
 - Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
 
-## Audit
+### Audit
 Will be updated after audit.
 
 ## 🚀 Deployment
