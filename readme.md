@@ -272,7 +272,7 @@ Note that since KYC is an asynchronous process (requiring potential manual actio
 
 The Hey team notably cannot guarantee that participants performing KYC during the first 24h after the Token Sale has started will get their KYC performed in due time to benefit from the first-day bonus. Hence participants should do their KYC early on.
 
-##### Minimum contribution (TO IMPLEMENT)
+###### Minimum contribution (TO IMPLEMENT)
 
 TODO: ensure `msg.value >= 0.1 ether`.
 
