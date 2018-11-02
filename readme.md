@@ -265,9 +265,9 @@ This customisation is implemented by overriding the internal `_getTokenAmount()`
 
 ###### Whitelisting (TO IMPLEMENT)
 
-The Token Sale contract only allows contributions from a set of whitelisted addresses, for KYC reasons. The set of addresses is a mapping `whitelist` of `address` to `bool`, which is in batch populated by the Token Sale contract owner in batch before and during the TGE period using the `batchWhitelist()` function.
+The Token Sale contract only allows contributions from a set of whitelisted addresses, for KYC reasons. The set of addresses is a mapping `whitelist` of `address` to `bool`, which is populated by the Token Sale contract owner in batch before and during the TGE period using the `batchWhitelist()` function.
 
-Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one week before contributions can start so that interested participants can already perform KYC. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
+Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one week before contributions can start, so that interested participants can already perform KYC and get their address whitelisted. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
 
 The Hey team notably cannot guarantee that participants performing KYC during the first 24h after the Token Sale has started will get their KYC performed in due time to benefit from the first-day bonus. Hence participants should do their KYC early on.
 
