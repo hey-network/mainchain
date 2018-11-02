@@ -97,13 +97,13 @@ Note that the Pausable contract leverages a version of the contract that predate
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Token token |
 
 
-## 🔵 Token characteristics and test cases
+## 💎 Token characteristics and test cases
 
 ### Overall description
 
 #### ERC20 behaviour
 
-The Hey Token conforms to the ERC20 specifications, directly extending OpenZeppelin's related library.
+The Hey Token conforms to the [ERC20 standard](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md), directly extending OpenZeppelin's related library.
 
 #### ERC20 parameters
 
