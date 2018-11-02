@@ -99,6 +99,18 @@ Note that the Pausable contract leverages a version of the contract that predate
 
 ## 🔵 Token characteristics and test cases
 
+### Overall description
+
+### Specifications and related tests
+
+| Characteristic | Test command        | Comment |
+| ------------- | ------------- | ------------- |
+| Name is `HeyToken` | `npm run test:token:name` | |
+| Symbol is `HEY` | `npm run test:token:symbol` | |
+| Number of decimals is `18` | `npm run test:token:decimals` | |
+| Total supply is `1,000,000,000` | `npm run test:token:supply` | |
+
+
 
 ### Characteristics
 
