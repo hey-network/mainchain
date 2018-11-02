@@ -8,6 +8,43 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 > 📘 If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
 
+#### Table of contents
+
+[Disclaimers](#-disclaimers)
+[Contract addresses](#-contracts-addresses)
+[Codebase overview](#-codebase-overview)
+
+ ⋅⋅⋅[Design principles](#design-principles)
+ ⋅⋅⋅[Contracts overview](#contracts-overview)
+ ⋅⋅⋅[Architecture diagrams](#architecture-diagrams)
+
+[Local machine setup](#-local-machine-setup)
+
+ ⋅⋅⋅[Dependencies](#dependencies)
+ ⋅⋅⋅[Running tests](#running-tests)
+
+[Open-source components](#-open-source-components)
+
+ ⋅⋅⋅[Code used as-is](#code-used-as-is)
+ ⋅⋅⋅[Code used as basis](#code-used-as-basis)
+
+[Contracts deep-dives](#-contracts-deep-dives)
+
+ ⋅⋅⋅[Token](#token)
+ ⋅⋅⋅[Token Sale](#token-sale)
+ ⋅⋅⋅[VestingTrustee](#vesting-trustee)
+ ⋅⋅⋅[Gateway](#gateway)
+
+[Deployment](#-deployment)
+
+  ...[First phase](#first-phase)
+  ...[Second phase](#second-phase)
+
+[Security](#-security)
+
+ ⋅⋅⋅[Preliminary analysis](#preliminary-analysis)
+ ⋅⋅⋅[Audit](#audit)
+
 
 ## ⚠️ Disclaimers
 This code and its readme are **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available once their recommendation has been processed.
@@ -20,7 +57,11 @@ A **bug bounty** program will likely be considered for product-specific smart co
 ## 📮 Contracts addresses
 ~~Will be populated after production deployment.~~
 
-## 🎯 Design principles
+
+
+## 🔭 Codebase overview
+
+### Design principles
 
 More than 95% of the mainchain codebase relies on standard, open-source, previously audited contracts. The Token Generation Event (TGE) smart contracts are mostly out-of-box OpenZeppelin's library contracts, while the Gateway contract leverage Loom Network's example.
 
@@ -32,11 +73,8 @@ This approach has been chosen deliberately so that the Hey Team can:
 
 The Hey Team has taken great care to track provenance of open-source components, and has made sure to thoroughly review each component internally to get a deep grasp of their interface and implementation.
 
+### Contracts overview
 
-## 🔭 Codebase overview
-
-
-### Introduction
 This repository consists of four main contracts.
 
 The two main contracts supporting Hey's platform are:
@@ -50,7 +88,7 @@ Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
 If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
 
 
-### Contracts diagrams
+### Architecture diagrams
 These diagrams express the inheritance and usage relationships amongst contracts. Contracts in blue are the ones that effectively get deployed on the mainchain, composing from higher-level contracts.
 
 #### Token, TokenSale, VestingTrustee
@@ -61,12 +99,17 @@ These diagrams express the inheritance and usage relationships amongst contracts
 
 ![Gateway diagram](https://raw.githubusercontent.com/hey-network/mainchain/master/_readme_assets/Gateway%20diagram.png)
 
+## 💻 Local machine setup
 
-## 💪 Reliance on audited open-source code
-The vast majority of Hey's sidechain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
+### Dependencies
+
+### Running tests
+
+## 💪 Open-source components
+The vast majority of Hey's mainchain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
 
 
-### Code reused *as-is* with no modification
+### Code used as-is
 
 | Domain | File        | Provider           | Source  | Commit hash |
 | ------------- | ------------- | ------------- |------------- |------------- |
@@ -88,7 +131,7 @@ The vast majority of Hey's sidechain contracts leverage existing, previously aud
 Note that the Pausable contract leverages a version of the contract that predated migration to a Roles-based ownership system. We prefer to stick to a single owner for the sake of simplicity, especially given the limited number of actions that can be performed by the owner in the context of the TGE (that is, only call `pause()`).
 
 
-### Code taken *as basis* for custom Hey contracts
+### Code used as basis
 
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
@@ -96,16 +139,17 @@ Note that the Pausable contract leverages a version of the contract that predate
 | TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to latest Solidity best practices |
 | Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Token token |
 
+## 📄 Contracts deep-dives
 
-## 💎 Token characteristics and test cases
+### Token
 
-### Overall description
+#### Description
 
-#### ERC20 behaviour
+##### ERC20 behaviour
 
 The Hey Token conforms to the [ERC20 standard](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md), directly extending OpenZeppelin's related library.
 
-#### ERC20 parameters
+##### ERC20 parameters
 
 The Hey Token has the following parameters:
 
@@ -114,16 +158,16 @@ The Hey Token has the following parameters:
 | Name | HeyToken | |
 | Symbol | HEY | |
 | Decimals | 18 | |
-| Total supply | 1,000,000 | Minted to owner address at creation |
+| Total supply | 1,000,000,000 | Minted to owner address at creation |
 
-#### Customisations
+##### Customisations
 
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
 - `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
 - `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
 
-### Testing of specifications
+#### Testing of specifications
 
 The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
@@ -139,11 +183,11 @@ The full token test suite can be run with the command `npm run test:token`. Each
 
 Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
 
-## 🛒 TokenSale characteristics and test cases
+### TokenSale
 
-### Overall description
+#### Description
 
-#### Crowdsale behaviour
+##### Crowdsale behaviour
 
 The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviours implemented in OpenZeppelin's standard contracts:
 - `TimedCrowdsale`: the Token sale only accept payments between `startTime` and `endTime`.
@@ -152,9 +196,9 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 
 Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
 
-#### Customisations
+##### Customisations
 
-##### Finalization
+###### Finalisation
 
 When it is deployed, the Token Sale contract expects a `pool` address to be provided as constructor argument. When the `finalize()` function is called after sale closing, any remaining tokens not sold to sale participants will automatically be transferred to the Pool address.
 
@@ -164,13 +208,13 @@ In the Pool, tokens will be made available for users to redeem. Note that the Po
 
 We expect that there will be remaining tokens even in the case that a hard cap is reached, primarily for rounding reasons.
 
-##### Pausable payments
+###### Pausable payments
 
 At any time, the owner of the contract can call the `pause()` function. This prevents any new incoming purchase of tokens.
 
 This customisation is implemented by extending the internal `_preValidatePurchase()` function and inheriting from the `Pausable` contract from OpenZeppelin's standard library.
 
-##### Evolving rate
+###### Evolving rate
 
 When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` to be provided as constructor argument. These express the ether-to-tokens rates that will be applicable respectively during and after the first 24 hours after the sale opening time.
 
@@ -178,7 +222,7 @@ The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 
 
 This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
 
-### Testing of specifications
+#### Testing of specifications
 <!-- TODO: multiply rate by 1e18 -->
 
 The full token sale test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
@@ -191,9 +235,20 @@ The full token sale test suite can be run with the command `npm run test:token-s
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
 | 5 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
+## 🔒 Security
+
+### Preliminary analysis
+- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
+- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
+- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
+- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
+
+## Audit
+Will be updated after audit.
+
 ## 🚀 Deployment
 
-### First phase: Token and TokenSale
+### First phase
 The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
 
 #### Prerequisites
@@ -250,13 +305,5 @@ All actions performed below should originate from the TGEAdmin account. After de
 This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). ~~The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).~~
 
 
-### Second phase: Gateway
+### Second phase
 This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
-
-## Security checks
-
-### Tools used to check the code
-- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
-- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
-- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
-- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
