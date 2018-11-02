@@ -22,6 +22,8 @@
     "test:token:transfers": "truffle test --network test test/Token.test.js -g '(function extension)'",
     "test:token:drain": "truffle test --network test test/Token.test.js -g 'drain'",
     "test:token-sale": "truffle test --network test test/TokenSale.test.js",
+    "test:token-sale:pause": "truffle test --network test test/TokenSale.test.js -g 'pausable'",
+    "test:token-sale:rate": "truffle test --network test test/TokenSale.test.js -g 'evolving rate'",
     "test:gateway": "truffle test --network test test/Gateway.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
     "mythril:token": "npm run mythrill contracts/Token.sol",

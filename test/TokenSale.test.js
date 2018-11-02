@@ -99,7 +99,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
         (await this.tokenSale.hasClosed()).should.equal(true);
       });
 
-      describe('pausing payments', function () {
+      describe('pausable', function () {
         it('can be paused by the owner', async function () {
           await this.tokenSale.pause({ from: owner });
           (await this.tokenSale.paused()).should.equal(true);
@@ -109,10 +109,37 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
           await shouldFail.reverting(this.tokenSale.pause({ from: anyone }));
         });
 
-        it('should reject payments when paused', async function () {
+        it.only('should reject payments when paused', async function () {
+          await time.increaseTo(this.openingTime);
           await this.tokenSale.pause({ from: owner });
           await shouldFail.reverting(this.tokenSale.send(value));
           await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
+        });
+      });
+
+      describe('evolving rate', function () {
+        context('within 24 hours after the opening time before and closing time', async function () {
+          beforeEach(async function () {
+            await time.increaseTo(this.openingTime);
+          });
+
+          describe('rate', function () {
+            it(`is set at ${firstDayRate} tokens per ETH`, async function () {
+              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
+            });
+          });
+        });
+
+        context('after 24 hours after the opening time before and closing time', async function () {
+          beforeEach(async function () {
+            await time.increaseTo(this.openingTime + time.duration.hours(24));
+          });
+
+          describe('rate', function () {
+            it(`is set at ${rate} tokens per ETH`, async function () {
+              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
+            });
+          });
         });
       });
 

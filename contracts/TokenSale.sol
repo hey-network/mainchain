@@ -71,7 +71,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
 
     // INTERNAL FUNCTIONS
 
-    // Override of parent function to add Pausable behaviour.
+    // Extension of parent function to add Pausable behaviour.
     function _preValidatePurchase(
         address beneficiary,
         uint256 weiAmount
@@ -94,7 +94,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         return weiAmount.mul(getCurrentRate());
     }
 
-    // Override of parent function. We extend it to have all remaining tokens
+    // Extension of parent function. We extend it to have all remaining tokens
     // transferred to the Pool where they will be made redeemable.
     // This function is called by the public finalize() function. Note interestingly
     // that the finalize() public function is callable by anyone to avoid having

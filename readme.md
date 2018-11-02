@@ -116,7 +116,7 @@ The Hey Token has the following parameters:
 | Decimals | 18 | |
 | Total supply | 1,000,000 | Minted to owner address at creation |
 
-#### Additional behaviours
+#### Customisations
 
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
@@ -139,23 +139,53 @@ The full token test suite can be run with the command `npm run test:token`. Each
 
 Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
 
-### Characteristics
-
-
-### Test cases
-
-
 ## 🛒 TokenSale characteristics and test cases
 
+### Overall description
 
-### Characteristics
+#### Crowdsale behaviour
 
+The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviours implemented in OpenZeppelin's standard contracts:
+- `TimedCrowdsale`: the Token sale only accept payments between `startTime` and `endTime`.
+- `FinalizableCrowdsale`: the Token sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
+- `Pausable`: the Token sale can be paused by the owner to reject any new incoming payments.
+
+Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
+
+#### Customisations
+
+##### Finalization
+
+When it is deployed, the Token Sale contract expects a `pool` address to be provided as constructor argument. When the `finalize()` function is called after sale closing, any remaining tokens not sold to sale participants will automatically be transferred to the Pool address.
+
+This customisation is implemented by extending the internal `_finalization()` function.
+
+In the Pool, tokens will be made available for users to redeem. Note that the Pool is anyway endowed with 30% of the total token supply, and the remaining tokens are an increment to this amount.
+
+We expect that there will be remaining tokens even in the case that a hard cap is reached, primarily for rounding reasons.
+
+##### Pausable payments
+
+At any time, the owner of the contract can call the `pause()` function. This prevents any new incoming purchase of tokens.
+
+This customisation is implemented by extending the internal `_preValidatePurchase()` function and inheriting from the `Pausable` contract from OpenZeppelin's standard library.
+
+##### Evolving rate
+
+When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` to be provided as constructor argument. These express the ether-to-tokens rates that will be applicable respectively during and after the first 24 hours after the sale opening time.
+
+The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 10% tokens bonus for first-day purchases).
+
+This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
 
 ### Test cases
-
+<!-- TODO: multiply rate by 1e18 -->
+| # | Description | Test command |
+| --- | ------------- | ------------- |
+|  | Payments are pausable | `npm run test:token-sale:pause` |
+|  | Remaining tokens are sent to pool at finalization | `npm run test:token-sale:finalize` |
 
 ## 🚀 Deployment
-
 
 ### First phase: Token and TokenSale
 The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
