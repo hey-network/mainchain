@@ -33,7 +33,7 @@
     "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
     "mythril:gateway": "npm run mythrill contracts/Gateway.sol",
     "mythril:vesting-trustee": "npm run mythrill contracts/VestingTrustee.sol",
-    "mythrill": "myth --solc-args \"openzeppelin-solidity/=$(pwd)/node_modules/openzeppelin-solidity/\" -x"
+    "mythrill": "myth --max-depth 100 --solc-args \"openzeppelin-solidity/=$(pwd)/node_modules/openzeppelin-solidity/\" -x"
   },
   "author": "",
   "license": "ISC",

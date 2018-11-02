@@ -49,10 +49,31 @@ Will be populated after production deployment.
 ## 🔒 Security analysis
 
 ### Preliminary analysis
-- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
-- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
-- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
-- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
+
+Prior to the audit, a series of tools have been used to improve overall code quality and robustness.
+
+#### Solium
+
+The [Solium](https://github.com/duaraghav8/Solium) linter can be run with `npm run lint`. The following warnings remain and are acceptable, hence they have been silenced by selectively disabling solium on the corresponding lines:
+- TokenSale#L65: usage of `block.timestamp`, required for the TimedCrowdsale behaviour
+- VestingTrustee#L187: usage of `block.timestamp`, required for the vesting behaviour
+- ECVerify#L11: assigning to function parameter (`hash`) argument, kept for simpler code readability, and to stick with the version retrieved from Loom's example
+- ECVerify#L25: usage of Inline Assembly to decompose signature byte, kept as it is a generally accepted practice to simply extract the `(r, s, v)` parameters, and to stick with the version retrieved from Loom's example
+
+#### Mythril
+
+The [Mythril](https://mythril.ai/) static analyzer can be run with `npm run mythril`, or independently for each contract (see the full list in `package.json`, for example you can run `npm run mythril:token`). Please consult the related doc to install this tool on your machine.
+
+For the Token contract, the following warnings were emitted and are acceptable:
+- Integer Overflow (SWC ID: 101) in file `Token.sol:9`: acceptable as the `decimals()` value is set once and for all at deployment with a predictable result
+- Message call to external contract (SWC ID: 107) in file `EmergencyERC20Drain.sol:18`: acceptable as this function can only be called by the contract owner, whom we assume is not malicious
+- Integer Overflow (SWC ID: 101) in file `SafeMath.sol:51`: acceptable as the SafeMath library's purpose is precisely to securely handle this error
+
+Note that there is a `--max-depth` issue to get the tool running for some contracts, which still needs to be investigated jointly with auditors to understand how to fix the configuration.
+
+#### Other tools
+
+The code repository has also been checked with [SmartCheck](https://tool.smartdec.net/) and [Securify](https://securify.chainsecurity.com/), two online security tools. [Oyente](https://github.com/melonproject/oyente) could not be deployed on this repository as it uses old `EVM` and `solc` versions which makes it unable to run the code. This will also be investigated with auditors to make the most out of the available toolkits.
 
 ### Audit
 Will be updated after audit.

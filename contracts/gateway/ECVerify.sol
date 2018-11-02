@@ -8,6 +8,7 @@ library ECVerify {
         TREZOR
     }
 
+    // solium-disable-next-line security/no-assign-params
     function recover(
         bytes32 hash,
         bytes signature
@@ -22,6 +23,7 @@ library ECVerify {
         uint8 v;
         bytes32 r;
         bytes32 s;
+        // solium-disable-next-line security/no-inline-assembly
         assembly {
             r := mload(add(signature, 33))
             s := mload(add(signature, 65))

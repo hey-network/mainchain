@@ -40,7 +40,7 @@ contract VestingTrustee is Ownable {
     )
         public
     {
-        require(_token != address(0));
+        require(_token != address(0), "token cannot be zero address");
 
         token = _token;
     }
@@ -63,17 +63,17 @@ contract VestingTrustee is Ownable {
         public
         onlyOwner
     {
-        require(_to != address(0));
-        require(_value > 0);
+        require(_to != address(0), "to cannot be zero address");
+        require(_value > 0, "value must be above 0");
 
         // Make sure that a single address can be granted tokens only once.
-        require(grants[_to].value == 0);
+        require(grants[_to].value == 0, "only one grant per address");
 
         // Check for date inconsistencies that may cause unexpected behavior.
-        require(_start <= _cliff && _cliff <= _end);
+        require(_start <= _cliff && _cliff <= _end, "vesting dates must be consistent");
 
         // Check that this grant doesn't exceed the total amount of tokens currently available for vesting.
-        require(totalVesting.add(_value) <= token.balanceOf(address(this)));
+        require(totalVesting.add(_value) <= token.balanceOf(address(this)), "grant cannot exceed total amount of tokens available");
 
         // Assign a new grant.
         grants[_to] = Grant({
@@ -101,7 +101,7 @@ contract VestingTrustee is Ownable {
     {
         Grant storage grant = grants[_holder];
 
-        require(grant.revokable);
+        require(grant.revokable, "grant must be revokable");
 
         // Send the remaining ERC20 back to the owner.
         uint256 refund = grant.value.sub(grant.transferred);
@@ -181,10 +181,11 @@ contract VestingTrustee is Ownable {
         public
     {
         Grant storage grant = grants[msg.sender];
-        require(grant.value != 0);
+        require(grant.value != 0, "grant value cannot be 0");
 
         // Get the total amount of vested tokens, acccording to grant.
-        uint256 vested = calculateVestedTokens(grant, now);
+        // solium-disable-next-line security/no-block-members
+        uint256 vested = calculateVestedTokens(grant, block.timestamp);
         if (vested == 0) {
             return;
         }

@@ -18,7 +18,7 @@ contract Token is ERC20, ERC20Detailed, EmergencyERC20Drain {
         address to
     )
     {
-        require(to != address(this));
+        require(to != address(this), "cannot send to contract itself");
         _;
     }
 

@@ -45,8 +45,8 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         Crowdsale(rate, wallet, token)
         TimedCrowdsale(openingTime, closingTime)
     {
-        require(firstDayRate > 0);
-        require(pool != address(0));
+        require(firstDayRate > 0, "first day rate must be above 0");
+        require(pool != address(0), "pool cannot be the zero address");
 
         _openingTime = openingTime;
         _firstDayRate = firstDayRate;
@@ -62,7 +62,8 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         view
         returns (uint256)
     {
-        if (now < (_openingTime.add(24 hours))) {
+        // solium-disable-next-line security/no-block-members
+        if (block.timestamp < (_openingTime.add(24 hours))) {
             return _firstDayRate;
         } else {
             return _rate;
@@ -80,7 +81,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         view
     {
         super._preValidatePurchase(beneficiary, weiAmount);
-        require(!paused());
+        require(!paused(), "cannot purchase when contract is paused");
     }
 
     // Override of parent function to reflect non-constant rate.
