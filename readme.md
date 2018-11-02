@@ -10,40 +10,29 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 #### Table of contents
 
-[Disclaimers](#-disclaimers)
-[Contract addresses](#-contracts-addresses)
-[Codebase overview](#-codebase-overview)
-
-   [Design principles](#design-principles)  
-   [Contracts overview](#contracts-overview)  
-   [Architecture diagrams](#architecture-diagrams)
-
-[Local machine setup](#-local-machine-setup)
-
- ⋅⋅⋅[Dependencies](#dependencies)
- ⋅⋅⋅[Running tests](#running-tests)
-
-[Open-source components](#-open-source-components)
-
- ⋅⋅⋅[Code used as-is](#code-used-as-is)
- ⋅⋅⋅[Code used as basis](#code-used-as-basis)
-
-[Contracts deep-dives](#-contracts-deep-dives)
-
- ⋅⋅⋅[Token](#token)
- ⋅⋅⋅[Token Sale](#token-sale)
- ⋅⋅⋅[VestingTrustee](#vesting-trustee)
- ⋅⋅⋅[Gateway](#gateway)
-
-[Deployment](#-deployment)
-
-  ...[First phase](#first-phase)
-  ...[Second phase](#second-phase)
-
-[Security](#-security)
-
- ⋅⋅⋅[Preliminary analysis](#preliminary-analysis)
- ⋅⋅⋅[Audit](#audit)
+- [Disclaimers](#-disclaimers)
+- [Contract addresses](#-contracts-addresses)
+- [Codebase overview](#-codebase-overview)
+  - [Design principles](#design-principles)  
+  - [Contracts overview](#contracts-overview)  
+  - [Architecture diagrams](#architecture-diagrams)
+- [Local machine setup](#-local-machine-setup)
+  - [Dependencies](#dependencies)
+  - [Running tests](#running-tests)
+- [Open-source components](#-open-source-components)
+  - [Code used as-is](#code-used-as-is)
+  - [Code used as basis](#code-used-as-basis)
+- [Contracts deep-dives](#-contracts-deep-dives)
+  - [Token](#token)
+  - [Token Sale](#token-sale)
+  - [VestingTrustee](#vesting-trustee)
+  - [Gateway](#gateway)
+- [Deployment](#-deployment)
+  - [First phase](#first-phase)
+  - [Second phase](#second-phase)
+- [Security](#-security)
+  - [Preliminary analysis](#preliminary-analysis)
+  - [Audit](#audit)
 
 
 ## ⚠️ Disclaimers
