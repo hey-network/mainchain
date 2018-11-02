@@ -30,7 +30,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
       (await this.token.symbol()).should.be.equal(SYMBOL);
     });
 
-    it(`sets the token number of decimals to ${DECIMALS}`, async function () {
+    it(`sets the token decimals to ${DECIMALS}`, async function () {
       (await this.token.decimals()).should.be.bignumber.equal(DECIMALS);
     });
 

@@ -1,7 +1,23 @@
-// Runs on Ganache - NOTE: we want to have Truffle and the gatewayOracle running
-// on the same blockchain instance, so that we can use the gatewayOracle address
-// to perform operations directly from Truffle (to test adding new validators as
-// an existing validator, for example).
+// -------------------------------------------------------------------
+// From https://gist.github.com/mxpaul/f2168f5c951306a06ef833efa0eb56ce
+// Emulate mocha --grep option to run only matching tests
+let mochaConf = {}; // Passed as module.exports.mocha
+// -------------------------------------------------------------------
+
+for (let i = 0; i < process.argv.length; i++) {
+	const arg = process.argv[i];
+	if (arg != '-g' && arg != "--grep" ) continue;
+	if (++i >= process.argv.length) {
+		console.error(arg + " option requires argument");
+		process.exit(1);
+	};
+	const re = new RegExp(process.argv[i]);
+	mochaConf.grep = new RegExp(process.argv[i]);
+	console.error("RegExp: " + i + ": " + re);
+	break;
+}
+// -------------------------------------------------------------------
+
 module.exports = {
   networks: {
     development: {
@@ -10,5 +26,5 @@ module.exports = {
       network_id: "*" // Match any network id
     }
   },
-
+  mocha: mochaConf,
 };
