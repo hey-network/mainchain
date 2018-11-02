@@ -121,13 +121,13 @@ The Hey Token has the following parameters:
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
 - `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
-- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to salvage any ERC20 tokens sent to the contract by mistake by draining them to the owner address. It does so with the `drain()` functions.
+- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
 
 ### Specifications and related tests
 
 The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
-| # | Description | Test command |
+| g# | Description | Test command |
 | --- | ------------- | ------------- |
 | 1 | Name is `HeyToken` | `npm run test:token:name` |
 | 2 | Symbol is `HEY` | `npm run test:token:symbol` |
