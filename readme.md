@@ -121,7 +121,7 @@ The Hey Token has the following parameters:
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
 - `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
-- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
+- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
 
 ### Specifications and related tests
 
@@ -135,7 +135,7 @@ The full token test suite can be run with the command `npm run test:token`. Each
 | 4 | Total supply is `1,000,000,000` | `npm run test:token:supply` |
 | 5 | Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` |
 | 6 | Conforms to ERC20 transfers interface | `npm run test:token:transfers` |
-| 7 | Allows owner to drain ERC20 tokens sent by mistake | `npm run test:token:drain` |
+| 7 | Allows owner to drain other ERC20 tokens sent by mistake | `npm run test:token:drain` |
 
 Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
 
