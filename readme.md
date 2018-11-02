@@ -92,7 +92,21 @@ These diagrams express the inheritance and usage relationships amongst contracts
 
 ### Dependencies
 
+Make sure the following npm modules are installed, by running `npm install`:
+- truffle (`v4.1.12`)
+- openzeppelin-solidity (`v2.0.0`)
+- web3 (`v1.0.0-beta.35`)
+
+Furthermore, we use the following modules during testing (installed simultaneously with above packages):
+- yaeti
+- typedarray-to-buffer
+- chai
+- chai-bignumber
+- pify
+
 ### Running tests
+
+No need to run `ganache-cli`, as we use the built-in `test` network from Truffle. Simply run `npm run test` or `npm t` to launch the full test suite.
 
 ## 💪 Open-source components
 The vast majority of Hey's mainchain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
