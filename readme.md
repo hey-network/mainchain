@@ -134,9 +134,9 @@ This table lists all `*.sol` contract files imported directly or indirectly (fro
 | TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | TGE | TimedCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | TGE | FinalizableCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Gateway | ValidatorsManagerContract.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ValidatorManagerContract.sol) |
-| Gateway | ECVerify.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ECVerify.sol) |
-| Gateway | ERC20Receiver.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ERC20Receiver.sol) |
+| Gateway | ValidatorsManagerContract.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ValidatorManagerContract.sol) |
+| Gateway | ECVerify.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ECVerify.sol) |
+| Gateway | ERC20Receiver.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ERC20Receiver.sol) |
 | Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | PauserRole.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
@@ -153,7 +153,7 @@ This table lists all `*.sol` contract files that served as basis by the deployed
 | ----- | ------- | ------------- |------------- |------ |
 | Token | Token.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`) |
 | TGE | VestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, change `Sirin` to `Hey` in functions and variables names, adhere to latest Solidity best practices |
-| Gateway | Gateway.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Token token |
+| Gateway | Gateway.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Token token |
 
 ## 📄 Contracts deep-dives
 
