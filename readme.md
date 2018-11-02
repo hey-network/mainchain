@@ -101,6 +101,28 @@ Note that the Pausable contract leverages a version of the contract that predate
 
 ### Overall description
 
+#### ERC20 behaviour
+
+The Hey Token conforms to the ERC20 specifications, directly extending OpenZeppelin's related library.
+
+#### ERC20 parameters
+
+The Hey Token has the following parameters:
+
+| Parameter | Value       | Comment |
+| ------------- | ------------- | ------------- |
+| Name | HeyToken | |
+| Symbol | HEY | |
+| Decimals | 18 | |
+| Total supply | 1,000,000 | Minted to owner address at creation |
+
+### Additional behaviours
+
+The Hey Token extends the ERC20 specifications to include two additional security features:
+
+- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey T okens to the Hey Token contract itself
+- `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to salvage any ERC20 tokens sent to the contract by mistake by draining them to the owner address
+
 ### Specifications and related tests
 
 | Characteristic | Test command        | Comment |
