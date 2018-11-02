@@ -185,7 +185,7 @@ The full token test suite can be run with the command `npm run test:token-sale`.
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
-| 1 | Conforms to standard Crowdsale behaviour | `npm run test:token-sale` |
+| 1 | Conforms to standard Crowdsale behaviour | `npm run test:token-sale:standard` |
 | 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
 | 3 | Evolves rate from 5500 to 5000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
