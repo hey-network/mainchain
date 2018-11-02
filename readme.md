@@ -228,9 +228,10 @@ Note that it is necessary to test (6) since the Hey Token extends the `transfer(
 ##### Crowdsale behaviour
 
 The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviours implemented in OpenZeppelin's standard contracts:
-- `TimedCrowdsale`: the Token sale only accept payments between `startTime` and `endTime`.
-- `FinalizableCrowdsale`: the Token sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
-- `Pausable`: the Token sale can be paused by the owner to reject any new incoming payments.
+- `TimedCrowdsale`: the Token Sale only accept payments between `startTime` and `endTime`.
+- `FinalizableCrowdsale`: the Token Sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
+- `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
+- `Whitelisting` (TO IMPLEMENT): the Token Sale only allows contributions from addresses whitelisted by the contract owner for KYC reasons.
 
 Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
 
@@ -261,6 +262,14 @@ When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` t
 The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 10% tokens bonus for first-day purchases).
 
 This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
+
+###### Whitelisting (TO IMPLEMENT)
+
+The Token Sale contract only allows contributions from a set of whitelisted addresses, for KYC reasons. The set of addresses is a mapping `whitelist` of `address` to `bool`, which is in batch populated by the Token Sale contract owner in batch before and during the TGE period using the `batchWhitelist()` function.
+
+Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one week before contributions can start so that interested participants can already perform KYC. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
+
+The Hey team notably cannot guarantee that participants performing KYC during the first 24h after the Token Sale has started will get their KYC performed in due time to benefit from the first-day bonus. Hence participants should do their KYC early on.
 
 #### Testing of specifications
 
