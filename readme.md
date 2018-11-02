@@ -40,7 +40,7 @@ This code and its readme are **still work in progress** and should be considered
 
 Through this document, elements that are **~~stricken through~~** should be considered **even more work in progress** as they are still subject to potentially significant changes.
 
-A **bug bounty** program will likely be considered for product-specific smart contracts (both on the sidechain and mainchain). Stay tuned if you are a Solidity nerd and are excited by this opportunity.
+A **bug bounty** program will run for product-specific smart contracts (both on the sidechain and mainchain). Contact us at [bounty@hey.network](mailto:bounty@hey.network) if you are a Solidity nerd and are excited by this opportunity.
 
 
 ## 📮 Contracts addresses
