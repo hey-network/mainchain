@@ -52,6 +52,14 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
         });
       });
 
+      // Note: this test should be placed somewhere else, for now we keep it
+      // as it contributes to 100% test coverage on the contract.
+      describe('claimableTokens', async function () {
+        it('should return 0 for an address that is not a grantee', async function () {
+          (await this.vestingTrustee.claimableTokens(anyone, (await time.latest()))).should.be.bignumber.equal(0);
+        });
+      });
+
       context('with an existing revokable single grant', async function () {
         beforeEach(async function () {
           this.value = 1000;

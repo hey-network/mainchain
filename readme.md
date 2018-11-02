@@ -280,7 +280,7 @@ TODO
 
 ### Gateway
 
-TODO
+TODO. Note that the ValidatorsManager contract has been taken out of the test coverages calculations as it is not in Hey's direct focus to test all validators co-opting features of this contract.
 
 ## 🚀 Deployment
 
