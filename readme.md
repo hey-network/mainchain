@@ -232,6 +232,7 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 - `FinalizableCrowdsale`: the Token Sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
 - `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
 - `Whitelisting` (TO IMPLEMENT): the Token Sale only allows contributions from addresses whitelisted by the contract owner for KYC reasons.
+- `MinimumContribution` (TO IMPLEMENT): the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
 
 Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
 
@@ -267,9 +268,13 @@ This customisation is implemented by overriding the internal `_getTokenAmount()`
 
 The Token Sale contract only allows contributions from a set of whitelisted addresses, for KYC reasons. The set of addresses is a mapping `whitelist` of `address` to `bool`, which is populated by the Token Sale contract owner in batch before and during the TGE period using the `batchWhitelist()` function.
 
-Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one week before contributions can start, so that interested participants can already perform KYC and get their address whitelisted. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
+Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one month before contributions can start, so that interested participants can already perform KYC and get their address whitelisted. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
 
 The Hey team notably cannot guarantee that participants performing KYC during the first 24h after the Token Sale has started will get their KYC performed in due time to benefit from the first-day bonus. Hence participants should do their KYC early on.
+
+##### Minimum contribution (TO IMPLEMENT)
+
+TODO: ensure `msg.value >= 0.1 ether`.
 
 #### Testing of specifications
 
