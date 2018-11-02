@@ -49,7 +49,7 @@ contract VestingTrustee is Ownable {
     /// @param _to address The address to grant tokens to.
     /// @param _value uint256 The amount of tokens to be granted.
     /// @param _start uint256 The beginning of the vesting period.
-    /// @param _cliff uint256 Duration of the cliff period.
+    /// @param _cliff uint256 The date at which the cliff occurs.
     /// @param _end uint256 The end of the vesting period.
     /// @param _revokable bool Whether the grant is revokable or not.
     function createGrant(
@@ -93,7 +93,7 @@ contract VestingTrustee is Ownable {
 
     /// @dev Revoke the grant of tokens of a specifed address.
     /// @param _holder The address which will have its tokens revoked.
-    function revoke(
+    function revokeGrant(
         address _holder
     )
         public
@@ -115,11 +115,11 @@ contract VestingTrustee is Ownable {
         emit RevokeGrant(_holder, refund);
     }
 
-    /// @dev Calculate the total amount of vested tokens of a holder at a given time.
+    /// @dev Calculate the total amount of tokens that a holder can claim at a given time.
     /// @param _holder address The address of the holder.
     /// @param _time uint256 The specific time.
     /// @return a uint256 representing a holder's total amount of vested tokens.
-    function vestedTokens(
+    function claimableTokens(
         address _holder,
         uint256 _time
     )
@@ -132,7 +132,7 @@ contract VestingTrustee is Ownable {
             return 0;
         }
 
-        return calculateVestedTokens(grant, _time);
+        return calculateClaimableTokens(grant, _time);
     }
 
     /// @dev Calculate amount of vested tokens at a specifc time.
@@ -153,7 +153,7 @@ contract VestingTrustee is Ownable {
     ///   |    .          |
     ///   +===+===========+---------+----------> time
     ///     Start       Cliff      End
-    function calculateVestedTokens(
+    function calculateClaimableTokens(
         Grant _grant,
         uint256 _time
     )
@@ -161,17 +161,17 @@ contract VestingTrustee is Ownable {
         pure
         returns (uint256)
     {
-        // If we're before the cliff, then nothing is vested.
+        // If we're before the cliff, then everything is still vested and nothing can be claimed.
         if (_time < _grant.cliff) {
             return 0;
         }
 
-        // If we're after the end of the vesting period - everything is vested;
+        // If we're after the end of the vesting period - everything is claimable;
         if (_time >= _grant.end) {
             return _grant.value;
         }
 
-        // Interpolate all vested tokens: vestedTokens = tokens/// (time - start) / (end - start)
+        // Interpolate all claimable tokens: claimableTokens = tokens/// (time - start) / (end - start)
         return _grant.value.mul(_time.sub(_grant.start)).div(_grant.end.sub(_grant.start));
     }
 
@@ -183,18 +183,16 @@ contract VestingTrustee is Ownable {
         Grant storage grant = grants[msg.sender];
         require(grant.value != 0, "grant value cannot be 0");
 
-        // Get the total amount of vested tokens, acccording to grant.
+        // Get the total amount of claimable tokens, acccording to grant.
         // solium-disable-next-line security/no-block-members
-        uint256 vested = calculateVestedTokens(grant, block.timestamp);
-        if (vested == 0) {
-            return;
-        }
+        uint256 claimable = calculateClaimableTokens(grant, block.timestamp);
+        require(claimable != 0, "no tokens claimable at the moment");
 
         // Make sure the holder doesn't transfer more than what he already has.
-        uint256 transferable = vested.sub(grant.transferred);
-        if (transferable == 0) {
-            return;
-        }
+        // Note that claimable will always be greater than or equal to
+        // transferred by definition, so this is just an extra check.
+        uint256 transferable = claimable.sub(grant.transferred);
+        require(transferable != 0, "claimable amount already transferred");
 
         grant.transferred = grant.transferred.add(transferable);
         totalVesting = totalVesting.sub(transferable);

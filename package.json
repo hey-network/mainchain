@@ -12,7 +12,7 @@
   },
   "scripts": {
     "lint": "solium --dir ./contracts --fix",
-    "test": "truffle test --network test test/Token.test.js test/TokenSale.test.js test/Gateway.test.js",
+    "test": "truffle test --network test test/Token.test.js test/TokenSale.test.js test/Gateway.test.js test/VestingTrustee.test.js",
     "test:token": "truffle test --network test test/Token.test.js",
     "test:token:name": "truffle test --network test test/Token.test.js -g 'token name'",
     "test:token:symbol": "truffle test --network test test/Token.test.js -g 'token symbol'",
@@ -27,6 +27,7 @@
     "test:token-sale:evolving-rate": "truffle test --network test test/TokenSale.test.js -g 'evolving rate'",
     "test:token-sale:timed": "truffle test --network test test/TokenSale.test.js -g 'timed'",
     "test:token-sale:finalizable": "truffle test --network test test/TokenSale.test.js -g 'finalize'",
+    "test:vesting-trustee": "truffle test --network test test/VestingTrustee.test.js",
     "test:gateway": "truffle test --network test test/Gateway.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
     "mythril:token": "npm run mythrill contracts/Token.sol",
