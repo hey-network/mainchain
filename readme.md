@@ -231,6 +231,9 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 - `TimedCrowdsale`: the Token Sale only accept payments between `startTime` and `endTime`.
 - `FinalizableCrowdsale`: the Token Sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
 - `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
+
+
+The following behaviours have also been implemented (not directly available from OpenZeppelin libraries): 
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
 - `Whitelisting` (TO IMPLEMENT): the Token Sale only allows contributions from addresses whitelisted by the contract owner for KYC reasons.
 
