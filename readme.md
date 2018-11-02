@@ -139,6 +139,8 @@ This table lists all `*.sol` contract files imported directly or indirectly (fro
 | Gateway | ERC20Receiver.sol | Loomx | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ERC20Receiver.sol) |
 | Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | PauserRole.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | Roles.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | Math.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
