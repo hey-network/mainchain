@@ -19,9 +19,11 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
   const firstDayRate = new BigNumber(5500);
   const rate = new BigNumber(5000);
   const tokenSupply = new BigNumber('1e27'); // 9 + 18
-  const value = ether(5);
+  const value = ether(3);
   const expectedFirstDayTokenAmount = firstDayRate.mul(value);
   const expectedTokenAmount = rate.mul(value);
+  const ethMinimumContribution = 0.1;
+  const minimumContribution = ether(ethMinimumContribution);
 
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
@@ -161,6 +163,26 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
           await time.increaseTo(this.afterClosingTime);
           await shouldFail.reverting(this.tokenSale.send(value));
           await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
+        });
+      });
+
+      describe('minimum contribution', function () {
+        it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
+          await time.increaseTo(this.openingTime);
+          await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
+          await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+        });
+
+        it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
+          await time.increaseTo(this.openingTime);
+          await this.tokenSale.send(minimumContribution);
+          await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
+        });
+
+        it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
+          await time.increaseTo(this.openingTime);
+          await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
+          await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
         });
       });
 

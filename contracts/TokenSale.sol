@@ -72,7 +72,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
 
     // INTERNAL FUNCTIONS
 
-    // Extension of parent function to add Pausable behaviour.
+    // Extension of parent function to add Pausable and MinimumContribution behaviours.
     function _preValidatePurchase(
         address beneficiary,
         uint256 weiAmount
@@ -82,6 +82,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
     {
         super._preValidatePurchase(beneficiary, weiAmount);
         require(!paused(), "cannot purchase when contract is paused");
+        require(msg.value >= 0.1 ether, "minimum contribution is 0.1 ETH");
     }
 
     // Override of parent function to reflect non-constant rate.
