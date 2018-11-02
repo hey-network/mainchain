@@ -123,7 +123,7 @@ The Hey Token extends the ERC20 specifications to include two additional securit
 - `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
 - `EmergencyERC20Drain`: as per [Zilliqua's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
 
-### Specifications and related tests
+### Testing of specifications
 
 The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
@@ -134,8 +134,8 @@ The full token test suite can be run with the command `npm run test:token`. Each
 | 3 | Number of decimals is `18` | `npm run test:token:decimals` |
 | 4 | Total supply is `1,000,000,000` | `npm run test:token:supply` |
 | 5 | Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` |
-| 6 | Conforms to ERC20 transfers interface | `npm run test:token:transfers` |
-| 7 | Allows owner to drain other ERC20 tokens sent by mistake | `npm run test:token:drain` |
+| 6 | Conforms to ERC20 transfers interface | `npm run test:token:transferable` |
+| 7 | Allows owner to drain other ERC20 tokens sent by mistake | `npm run test:token:drainable` |
 
 Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
 
@@ -178,12 +178,18 @@ The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 
 
 This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
 
-### Test cases
+### Testing of specifications
 <!-- TODO: multiply rate by 1e18 -->
+
+The full token test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
+
 | # | Description | Test command |
 | --- | ------------- | ------------- |
-|  | Payments are pausable | `npm run test:token-sale:pause` |
-|  | Remaining tokens are sent to pool at finalization | `npm run test:token-sale:finalize` |
+| 1 | Conforms to standard Crowdsale behaviour | `npm run test:token-sale` |
+| 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
+| 3 | Evolves rate from 5500 to 5000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
+| 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
+| 5 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
 ## 🚀 Deployment
 
