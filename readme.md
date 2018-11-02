@@ -14,8 +14,8 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 [Contract addresses](#-contracts-addresses)
 [Codebase overview](#-codebase-overview)
 
- ⋅⋅⋅[Design principles](#design-principles)
- ⋅⋅⋅[Contracts overview](#contracts-overview)
+ ⋅⋅⋅[Design principles](#design-principles)..
+ ⋅⋅⋅[Contracts overview](#contracts-overview)..
  ⋅⋅⋅[Architecture diagrams](#architecture-diagrams)
 
 [Local machine setup](#-local-machine-setup)
