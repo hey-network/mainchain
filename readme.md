@@ -292,7 +292,7 @@ The full Token Sale test suite can be run with the command `npm run test:token-s
 | 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
 | 3 | Evolves rate from 5500 to 5000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
-| 5 | Expects a minimum contribution of 0.1 ETH | `test:token-sale:minimum-contribution` |
+| 5 | Expects a minimum contribution of 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
 | 6 | Allows contribution only from whitelisted addresses | `npm run test:token-sale:whitelisted` |
 | 7 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
