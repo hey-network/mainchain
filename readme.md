@@ -127,7 +127,7 @@ The Hey Token extends the ERC20 specifications to include two additional securit
 
 The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
 
-| Specification # | Description | Test command |
+| # | Description | Test command |
 | --- | ------------- | ------------- |
 | 1 | Name is `HeyToken` | `npm run test:token:name` |
 | 2 | Symbol is `HEY` | `npm run test:token:symbol` |
