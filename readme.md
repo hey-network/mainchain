@@ -12,6 +12,9 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 - [Disclaimers](#-disclaimers)
 - [Contract addresses](#-contracts-addresses)
+- [Security analysis](#-security-analysis)
+  - [Preliminary analysis](#preliminary-analysis)
+  - [Audit](#audit)
 - [Local machine setup](#-local-machine-setup)
   - [Dependencies](#dependencies)
   - [Running tests](#running-tests)
@@ -30,9 +33,6 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 - [Deployment](#-deployment)
   - [First phase](#first-phase)
   - [Second phase](#second-phase)
-- [Security](#-security)
-  - [Preliminary analysis](#preliminary-analysis)
-  - [Audit](#audit)
 
 
 ## ⚠️ Disclaimers
@@ -44,9 +44,18 @@ A **bug bounty** program will likely be considered for product-specific smart co
 
 
 ## 📮 Contracts addresses
-~~Will be populated after production deployment.~~
+Will be populated after production deployment.
 
+## 🔒 Security analysis
 
+### Preliminary analysis
+- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
+- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
+- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
+- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
+
+### Audit
+Will be updated after audit.
 
 ## 🔭 Codebase overview
 
@@ -245,17 +254,6 @@ TODO
 ### Gateway
 
 TODO
-
-## 🔒 Security
-
-### Preliminary analysis
-- SmartCheck (online tool): https://tool.smartdec.net/, using link to GitHub repo
-- Securify (online tool): https://securify.chainsecurity.com/, using zipped repo
-- Mythril: `npm run mythril` (must be fixed for TokenSale, investigating `--max-depth` issue)
-- Oyente: https://github.com/melonproject/oyente, pull the latest Oyente Docker container, then run `docker run -v $(pwd)/contracts:/oyente/oyente/contracts -i -t luongnguyen/oyente`. You can then run `cd oyente` then `python oyente.py -s Token.sol`, and so for other contracts. Unfortunately at the time of writing, Oyente does not support the EVM and solc versions we use in this project, hence no analysis could be run.
-
-### Audit
-Will be updated after audit.
 
 ## 🚀 Deployment
 
