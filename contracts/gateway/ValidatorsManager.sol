@@ -3,7 +3,7 @@ pragma solidity ^0.4.24;
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ECVerify.sol";
 
-contract ValidatorsManagerContract is Ownable {
+contract ValidatorsManager is Ownable {
     using ECVerify for bytes32;
 
     address tokenAddress;

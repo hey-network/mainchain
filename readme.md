@@ -239,7 +239,6 @@ The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 
 This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
 
 #### Testing of specifications
-<!-- TODO: multiply rate by 1e18 -->
 
 The full token sale test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
 

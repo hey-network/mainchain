@@ -1,14 +1,14 @@
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
-import "./gateway/ValidatorsManagerContract.sol";
+import "./gateway/ValidatorsManager.sol";
 import "./gateway/ERC20Receiver.sol";
 
 contract ERC20Token {
     function transfer(address to, uint256 value) public returns (bool);
 }
 
-contract Gateway is ERC20Receiver, ValidatorsManagerContract {
+contract Gateway is ERC20Receiver, ValidatorsManager {
 
     using SafeMath for uint256;
 
@@ -27,7 +27,7 @@ contract Gateway is ERC20Receiver, ValidatorsManagerContract {
         uint8 _threshold_denom
     )
         public
-        ValidatorsManagerContract(_tokenAddress, _validators, _threshold_num, _threshold_denom)
+        ValidatorsManager(_tokenAddress, _validators, _threshold_num, _threshold_denom)
     {
         tokenAddress = _tokenAddress;
     }
