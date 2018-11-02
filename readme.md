@@ -55,10 +55,10 @@ Prior to the audit, a series of tools have been used to improve overall code qua
 #### Solium
 
 The [Solium](https://github.com/duaraghav8/Solium) linter can be run with `npm run lint`. The following warnings remain and are acceptable, hence they have been silenced by selectively disabling solium on the corresponding lines:
-- TokenSale#L65: usage of `block.timestamp`, required for the TimedCrowdsale behaviour
-- VestingTrustee#L187: usage of `block.timestamp`, required for the vesting behaviour
-- ECVerify#L11: assigning to function parameter (`hash`) argument, kept for simpler code readability, and to stick with the version retrieved from Loom's example
-- ECVerify#L25: usage of Inline Assembly to decompose signature byte, kept as it is a generally accepted practice to simply extract the `(r, s, v)` parameters, and to stick with the version retrieved from Loom's example
+- `TokenSale.sol:65`: usage of `block.timestamp`, required for the TimedCrowdsale behaviour
+- `VestingTrustee.sol:187`: usage of `block.timestamp`, required for the vesting behaviour
+- `ECVerify.sol:11`: assigning to function parameter (`hash`) argument, kept for simpler code readability, and to stick with the version retrieved from Loom's example
+- `ECVerify.sol:25`: usage of Inline Assembly to decompose signature byte, kept as it is a generally accepted practice to simply extract the `(r, s, v)` parameters, and to stick with the version retrieved from Loom's example
 
 #### Mythril
 
