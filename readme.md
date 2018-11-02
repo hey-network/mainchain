@@ -168,7 +168,7 @@ This table lists all `*.sol` contract files imported directly or indirectly (fro
 
 ### Code used as basis
 
-This table lists all `*.sol` contract files that served as basis by the deployed Hey contracts.
+This table lists all `*.sol` contract files that served as a source of inspiration for the deployed Hey contracts.
 
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
