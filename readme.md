@@ -203,11 +203,11 @@ The Hey Token has the following parameters:
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
 - `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
-- `EmergencyERC20Drain`: as per [Zilliqa's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` functions.
+- `EmergencyERC20Drain`: as per [Zilliqa's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` function.
 
 #### Testing of specifications
 
-The full token test suite can be run with the command `npm run test:token`. Each specification of the token can also be verified individually with its dedicated test:
+The full Hey Token test suite can be run with the command `npm run test:token`. Each specification of the Hey Token can also be verified individually with its dedicated test:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
@@ -233,6 +233,8 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 - `Pausable`: the Token sale can be paused by the owner to reject any new incoming payments.
 
 Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
+
+The name `TokenSale` has been chosen to be as close as possible to the standard `Crowdsale` name, which is already reserved for the corresponding OpenZeppelin's library (cannot be redeclared since it is already in use).
 
 ##### Customisations
 
@@ -262,7 +264,7 @@ This customisation is implemented by overriding the internal `_getTokenAmount()`
 
 #### Testing of specifications
 
-The full token sale test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
+The full Token Sale test suite can be run with the command `npm run test:token-sale`. Each specification of the Token Sale can also be verified individually with its dedicated test:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
