@@ -181,7 +181,7 @@ This customisation is implemented by overriding the internal `_getTokenAmount()`
 ### Testing of specifications
 <!-- TODO: multiply rate by 1e18 -->
 
-The full token test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
+The full token sale test suite can be run with the command `npm run test:token-sale`. Each specification of the token sale can also be verified individually with its dedicated test:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
