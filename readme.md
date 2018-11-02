@@ -128,6 +128,7 @@ This table lists all `*.sol` contract files imported directly or indirectly (fro
 | Domain | File        | Provider           | Source  |
 | ------------- | ------------- | ------------- |------------- |
 | Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Token | ERC20Detailed.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Token | IERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Token | SafeERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
