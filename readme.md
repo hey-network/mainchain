@@ -123,6 +123,8 @@ The vast majority of Hey's mainchain contracts leverage existing, previously aud
 
 ### Code used as-is
 
+This table lists all `*.sol` contract files imported directly or indirectly (from other imported contracts) by the deployed Hey contracts. These files have been used as-is with no modifications.
+
 | Domain | File        | Provider           | Source  |
 | ------------- | ------------- | ------------- |------------- |
 | Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
@@ -140,10 +142,9 @@ The vast majority of Hey's mainchain contracts leverage existing, previously aud
 | Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 | Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
 
-Note that the Pausable contract leverages a version of the contract that predated migration to a Roles-based ownership system. We prefer to stick to a single owner for the sake of simplicity, especially given the limited number of actions that can be performed by the owner in the context of the TGE (that is, only call `pause()`).
-
-
 ### Code used as basis
+
+This table lists all `*.sol` contract files that served as basis by the deployed Hey contracts.
 
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
