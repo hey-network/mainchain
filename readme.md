@@ -233,7 +233,8 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 - `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
 
 
-The following behaviours have also been implemented (not directly available from OpenZeppelin libraries): 
+The following behaviours have also been implemented (not directly available from OpenZeppelin libraries):
+- `EvolvingRate`: the ETH-to-tokens rate evolves from 5500 during the first day of the TGE to 5000 afterwards.
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
 - `Whitelisting` (TO IMPLEMENT): the Token Sale only allows contributions from addresses whitelisted by the contract owner for KYC reasons.
 
