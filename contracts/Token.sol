@@ -6,7 +6,9 @@ import "./utils/EmergencyERC20Drain.sol";
 
 contract Token is ERC20, ERC20Detailed, EmergencyERC20Drain {
 
-    uint256 public constant INITIAL_SUPPLY = 1000000000 * (10 ** uint256(decimals())); // 1 billion tokens
+    // Note that here we'd like to use decimals() to be DRY (and follow OZ's
+    // SimpleToken example, however this crashes the compiler).
+    uint256 public constant INITIAL_SUPPLY = 1000000000 * (10 ** uint256(18)); // 1 billion tokens
 
     /**
     * @dev From Consensys recommendations:

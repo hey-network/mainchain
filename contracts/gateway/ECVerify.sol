@@ -38,8 +38,8 @@ library ECVerify {
 
         return ecrecover(hash, v, r, s);
     }
-
-    function ecverify(bytes32 hash, bytes sig, address signer) internal pure returns (bool) {
-        return signer == recover(hash, sig);
-    }
+    // Not used for now, kept for later if needed.
+    // function ecverify(bytes32 hash, bytes sig, address signer) internal pure returns (bool) {
+    //     return signer == recover(hash, sig);
+    // }
 }

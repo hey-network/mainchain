@@ -94,299 +94,333 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
         await this.token.transfer(this.tokenSale.address, tokenSupply, { from: owner });
       });
 
-      describe('pausable', function () {
-        it('can be paused by the owner', async function () {
-          await this.tokenSale.pause({ from: owner });
-          (await this.tokenSale.paused()).should.equal(true);
-        });
-
-        it('cannot be paused if sender is not the owner', async function () {
-          await shouldFail.reverting(this.tokenSale.pause({ from: anyone }));
-        });
-
-        it('should reject payments when paused', async function () {
+      describe('KYC', function () {
+        beforeEach(async function () {
           await time.increaseTo(this.openingTime);
-          await this.tokenSale.pause({ from: owner });
-          await shouldFail.reverting(this.tokenSale.send(value));
-          await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
-        });
-      });
-
-      describe('evolving rate', function () {
-        context('within 24 hours after opening time', async function () {
-          beforeEach(async function () {
-            await time.increaseTo(this.openingTime);
-          });
-
-          describe('rate', function () {
-            it(`is set at ${firstDayRate} tokens per ETH`, async function () {
-              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
-            });
-          });
         });
 
-        context('after 24 hours after opening time', async function () {
-          beforeEach(async function () {
-            await time.increaseTo(this.openingTime + time.duration.hours(24));
-          });
-
-          describe('rate', function () {
-            it(`is set at ${rate} tokens per ETH`, async function () {
-              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(rate);
-            });
-          });
-        });
-      });
-
-      describe('timed crowdsale', function () {
-        it('should be ended only after end', async function () {
-          (await this.tokenSale.hasClosed()).should.equal(false);
-          await time.increaseTo(this.afterClosingTime);
-          (await this.tokenSale.isOpen()).should.equal(false);
-          (await this.tokenSale.hasClosed()).should.equal(true);
+        it('should allow the owner to grant KYC authorization to an account', async function () {
+          await this.tokenSale.grantKYCAuthorizations([participant], { from: owner });
+          (await this.tokenSale.kycAuthorized(participant)).should.equal(true);
         });
 
-        it('should reject payments before start', async function () {
-          (await this.tokenSale.isOpen()).should.equal(false);
+        it('should allow the owner to revert KYC authorization to an account', async function () {
+          await this.tokenSale.grantKYCAuthorizations([participant], { from: owner });
+          (await this.tokenSale.kycAuthorized(participant)).should.equal(true);
+          await this.tokenSale.revertKYCAuthorizations([participant], { from: owner });
+          (await this.tokenSale.kycAuthorized(participant)).should.equal(false);
+        });
+
+        it('should reject payments from non KYC authorized accounts', async function () {
           await shouldFail.reverting(this.tokenSale.send(value));
           await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: value }));
         });
 
-        it('should accept payments after start', async function () {
-          await time.increaseTo(this.openingTime);
-          (await this.tokenSale.isOpen()).should.equal(true);
+        it('should accept payments from KYC authorized accounts', async function () {
+          await this.tokenSale.grantKYCAuthorizations([_, participant], { from: owner });
           await this.tokenSale.send(value);
           await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
         });
-
-        it('should reject payments after end', async function () {
-          await time.increaseTo(this.afterClosingTime);
-          await shouldFail.reverting(this.tokenSale.send(value));
-          await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
-        });
       });
 
-      describe('minimum contribution', function () {
-        it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
-          await time.increaseTo(this.openingTime);
-          await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
-          await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+      context('once participants have been authorized', async function () {
+        beforeEach(async function () {
+          await this.tokenSale.grantKYCAuthorizations([_, participant, purchaser, anyone], { from: owner });
         });
+        describe('pausable', function () {
+          it('can be paused by the owner', async function () {
+            await this.tokenSale.pause({ from: owner });
+            (await this.tokenSale.paused()).should.equal(true);
+          });
 
-        it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
-          await time.increaseTo(this.openingTime);
-          await this.tokenSale.send(minimumContribution);
-          await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
-        });
+          it('cannot be paused if sender is not the owner', async function () {
+            await shouldFail.reverting(this.tokenSale.pause({ from: anyone }));
+          });
 
-        it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
-          await time.increaseTo(this.openingTime);
-          await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
-          await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
-        });
-      });
-
-      describe('standard crowdsale behaviour', function () {
-        context('when within 24 hours after the opening time before and closing time', async function () {
-          beforeEach(async function () {
+          it('should reject payments when paused', async function () {
             await time.increaseTo(this.openingTime);
+            await this.tokenSale.pause({ from: owner });
+            await shouldFail.reverting(this.tokenSale.send(value));
+            await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
           });
+        });
 
-          describe('rate', function () {
-            it(`is set at ${firstDayRate} tokens per ETH`, async function () {
-              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
-            });
-          });
-
-          describe('accepting payments', function () {
-            describe('bare payments', function () {
-              it('should accept payments', async function () {
-                await this.tokenSale.send(value, { from: purchaser });
-              });
-
-              it('reverts on zero-valued payments', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.send(0, { from: purchaser })
-                );
-              });
+        describe('evolving rate', function () {
+          context('within 24 hours after opening time', async function () {
+            beforeEach(async function () {
+              await time.increaseTo(this.openingTime);
             });
 
-            describe('buyTokens', function () {
-              it('should accept payments', async function () {
-                await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
-              });
-
-              it('reverts on zero-valued payments', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
-                );
-              });
-
-              it('requires a non-null beneficiary', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.buyTokens(ZERO_ADDRESS, { value: value, from: purchaser })
-                );
+            describe('rate', function () {
+              it(`is set at ${firstDayRate} tokens per ETH`, async function () {
+                (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
               });
             });
           });
 
-          describe('high-level purchase', function () {
-            it('should log purchase', async function () {
-              const { logs } = await this.tokenSale.sendTransaction({ value: value, from: participant });
-              expectEvent.inLogs(logs, 'TokensPurchased', {
-                purchaser: participant,
-                beneficiary: participant,
-                value: value,
-                amount: expectedFirstDayTokenAmount,
+          context('after 24 hours after opening time', async function () {
+            beforeEach(async function () {
+              await time.increaseTo(this.openingTime + time.duration.hours(24));
+            });
+
+            describe('rate', function () {
+              it(`is set at ${rate} tokens per ETH`, async function () {
+                (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(rate);
               });
-            });
-
-            it('should assign tokens to sender', async function () {
-              await this.tokenSale.sendTransaction({ value: value, from: participant });
-              (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedFirstDayTokenAmount);
-            });
-
-            it('should forward funds to wallet', async function () {
-              const pre = await ethGetBalance(wallet);
-              await this.tokenSale.sendTransaction({ value, from: participant });
-              const post = await ethGetBalance(wallet);
-              post.minus(pre).should.be.bignumber.equal(value);
-            });
-          });
-
-          describe('low-level purchase', function () {
-            it('should log purchase', async function () {
-              const { logs } = await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
-              expectEvent.inLogs(logs, 'TokensPurchased', {
-                purchaser: purchaser,
-                beneficiary: participant,
-                value: value,
-                amount: expectedFirstDayTokenAmount,
-              });
-            });
-
-            it('should assign tokens to beneficiary', async function () {
-              await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-              (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedFirstDayTokenAmount);
-            });
-
-            it('should forward funds to wallet', async function () {
-              const pre = await ethGetBalance(wallet);
-              await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-              const post = await ethGetBalance(wallet);
-              post.minus(pre).should.be.bignumber.equal(value);
             });
           });
         });
 
-        context('when more than 24 hours after the opening time before and closing time', async function () {
-          beforeEach(async function () {
-            await time.increaseTo(this.openingTime + time.duration.hours(24));
-          });
-
-          describe('rate', function () {
-            it(`is set at ${rate} tokens per ETH`, async function () {
-              (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(rate);
-            });
-          });
-
-          describe('accepting payments', function () {
-            describe('bare payments', function () {
-              it('should accept payments', async function () {
-                await this.tokenSale.send(value, { from: purchaser });
-              });
-
-              it('reverts on zero-valued payments', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.send(0, { from: purchaser })
-                );
-              });
-            });
-
-            describe('buyTokens', function () {
-              it('should accept payments', async function () {
-                await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
-              });
-
-              it('reverts on zero-valued payments', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
-                );
-              });
-
-              it('requires a non-null beneficiary', async function () {
-                await shouldFail.reverting(
-                  this.tokenSale.buyTokens(ZERO_ADDRESS, { value: value, from: purchaser })
-                );
-              });
-            });
-          });
-
-          describe('high-level purchase', function () {
-            it('should log purchase', async function () {
-              const { logs } = await this.tokenSale.sendTransaction({ value: value, from: participant });
-              expectEvent.inLogs(logs, 'TokensPurchased', {
-                purchaser: participant,
-                beneficiary: participant,
-                value: value,
-                amount: expectedTokenAmount,
-              });
-            });
-
-            it('should assign tokens to sender', async function () {
-              await this.tokenSale.sendTransaction({ value: value, from: participant });
-              (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedTokenAmount);
-            });
-
-            it('should forward funds to wallet', async function () {
-              const pre = await ethGetBalance(wallet);
-              await this.tokenSale.sendTransaction({ value, from: participant });
-              const post = await ethGetBalance(wallet);
-              post.minus(pre).should.be.bignumber.equal(value);
-            });
-          });
-
-          describe('low-level purchase', function () {
-            it('should log purchase', async function () {
-              const { logs } = await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
-              expectEvent.inLogs(logs, 'TokensPurchased', {
-                purchaser: purchaser,
-                beneficiary: participant,
-                value: value,
-                amount: expectedTokenAmount,
-              });
-            });
-
-            it('should assign tokens to beneficiary', async function () {
-              await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-              (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedTokenAmount);
-            });
-
-            it('should forward funds to wallet', async function () {
-              const pre = await ethGetBalance(wallet);
-              await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-              const post = await ethGetBalance(wallet);
-              post.minus(pre).should.be.bignumber.equal(value);
-            });
-          });
-        });
-      });
-
-      describe('finalize', function () {
-        context('when the sale has ended after closing time', async function () {
-          beforeEach(async function () {
-            await time.increaseTo(this.openingTime);
-            await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+        describe('timed crowdsale', function () {
+          it('should be ended only after end', async function () {
+            (await this.tokenSale.hasClosed()).should.equal(false);
             await time.increaseTo(this.afterClosingTime);
+            (await this.tokenSale.isOpen()).should.equal(false);
+            (await this.tokenSale.hasClosed()).should.equal(true);
           });
 
-          it('should forward remaining tokens to pool', async function () {
-            const remaining = await this.token.balanceOf(this.tokenSale.address);
-            const pre = await this.token.balanceOf(pool);
-            await this.tokenSale.finalize({ from: anyone });
-            const post = await this.token.balanceOf(pool);
-            (await this.token.balanceOf(this.tokenSale.address)).should.be.bignumber.equal(0);
-            post.minus(pre).should.be.bignumber.equal(remaining);
+          it('should reject payments before start', async function () {
+            (await this.tokenSale.isOpen()).should.equal(false);
+            await shouldFail.reverting(this.tokenSale.send(value));
+            await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: value }));
+          });
+
+          it('should accept payments after start', async function () {
+            await time.increaseTo(this.openingTime);
+            (await this.tokenSale.isOpen()).should.equal(true);
+            await this.tokenSale.send(value);
+            await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
+          });
+
+          it('should reject payments after end', async function () {
+            await time.increaseTo(this.afterClosingTime);
+            await shouldFail.reverting(this.tokenSale.send(value));
+            await shouldFail.reverting(this.tokenSale.buyTokens(participant, { value: value, from: purchaser }));
+          });
+        });
+
+        describe('minimum contribution', function () {
+          it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
+            await time.increaseTo(this.openingTime);
+            await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
+            await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+          });
+
+          it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
+            await time.increaseTo(this.openingTime);
+            await this.tokenSale.send(minimumContribution);
+            await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
+          });
+
+          it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
+            await time.increaseTo(this.openingTime);
+            await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
+            await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
+          });
+        });
+
+        describe('standard crowdsale behaviour', function () {
+          context('when within 24 hours after the opening time before and closing time', async function () {
+            beforeEach(async function () {
+              await time.increaseTo(this.openingTime);
+            });
+
+            describe('rate', function () {
+              it(`is set at ${firstDayRate} tokens per ETH`, async function () {
+                (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(firstDayRate);
+              });
+            });
+
+            describe('accepting payments', function () {
+              describe('bare payments', function () {
+                it('should accept payments', async function () {
+                  await this.tokenSale.send(value, { from: purchaser });
+                });
+
+                it('reverts on zero-valued payments', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.send(0, { from: purchaser })
+                  );
+                });
+              });
+
+              describe('buyTokens', function () {
+                it('should accept payments', async function () {
+                  await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
+                });
+
+                it('reverts on zero-valued payments', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
+                  );
+                });
+
+                it('requires a non-null beneficiary', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.buyTokens(ZERO_ADDRESS, { value: value, from: purchaser })
+                  );
+                });
+              });
+            });
+
+            describe('high-level purchase', function () {
+              it('should log purchase', async function () {
+                const { logs } = await this.tokenSale.sendTransaction({ value: value, from: participant });
+                expectEvent.inLogs(logs, 'TokensPurchased', {
+                  purchaser: participant,
+                  beneficiary: participant,
+                  value: value,
+                  amount: expectedFirstDayTokenAmount,
+                });
+              });
+
+              it('should assign tokens to sender', async function () {
+                await this.tokenSale.sendTransaction({ value: value, from: participant });
+                (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedFirstDayTokenAmount);
+              });
+
+              it('should forward funds to wallet', async function () {
+                const pre = await ethGetBalance(wallet);
+                await this.tokenSale.sendTransaction({ value, from: participant });
+                const post = await ethGetBalance(wallet);
+                post.minus(pre).should.be.bignumber.equal(value);
+              });
+            });
+
+            describe('low-level purchase', function () {
+              it('should log purchase', async function () {
+                const { logs } = await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
+                expectEvent.inLogs(logs, 'TokensPurchased', {
+                  purchaser: purchaser,
+                  beneficiary: participant,
+                  value: value,
+                  amount: expectedFirstDayTokenAmount,
+                });
+              });
+
+              it('should assign tokens to beneficiary', async function () {
+                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+                (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedFirstDayTokenAmount);
+              });
+
+              it('should forward funds to wallet', async function () {
+                const pre = await ethGetBalance(wallet);
+                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+                const post = await ethGetBalance(wallet);
+                post.minus(pre).should.be.bignumber.equal(value);
+              });
+            });
+          });
+
+          context('when more than 24 hours after the opening time before and closing time', async function () {
+            beforeEach(async function () {
+              await time.increaseTo(this.openingTime + time.duration.hours(24));
+            });
+
+            describe('rate', function () {
+              it(`is set at ${rate} tokens per ETH`, async function () {
+                (await this.tokenSale.getCurrentRate()).should.be.bignumber.equal(rate);
+              });
+            });
+
+            describe('accepting payments', function () {
+              describe('bare payments', function () {
+                it('should accept payments', async function () {
+                  await this.tokenSale.send(value, { from: purchaser });
+                });
+
+                it('reverts on zero-valued payments', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.send(0, { from: purchaser })
+                  );
+                });
+              });
+
+              describe('buyTokens', function () {
+                it('should accept payments', async function () {
+                  await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
+                });
+
+                it('reverts on zero-valued payments', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
+                  );
+                });
+
+                it('requires a non-null beneficiary', async function () {
+                  await shouldFail.reverting(
+                    this.tokenSale.buyTokens(ZERO_ADDRESS, { value: value, from: purchaser })
+                  );
+                });
+              });
+            });
+
+            describe('high-level purchase', function () {
+              it('should log purchase', async function () {
+                const { logs } = await this.tokenSale.sendTransaction({ value: value, from: participant });
+                expectEvent.inLogs(logs, 'TokensPurchased', {
+                  purchaser: participant,
+                  beneficiary: participant,
+                  value: value,
+                  amount: expectedTokenAmount,
+                });
+              });
+
+              it('should assign tokens to sender', async function () {
+                await this.tokenSale.sendTransaction({ value: value, from: participant });
+                (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedTokenAmount);
+              });
+
+              it('should forward funds to wallet', async function () {
+                const pre = await ethGetBalance(wallet);
+                await this.tokenSale.sendTransaction({ value, from: participant });
+                const post = await ethGetBalance(wallet);
+                post.minus(pre).should.be.bignumber.equal(value);
+              });
+            });
+
+            describe('low-level purchase', function () {
+              it('should log purchase', async function () {
+                const { logs } = await this.tokenSale.buyTokens(participant, { value: value, from: purchaser });
+                expectEvent.inLogs(logs, 'TokensPurchased', {
+                  purchaser: purchaser,
+                  beneficiary: participant,
+                  value: value,
+                  amount: expectedTokenAmount,
+                });
+              });
+
+              it('should assign tokens to beneficiary', async function () {
+                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+                (await this.token.balanceOf(participant)).should.be.bignumber.equal(expectedTokenAmount);
+              });
+
+              it('should forward funds to wallet', async function () {
+                const pre = await ethGetBalance(wallet);
+                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+                const post = await ethGetBalance(wallet);
+                post.minus(pre).should.be.bignumber.equal(value);
+              });
+            });
+          });
+        });
+
+        describe('finalize', function () {
+          context('when the sale has ended after closing time', async function () {
+            beforeEach(async function () {
+              await time.increaseTo(this.openingTime);
+              await this.tokenSale.buyTokens(participant, { value, from: purchaser });
+              await time.increaseTo(this.afterClosingTime);
+            });
+
+            it('should forward remaining tokens to pool', async function () {
+              const remaining = await this.token.balanceOf(this.tokenSale.address);
+              const pre = await this.token.balanceOf(pool);
+              await this.tokenSale.finalize({ from: anyone });
+              const post = await this.token.balanceOf(pool);
+              (await this.token.balanceOf(this.tokenSale.address)).should.be.bignumber.equal(0);
+              post.minus(pre).should.be.bignumber.equal(remaining);
+            });
           });
         });
       });

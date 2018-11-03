@@ -236,7 +236,7 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 The following behaviours have also been implemented (not directly available from OpenZeppelin libraries):
 - `EvolvingRate`: the ETH-to-tokens rate evolves from 5500 during the first day of the TGE to 5000 afterwards.
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
-- `Whitelisting` (TO IMPLEMENT): the Token Sale only allows contributions from addresses whitelisted by the contract owner for KYC reasons.
+- `KYC`: the Token Sale only allows contributions from addresses authorized by the contract owner for KYC reasons.
 
 Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
 
@@ -274,9 +274,13 @@ Token purchases are only allowed if the amount sent is equal to or above 0.1 ETH
 
 This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `msg.value`.
 
-###### Whitelisting (TO IMPLEMENT)
+###### KYC
 
-The Token Sale contract only allows contributions from a set of whitelisted addresses, for KYC reasons. The set of addresses is a mapping `whitelist` of `address` to `bool`, which is populated by the Token Sale contract owner in batch before and during the TGE period using the `batchWhitelist()` function.
+The Token Sale contract only allows contributions from a set of authorized addresses, for KYC reasons. The set of addresses is a mapping `authorizedAccounts` of `address` to `bool`, which is populated by the Token Sale contract owner (and other authorized KYC verifiers) in batch before and during the TGE period using the `grantKYCAuthorizations()` function.
+
+This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `beneficiary`. Note that we do only check the beneficiary address, as KYC will be done on these addresses (not on addresses purchasing on behalf of other addresses).
+
+We also create a `KYCVerifierRole` based exactly on `PauserRole` and other similar access control contracts available in OpenZeppelin's standard library.
 
 Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one month before contributions can start, so that interested participants can already perform KYC and get their address whitelisted. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
 
@@ -293,8 +297,10 @@ The full Token Sale test suite can be run with the command `npm run test:token-s
 | 3 | Evolves rate from 5500 to 5000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
 | 5 | Expects a minimum contribution of 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
-| 6 | Allows contribution only from whitelisted addresses | `npm run test:token-sale:whitelisted` |
+| 6 | Allows contribution only from whitelisted addresses | `npm run test:token-sale:kyc` |
 | 7 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
+
+Note that the access control helper `KYCVerifierRole` can be tested with `npm run test:kyc-verifier-role`.
 
 ### VestingTrustee
 

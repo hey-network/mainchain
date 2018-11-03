@@ -5,6 +5,7 @@ import "openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowds
 import "openzeppelin-solidity/contracts/lifecycle/Pausable.sol";
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
+import "./utils/KYC.sol";
 
 /**
 * @title Hey Crowdsale
@@ -14,7 +15,7 @@ import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 * Note that we are naming this contract 'TokenSale' to not redeclare the parent
 * Crowdsale contract, from which Sale indirectly inherits.
 */
-contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
+contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
 
     // Needed to compute current rate
     using SafeMath for uint256;
@@ -72,7 +73,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
 
     // INTERNAL FUNCTIONS
 
-    // Extension of parent function to add Pausable and MinimumContribution behaviours.
+    // Extension of parent function to add Pausable, MinimumContribution, KYC.
     function _preValidatePurchase(
         address beneficiary,
         uint256 weiAmount
@@ -83,6 +84,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable {
         super._preValidatePurchase(beneficiary, weiAmount);
         require(!paused(), "cannot purchase when contract is paused");
         require(msg.value >= 0.1 ether, "minimum contribution is 0.1 ETH");
+        require(kycAuthorized(beneficiary), "beneficiary must be KYC authorized");
     }
 
     // Override of parent function to reflect non-constant rate.
