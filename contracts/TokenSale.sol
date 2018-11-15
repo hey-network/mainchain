@@ -39,7 +39,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
     IERC20 private _token;          // The token which is sold
 
 
-    /* *** State-Modifying Functions *** */
+    /* *** Public Functions *** */
 
     /** @dev Constructor. First contract set up (tokens will also need to be transferred to the contract afterwards)
      *  @param openingTime Time the sale will start in seconds since the Unix Epoch
@@ -88,8 +88,25 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
         _deliverTokens(_pool, remainingBalance);
     }
 
+    /** @dev Override of OpenZeppelin's standard function to reflect the
+     *  evolving ETH-to-Token rate.
+     *  @return uint256 The current number of tokens purchasable for the Wei amount
+     */
+    function getCurrentRate()
+        public
+        view
+        returns (uint256)
+    {
+        // solium-disable-next-line security/no-block-members
+        if (block.timestamp < (_openingTime.add(FIRST_DAY_DURATION))) {
+            return _firstDayRate;
+        } else {
+            return _rate;
+        }
+    }
 
-    /* *** Internal View Functions *** */
+
+    /* *** Internal Functions *** */
 
     /** @dev Called before any purchase is confirmed - extension of OpenZeppelin's
      *  standard function to implement the Pausable, MinimumContribution and KYC
@@ -126,25 +143,5 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
     {
         // Note that the decimals of ETH and Token (both 18) cancel each other
         return weiAmount.mul(getCurrentRate());
-    }
-
-
-    /* *** Public View Functions *** */
-
-    /** @dev Override of OpenZeppelin's standard function to reflect the
-     *  evolving ETH-to-Token rate.
-     *  @return uint256 The current number of tokens purchasable for the Wei amount
-     */
-    function getCurrentRate()
-        public
-        view
-        returns (uint256)
-    {
-        // solium-disable-next-line security/no-block-members
-        if (block.timestamp < (_openingTime.add(FIRST_DAY_DURATION))) {
-            return _firstDayRate;
-        } else {
-            return _rate;
-        }
     }
 }
