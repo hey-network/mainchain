@@ -79,7 +79,7 @@ contract VestingTrustee is Ownable {
         require(to != address(0), "to cannot be zero address");
         require(value > 0, "value must be above 0");
 
-        // Make sure that a single address can be granted tokens only once.
+        // Check that no grant has previously been assigned to this address
         require(grants[to].value == 0, "only one grant per address");
 
         // Check for date inconsistencies that may cause unexpected behavior.
@@ -118,13 +118,11 @@ contract VestingTrustee is Ownable {
 
         require(grant.revokable, "grant must be revokable");
 
-        // Send the remaining ERC20 back to the owner.
         uint256 refund = grant.value.sub(grant.transferred);
-
-        // Remove the grant.
+        _totalVesting = _totalVesting.sub(refund);
         delete grants[holder];
 
-        _totalVesting = _totalVesting.sub(refund);
+        // Send the remaining ERC20 tokens back to the contract owner.
         _token.transfer(msg.sender, refund);
 
         emit GrantRevoked(holder, refund);
@@ -207,11 +205,14 @@ contract VestingTrustee is Ownable {
     /* *** Private Functions *** */
 
     /** @dev Calculate amount of vested tokens at a given time for a given grant.
+     *  Note that this function does not take into account any previously claimed
+     *  tokens - it is the responsibility of the caller function to ensure that
+     *  the grant holder does not claim the same value multiple times.
      *  @param grant Grant The vesting grant
      *  @param time uint256 The time to be checked
      *  @return An uint256 representing the amount of claimable tokens
      *
-     *   |                         _/--------   vestedTokens rect
+     *   |                         ____________ total value
      *   |                       _/
      *   |                     _/
      *   |                   _/
@@ -239,12 +240,13 @@ contract VestingTrustee is Ownable {
             return 0;
         }
 
-        // If we're after the end of the vesting period - everything is claimable;
+        // If we're after the end of the vesting period, the full value is claimable;
         if (time >= grant.end) {
             return grant.value;
         }
 
-        // Interpolate all claimable tokens: claimableTokens = total * (time - start) / (end - start)
+        // If we're between the cliff and the end time, interpolate linearly using
+        // the formula: claimableTokens = total * (time - start) / (end - start)
         return grant.value.mul(time.sub(grant.start)).div(grant.end.sub(grant.start));
     }
 }
