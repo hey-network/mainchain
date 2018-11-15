@@ -1,3 +1,9 @@
+/** @title Hey Token Sale
+ *  @author Thomas Vanderstraeten - <thomas@get-hey.com>
+ *  This smart contract has undertaken X audit and X bounty program.
+ *  However, keep in mind that smart contracts still rely on experimental technology.
+ */
+
 pragma solidity ^0.4.24;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
