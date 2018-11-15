@@ -20,7 +20,7 @@ contract KYC is KYCVerifierRole {
      * @return true if `account` has been KYC authorized.
      */
     function kycAuthorized(address account) public view returns (bool) {
-      return _authorizedAccounts[account];
+        return _authorizedAccounts[account];
     }
 
     /**
