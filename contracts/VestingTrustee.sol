@@ -130,19 +130,18 @@ contract VestingTrustee is Ownable {
         emit RevokeGrant(holder, refund);
     }
 
-    /** @dev Unlock vested tokens and transfer them to their holder. Note that
-     *  this function can be called by anyone.
+    /** @dev Claim vested tokens and transfer them to their holder. Note that
+     *  this function has to be called by the grant holder themselves.
      */
-    function unlockVestedTokens()
+    function claimTokens()
         public
     {
-        Grant storage grant = grants[msg.sender];
-        require(grant.value != 0, "grant value cannot be 0");
-
         // Get the total amount of claimable tokens, acccording to grant.
         // solium-disable-next-line security/no-block-members
-        uint256 claimable = calculateClaimableTokens(grant, block.timestamp);
-        require(claimable != 0, "no tokens claimable at the moment");
+        uint256 claimable = claimableTokens(msg.sender, block.timestamp);
+        require(claimable != 0, "no tokens claimable currently");
+
+        Grant storage grant = grants[msg.sender];
 
         // Make sure the holder doesn't transfer more than what he already has.
         // Note that claimable will always be greater than or equal to
@@ -158,7 +157,10 @@ contract VestingTrustee is Ownable {
     }
 
     /** @dev Calculate the total amount of tokens that a holder can claim at a
-     *  given time, from the total amount vested for this holder.
+     *  given time, from the total amount vested for this holder. This function
+     *  does the precheck of making sure that there is actually a grant for this
+     *  owner, before delegating to the private _calculateClaimableTokens()
+     *  function to derive the claimable amount at the given time.
      *  @param holder address The address of the holder
      *  @param time uint256 The specific time
      *  @return a uint256 representing a holder's total amount of vested tokens
@@ -176,7 +178,7 @@ contract VestingTrustee is Ownable {
             return 0;
         }
 
-        return calculateClaimableTokens(grant, time);
+        return _calculateClaimableTokens(grant, time);
     }
 
     /**
@@ -224,7 +226,7 @@ contract VestingTrustee is Ownable {
      *   +===+===========+---------+----------> time
      *     Start       Cliff      End
      */
-    function calculateClaimableTokens(
+    function _calculateClaimableTokens(
         Grant grant,
         uint256 time
     )
@@ -242,7 +244,7 @@ contract VestingTrustee is Ownable {
             return grant.value;
         }
 
-        // Interpolate all claimable tokens: claimableTokens = tokens/// (time - start) / (end - start)
+        // Interpolate all claimable tokens: claimableTokens = total * (time - start) / (end - start)
         return grant.value.mul(time.sub(grant.start)).div(grant.end.sub(grant.start));
     }
 }

@@ -90,14 +90,14 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
         });
 
         it('does not let the grantee claim tokens before the cliff', async function () {
-          await shouldFail.reverting(this.vestingTrustee.unlockVestedTokens({ from: grantee }));
+          await shouldFail.reverting(this.vestingTrustee.claimTokens({ from: grantee }));
         });
 
         it('lets the grantee claim a portion of her vested tokens between the cliff and the end time', async function () {
           await time.increaseTo(this.cliffTime + time.duration.seconds(1));
 
           const pre = await this.token.balanceOf(grantee);
-          await this.vestingTrustee.unlockVestedTokens({ from: grantee });
+          await this.vestingTrustee.claimTokens({ from: grantee });
           const post = await this.token.balanceOf(grantee);
 
           post.minus(pre).should.be.bignumber.above(0);
@@ -106,7 +106,7 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
 
         it('lets the grantee claim all her vested tokens after the end time', async function () {
           await time.increaseTo(this.endTime + time.duration.seconds(1));
-          await this.vestingTrustee.unlockVestedTokens({ from: grantee });
+          await this.vestingTrustee.claimTokens({ from: grantee });
           (await this.token.balanceOf(grantee)).should.be.bignumber.equal(this.value);
         });
       });
