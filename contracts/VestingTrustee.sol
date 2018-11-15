@@ -122,7 +122,7 @@ contract VestingTrustee is Ownable {
         _totalVesting = _totalVesting.sub(refund);
         delete grants[holder];
 
-        // Send the remaining ERC20 tokens back to the contract owner.
+        // Send the revoked grant tokens back to the contract owner.
         _token.transfer(msg.sender, refund);
 
         emit GrantRevoked(holder, refund);
