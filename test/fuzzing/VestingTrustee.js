@@ -1,11 +1,8 @@
 const { advanceBlock } = require('../helpers/advanceToBlock');
 const time = require('../helpers/time');
+const asciichart = require ('asciichart')
 
 const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 const VestingTrustee = artifacts.require('VestingTrustee');
 const Token = artifacts.require('Token');
@@ -20,8 +17,10 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
 
     this.value = 1000;
     this.startTime = (await time.latest()) + time.duration.weeks(1);
-    this.cliffTime = this.startTime + time.duration.days(50);
-    this.endTime = this.cliffTime + time.duration.days(100);
+    this.cliffDays = 50;
+    this.totalDays = 100;
+    this.cliffTime = this.startTime + time.duration.days(this.cliffDays);
+    this.endTime = this.startTime + time.duration.days(this.totalDays);
     const revokable = true;
 
     await this.vestingTrustee.createGrant(
@@ -29,15 +28,16 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
     , { from: owner });
   });
 
-  it('lets the grantee claim a portion of her vested tokens between the cliff and the end time', async function () {
-    await time.increaseTo(this.cliffTime + time.duration.seconds(1));
+  it('fuzz', async function () {
+    const timeSeries = [];
 
-    const pre = await this.token.balanceOf(grantee);
-    console.log(await this.vestingTrustee.claimableTokens(grantee, await time.latest()));
-    await this.vestingTrustee.claimTokens({ from: grantee });
-    const post = await this.token.balanceOf(grantee);
-
-    post.minus(pre).should.be.bignumber.above(0);
-    post.minus(pre).should.be.bignumber.below(this.value);
+    for(let i = 0; i <= this.totalDays + 10; i++){
+      let claimableTokens = await this.vestingTrustee.claimableTokens(grantee, this.startTime + time.duration.days(i));
+      timeSeries.push(claimableTokens.toNumber());
+    }
+    console.log('\n');
+    console.log(`Claimable tokens over time (vested: ${this.value}, cliff days: ${this.cliffDays}, total days: ${this.totalDays})`);
+    console.log('\n');
+    console.log(asciichart.plot(timeSeries, { height: 20 }));
   });
 });
