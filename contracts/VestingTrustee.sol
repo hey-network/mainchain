@@ -10,8 +10,7 @@ import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
-/**
- * @title VestingTrustee
+/** @title VestingTrustee
  * @dev Lends very heavily from SirinLab and Stox's own VestingTrustee contracts
  */
 contract VestingTrustee is Ownable {
@@ -45,8 +44,9 @@ contract VestingTrustee is Ownable {
 
     /* *** Public Functions *** */
 
-    /// @dev Constructor that initializes the address of the ERC20 contract.
-    /// @param token IERC20 The address of the previously deployed ERC20 smart contract.
+    /** @dev Constructor. Initializes the ERC20 token linked to the grants.
+     *  @param token IERC20 The address of the previously deployed ERC20 smart contract
+     */
     constructor(
         IERC20 token
     )
@@ -57,13 +57,14 @@ contract VestingTrustee is Ownable {
         _token = token;
     }
 
-    /// @dev Grant tokens to a specified address.
-    /// @param to address The address to grant tokens to.
-    /// @param value uint256 The amount of tokens to be granted.
-    /// @param start uint256 The beginning of the vesting period.
-    /// @param cliff uint256 The date at which the cliff occurs.
-    /// @param end uint256 The end of the vesting period.
-    /// @param revokable bool Whether the grant is revokable or not.
+    /** @dev Grant tokens to a specified address.
+     *  @param to address The address to grant tokens to
+     *  @param value uint256 The amount of tokens to be granted
+     *  @param start uint256 The start of the vesting period in seconds since the Unix Epoch
+     *  @param cliff uint256 The date at which the cliff occurs in seconds since the Unix Epoch
+     *  @param end uint256 The end of the vesting period in seconds since the Unix Epoch
+     *  @param revokable bool Whether the grant is revokable or not
+     */
     function createGrant(
         address to,
         uint256 value,
@@ -103,8 +104,10 @@ contract VestingTrustee is Ownable {
         emit NewGrant(msg.sender, to, value);
     }
 
-    /// @dev Revoke the grant of tokens of a specifed address.
-    /// @param holder The address which will have its tokens revoked.
+    /** @dev Revoke the grant of tokens of a specifed address and returns tokens
+     *  to the grant contract owner.
+     *  @param holder address The address which will have its grant revoked.
+     */
     function revokeGrant(
         address holder
     )
@@ -127,8 +130,9 @@ contract VestingTrustee is Ownable {
         emit RevokeGrant(holder, refund);
     }
 
-    /// @dev Unlock vested tokens and transfer them to their holder.
-    /// @return a uint256 representing the amount of vested tokens transferred to their holder.
+    /** @dev Unlock vested tokens and transfer them to their holder. Note that
+     *  this function can be called by anyone.
+     */
     function unlockVestedTokens()
         public
     {
@@ -153,10 +157,12 @@ contract VestingTrustee is Ownable {
         emit UnlockGrant(msg.sender, transferable);
     }
 
-    /// @dev Calculate the total amount of tokens that a holder can claim at a given time.
-    /// @param holder address The address of the holder.
-    /// @param time uint256 The specific time.
-    /// @return a uint256 representing a holder's total amount of vested tokens.
+    /** @dev Calculate the total amount of tokens that a holder can claim at a
+     *  given time, from the total amount vested for this holder.
+     *  @param holder address The address of the holder.
+     *  @param time uint256 The specific time.
+     *  @return a uint256 representing a holder's total amount of vested tokens.
+     */
     function claimableTokens(
         address holder,
         uint256 time
@@ -171,46 +177,6 @@ contract VestingTrustee is Ownable {
         }
 
         return calculateClaimableTokens(grant, time);
-    }
-
-    /// @dev Calculate amount of vested tokens at a specifc time.
-    /// @param grant Grant The vesting grant.
-    /// @param time uint256 The time to be checked
-    /// @return An uint256 representing the amount of vested tokens of a specific grant.
-    ///   |                         _/--------   vestedTokens rect
-    ///   |                       _/
-    ///   |                     _/
-    ///   |                   _/
-    ///   |                 _/
-    ///   |                /
-    ///   |              .|
-    ///   |            .  |
-    ///   |          .    |
-    ///   |        .      |
-    ///   |      .        |
-    ///   |    .          |
-    ///   +===+===========+---------+----------> time
-    ///     Start       Cliff      End
-    function calculateClaimableTokens(
-        Grant grant,
-        uint256 time
-    )
-        private
-        pure
-        returns (uint256)
-    {
-        // If we're before the cliff, then everything is still vested and nothing can be claimed.
-        if (time < grant.cliff) {
-            return 0;
-        }
-
-        // If we're after the end of the vesting period - everything is claimable;
-        if (time >= grant.end) {
-            return grant.value;
-        }
-
-        // Interpolate all claimable tokens: claimableTokens = tokens/// (time - start) / (end - start)
-        return grant.value.mul(time.sub(grant.start)).div(grant.end.sub(grant.start));
     }
 
     /**
@@ -233,5 +199,50 @@ contract VestingTrustee is Ownable {
         returns (uint256)
     {
         return _totalVesting;
+    }
+
+
+    /* *** Private Functions *** */
+
+    /** @dev Calculate amount of vested tokens at a specifc timefor a given grant
+     *  @param grant Grant The vesting grant
+     *  @param time uint256 The time to be checked
+     *  @return An uint256 representing the amount of claimable tokens
+     *
+     *   |                         _/--------   vestedTokens rect
+     *   |                       _/
+     *   |                     _/
+     *   |                   _/
+     *   |                 _/
+     *   |                /
+     *   |              .|
+     *   |            .  |
+     *   |          .    |
+     *   |        .      |
+     *   |      .        |
+     *   |    .          |
+     *   +===+===========+---------+----------> time
+     *     Start       Cliff      End
+     */
+    function calculateClaimableTokens(
+        Grant grant,
+        uint256 time
+    )
+        private
+        pure
+        returns (uint256)
+    {
+        // If we're before the cliff, then everything is still vested and nothing can be claimed.
+        if (time < grant.cliff) {
+            return 0;
+        }
+
+        // If we're after the end of the vesting period - everything is claimable;
+        if (time >= grant.end) {
+            return grant.value;
+        }
+
+        // Interpolate all claimable tokens: claimableTokens = tokens/// (time - start) / (end - start)
+        return grant.value.mul(time.sub(grant.start)).div(grant.end.sub(grant.start));
     }
 }
