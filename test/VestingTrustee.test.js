@@ -15,7 +15,7 @@ require('chai')
 const VestingTrustee = artifacts.require('VestingTrustee');
 const Token = artifacts.require('Token');
 
-contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
+contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, grantee4, anyone]) {
   // before(async function () {
   //   // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
   //   await advanceBlock();
@@ -49,11 +49,11 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
       let grant = await vestingTrustee.grants(address);
 
       return {
-        value: grant[0],
-        start: grant[1],
-        cliff: grant[2],
-        end: grant[3],
-        transferred: grant[4],
+        value: grant[0].toNumber(),
+        start: grant[1].toNumber(),
+        cliff: grant[2].toNumber(),
+        end: grant[3].toNumber(),
+        transferred: grant[4].toNumber(),
         revokable: grant[5]
       };
     }
@@ -93,85 +93,84 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
       });
     });
 
-    context('with provisioned token balance', async function () {
+    let balance = 10000;
+    context(`with a provisioned token balance of ${balance}`, async function () {
       beforeEach(async function () {
-        await token.transfer(vestingTrustee.address, 10000, { from: owner });
+        await token.transfer(vestingTrustee.address, balance, { from: owner });
       });
 
       describe('create grant', async function () {
-        // it('should not allow granting to 0', async () => {
-        //   await shouldFail.reverting(trustee.grant(ZERO_ADDRESS, 1000, now(), now(), now() + 10 * YEAR, false));
-        // });
-        //
-        // it('should not allow granting 0 tokens', async () => {
-        //     await expectThrow(trustee.grant(accounts[0], 0, now, now, now + 3 * YEAR, false));
-        // });
-        //
-        // it('should not allow granting with a cliff before the start', async () => {
-        //     await expectThrow(trustee.grant(accounts[0], 0, now, now - 1, now + 10 * YEAR, false));
-        // });
-        //
-        // it('should not allow granting with a cliff after the vesting', async () => {
-        //     await expectThrow(trustee.grant(accounts[0], 0, now, now + YEAR, now + MONTH, false));
-        // });
-        //
-        // it('should not allow granting tokens more than once', async () => {
-        //     await trustee.grant(accounts[1], 1000, now, now, now + 10 * YEAR, false);
-        //
-        //     await expectThrow(trustee.grant(accounts[1], 1000, now, now, now + 10 * YEAR, false));
-        // });
-        //
-        // it('should not allow granting from not an owner', async () => {
-        //     await expectThrow(trustee.grant(accounts[0], 1000, now, now + MONTH, now + YEAR, false,
-        //         {from: accounts[1]}));
-        // });
-        //
-        // it('should not allow granting more than the balance in a single grant', async () => {
-        //     await expectThrow(trustee.grant(accounts[0], balance + 1, now, now + MONTH, now + YEAR, false));
-        // });
-        //
-        // it('should not allow granting more than the balance in multiple grants', async () => {
-        //     await trustee.grant(accounts[0], balance - 10, now, now + MONTH, now + YEAR, false);
-        //     await trustee.grant(accounts[1], 7, now, now + MONTH, now + YEAR, false);
-        //     await trustee.grant(accounts[2], 3, now, now + 5 * MONTH, now + YEAR, false);
-        //
-        //     await expectThrow(trustee.grant(accounts[3], 1, now, now, now + YEAR, false));
-        // });
-        //
-        // it('should record a grant and increase grants count and total vesting', async () => {
-        //     let totalVesting = (await trustee.totalVesting()).toNumber();
-        //     assert.equal(totalVesting, 0);
-        //
-        //     let value = 1000;
-        //     let start = now;
-        //     let cliff = now + MONTH;
-        //     let end = now + YEAR;
-        //     await trustee.grant(accounts[0], value, start, cliff, end, false);
-        //
-        //     assert.equal((await trustee.totalVesting()).toNumber(), totalVesting + value);
-        //     let grant = await getGrant(accounts[0]);
-        //     assert.equal(grant.value, value);
-        //     assert.equal(grant.start, start);
-        //     assert.equal(grant.cliff, cliff);
-        //     assert.equal(grant.end, end);
-        //     assert.equal(grant.transferred, 0);
-        //     assert.equal(grant.revokable, false);
-        //
-        //     let value2 = 2300;
-        //     let start2 = now + 2 * MONTH;
-        //     let cliff2 = now + 6 * MONTH;
-        //     let end2 = now + YEAR;
-        //     await trustee.grant(accounts[1], value2, start2, cliff2, end2, false);
-        //
-        //     assert.equal((await trustee.totalVesting()).toNumber(), totalVesting + value + value2);
-        //     let grant2 = await getGrant(accounts[1]);
-        //     assert.equal(grant2.value, value2);
-        //     assert.equal(grant2.start, start2);
-        //     assert.equal(grant2.cliff, cliff2);
-        //     assert.equal(grant2.end, end2);
-        //     assert.equal(grant2.transferred, 0);
-        //     assert.equal(grant2.revokable, false);
-        // });
+        it('should not allow granting to the zero address', async function () {
+          await shouldFail.reverting(vestingTrustee.createGrant(ZERO_ADDRESS, 1000, now, now, now + 10 * YEAR, false));
+        });
+
+        it('should not allow granting 0 tokens', async function () {
+          await shouldFail.reverting(vestingTrustee.createGrant(grantee, 0, now, now, now + 10 * YEAR, false));
+        });
+
+        it('should not allow granting with a cliff before the start', async function () {
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee, 0, now, now - 1, now + 10 * YEAR, false));
+        });
+
+        it('should not allow granting with a cliff after the vesting end', async function () {
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee, 0, now, now + YEAR, now + MONTH, false));
+        });
+
+        it('should not allow granting tokens more than once to the same address', async function () {
+            await vestingTrustee.createGrant(grantee, 1000, now, now, now + 10 * YEAR, false, { from: owner });
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee, 1000, now, now, now + 10 * YEAR, false, { from: owner }));
+        });
+
+        it('should not allow granting from a non-owner', async function () {
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee, 0, now, now, now + 10 * YEAR, false, { from: anyone }));
+        });
+
+        it('should not allow granting more than the contract token balance in a single grant', async function () {
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee, balance + 1, now, now + MONTH, now + YEAR, false, { from: owner }));
+        });
+
+        it('should not allow granting more than the contract token balance in multiple grants', async function () {
+            await vestingTrustee.createGrant(grantee, balance - 10, now, now + MONTH, now + YEAR, false, { from: owner });
+            await vestingTrustee.createGrant(grantee2, 7, now, now + MONTH, now + YEAR, false, { from: owner });
+            await vestingTrustee.createGrant(grantee3, 3, now, now + 5 * MONTH, now + YEAR, false, { from: owner });
+
+            await shouldFail.reverting(vestingTrustee.createGrant(grantee4, 1, now, now, now + YEAR, false, { from: owner }));
+        });
+
+        it('should record a grant and increase grants count and total vesting', async function () {
+            let totalVesting = (await vestingTrustee.totalVesting()).toNumber();
+            totalVesting.should.be.bignumber.equal(0);
+
+            let value = 1000;
+            let start = now;
+            let cliff = now + MONTH;
+            let end = now + YEAR;
+            await vestingTrustee.createGrant(grantee, value, start, cliff, end, false, { from: owner });
+
+            (await vestingTrustee.totalVesting()).should.be.bignumber.equal(totalVesting + value);
+            let grant = await getGrant(grantee);
+            grant.value.should.be.equal(value);
+            grant.start.should.be.equal(start);
+            grant.cliff.should.be.equal(cliff);
+            grant.end.should.be.equal(end);
+            grant.transferred.should.be.equal(0);
+            grant.revokable.should.be.equal(false);
+
+            let value2 = 2300;
+            let start2 = now + 2 * MONTH;
+            let cliff2 = now + 6 * MONTH;
+            let end2 = now + YEAR;
+            await vestingTrustee.createGrant(grantee2, value2, start2, cliff2, end2, false, { from: owner });
+
+            (await vestingTrustee.totalVesting()).should.be.bignumber.equal(totalVesting + value + value2);
+            let grant2 = await getGrant(grantee2);
+            grant2.value.should.be.equal(value2);
+            grant2.start.should.be.equal(start2);
+            grant2.cliff.should.be.equal(cliff2);
+            grant2.end.should.be.equal(end2);
+            grant2.transferred.should.be.equal(0);
+            grant2.revokable.should.be.equal(false);
+        });
       });
 
       describe('create grant', async function () {
@@ -185,7 +184,7 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
           await vestingTrustee.createGrant(
             grantee, value, startTime, cliffTime, endTime, revokable
           , { from: owner });
-          (await getGrant(grantee)).value.should.be.bignumber.equal(value);
+          (await getGrant(grantee)).value.should.be.equal(value);
           (await vestingTrustee.claimableTokens(grantee, now)).should.be.bignumber.equal(0);
         });
       });
