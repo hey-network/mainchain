@@ -31,6 +31,14 @@ contract('VestingTrustee', function ([_, owner, grantee, anyone]) {
       this.vestingTrustee = await VestingTrustee.new(this.token.address, { from: owner });
     });
 
+    it('sets the token address to the ERC20 contract address', async function () {
+      (await this.vestingTrustee.token()).should.be.equal(this.token.address);
+    });
+
+    it('sets the total vesting to 0 initially', async function () {
+      (await this.vestingTrustee.totalVesting()).should.be.bignumber.equal(0);
+    });
+
     context('with provisioned token balance', async function () {
       beforeEach(async function () {
         await this.token.transfer(this.vestingTrustee.address, 10000, { from: owner });

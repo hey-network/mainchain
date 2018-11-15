@@ -29,8 +29,8 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
 
     /* *** Sale Parameters *** */
     // Constants
-    uint256 private constant MINIMUM_CONTRIBUTION = 0.1 ether; // Minimum contribution
-    uint256 private constant FIRST_DAY_DURATION = 24 hours;    // Duration of the first sale day
+    uint256 public constant MINIMUM_CONTRIBUTION = 0.1 ether; // Minimum contribution
+    uint256 public constant FIRST_DAY_DURATION = 24 hours;    // Duration of the first sale day
     // Initialized at contract deployment
     uint256 private _openingTime;   // When the sale starts
     uint256 private _firstDayRate;  // The ETH-to-Token rate for the first day
