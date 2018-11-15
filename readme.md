@@ -27,8 +27,8 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
   - [Code used as basis](#code-used-as-basis)
 - [Contracts deep-dives](#-contracts-deep-dives)
   - [Token](#token)
-  - [Token Sale](#token-sale)
-  - [VestingTrustee](#vesting-trustee)
+  - [Token Sale](#tokensale)
+  - [Vesting Trustee](#vestingtrustee)
   - [Gateway](#gateway)
 - [Deployment](#-deployment)
   - [First phase](#first-phase)
@@ -305,58 +305,89 @@ Note that the access control helper `KYCVerifierRole` can be tested with `npm ru
 
 ### VestingTrustee
 
-```
-Claimable tokens over time (vested: 1000, cliff days: 10, total days: 50)
+#### Making sense of the linear / cliff vesting scheme
 
-
-    1000.00 ┼                                                ╭───────────
-     950.00 ┤                                              ╭─╯
-     900.00 ┤                                           ╭──╯
-     850.00 ┤                                         ╭─╯
-     800.00 ┤                                      ╭──╯
-     750.00 ┤                                    ╭─╯
-     700.00 ┤                                 ╭──╯
-     650.00 ┤                               ╭─╯
-     600.00 ┤                            ╭──╯
-     550.00 ┤                          ╭─╯
-     500.00 ┤                       ╭──╯
-     450.00 ┤                     ╭─╯
-     400.00 ┤                  ╭──╯
-     350.00 ┤                ╭─╯
-     300.00 ┤             ╭──╯
-     250.00 ┤           ╭─╯
-     200.00 ┤         ╭─╯
-     150.00 ┤         │
-     100.00 ┤         │
-      50.00 ┤         │
-       0.00 ┼─────────╯
-```
+To visualise the evolving tokens vesting over time, simply run `test:vesting-trustee:charts`. This will provide ASCII charts such as the following, to help grasp the mechanism of linearity.
 
 ```
-Claimable tokens over time (vested: 1000, cliff days: 50, total days: 100)
+Claimable tokens over time (vested: 100, cliff days: 25, total days: 100)
 
 
-   1000.00 ┼                                                                                                 ╭────────────
-    950.00 ┤                                                                                            ╭────╯
-    900.00 ┤                                                                                       ╭────╯
-    850.00 ┤                                                                                  ╭────╯
-    800.00 ┤                                                                             ╭────╯
-    750.00 ┤                                                                        ╭────╯
-    700.00 ┤                                                                   ╭────╯
-    650.00 ┤                                                              ╭────╯
-    600.00 ┤                                                         ╭────╯
-    550.00 ┤                                                    ╭────╯
-    500.00 ┤                                                 ╭──╯
-    450.00 ┤                                                 │
-    400.00 ┤                                                 │
-    350.00 ┤                                                 │
-    300.00 ┤                                                 │
-    250.00 ┤                                                 │
-    200.00 ┤                                                 │
-    150.00 ┤                                                 │
-    100.00 ┤                                                 │
-     50.00 ┤                                                 │
-      0.00 ┼─────────────────────────────────────────────────╯
+ 100.00 ┼                                                                                                 ╭────────────
+  95.00 ┤                                                                                            ╭────╯
+  90.00 ┤                                                                                       ╭────╯
+  85.00 ┤                                                                                  ╭────╯
+  80.00 ┤                                                                             ╭────╯
+  75.00 ┤                                                                        ╭────╯
+  70.00 ┤                                                                   ╭────╯
+  65.00 ┤                                                              ╭────╯
+  60.00 ┤                                                         ╭────╯
+  55.00 ┤                                                    ╭────╯
+  50.00 ┤                                               ╭────╯
+  45.00 ┤                                          ╭────╯
+  40.00 ┤                                     ╭────╯
+  35.00 ┤                                ╭────╯
+  30.00 ┤                           ╭────╯
+  25.00 ┤                        ╭──╯
+  20.00 ┤                        │
+  15.00 ┤                        │
+  10.00 ┤                        │
+   5.00 ┤                        │
+   0.00 ┼────────────────────────╯
+```
+
+```
+Claimable tokens over time (vested: 100, cliff days: 50, total days: 100)
+
+
+ 100.00 ┼                                                                                                 ╭────────────
+  95.00 ┤                                                                                            ╭────╯
+  90.00 ┤                                                                                       ╭────╯
+  85.00 ┤                                                                                  ╭────╯
+  80.00 ┤                                                                             ╭────╯
+  75.00 ┤                                                                        ╭────╯
+  70.00 ┤                                                                   ╭────╯
+  65.00 ┤                                                              ╭────╯
+  60.00 ┤                                                         ╭────╯
+  55.00 ┤                                                    ╭────╯
+  50.00 ┤                                                 ╭──╯
+  45.00 ┤                                                 │
+  40.00 ┤                                                 │
+  35.00 ┤                                                 │
+  30.00 ┤                                                 │
+  25.00 ┤                                                 │
+  20.00 ┤                                                 │
+  15.00 ┤                                                 │
+  10.00 ┤                                                 │
+   5.00 ┤                                                 │
+   0.00 ┼─────────────────────────────────────────────────╯
+```
+
+```
+Claimable tokens over time (vested: 100, cliff days: 75, total days: 100)
+
+
+ 100.00 ┼                                                                                                 ╭────────────
+  95.00 ┤                                                                                            ╭────╯
+  90.00 ┤                                                                                       ╭────╯
+  85.00 ┤                                                                                  ╭────╯
+  80.00 ┤                                                                             ╭────╯
+  75.00 ┤                                                                          ╭──╯
+  70.00 ┤                                                                          │
+  65.00 ┤                                                                          │
+  60.00 ┤                                                                          │
+  55.00 ┤                                                                          │
+  50.00 ┤                                                                          │
+  45.00 ┤                                                                          │
+  40.00 ┤                                                                          │
+  35.00 ┤                                                                          │
+  30.00 ┤                                                                          │
+  25.00 ┤                                                                          │
+  20.00 ┤                                                                          │
+  15.00 ┤                                                                          │
+  10.00 ┤                                                                          │
+   5.00 ┤                                                                          │
+   0.00 ┼──────────────────────────────────────────────────────────────────────────╯
 ```
 
 ### Gateway
