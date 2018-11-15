@@ -40,7 +40,7 @@ contract Token is ERC20, ERC20Detailed, EmergencyERC20Drain {
     }
 
 
-    /* *** Functions Modifying the State *** */
+    /* *** State-Modifying Functions *** */
 
     /** @dev Constructor. Mints all tokens at once and give them to the contract
      *  deployer. No further minting is subsequently possible.

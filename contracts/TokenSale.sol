@@ -27,26 +27,28 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
     using SafeMath for uint256;
 
 
-    /* *** Sale parameters *** */
+    /* *** Sale Parameters *** */
+    // Constants
     uint256 private constant MINIMUM_CONTRIBUTION = 0.1 ether; // Minimum contribution
     uint256 private constant FIRST_DAY_DURATION = 24 hours;    // Duration of the first sale day
-    uint256 private _openingTime;                     // When the sale starts.
-    uint256 private _firstDayRate;                    // The ETH-to-Token rate for the first day
-    uint256 private _rate;                            // The ETH-to-Token rate after the first day
-    address private _pool;                            // The address where unsold tokens are sent at finalization
-    IERC20 private _token;                            // The token which is sold.
+    // Initialized at contract deployment
+    uint256 private _openingTime;   // When the sale starts
+    uint256 private _firstDayRate;  // The ETH-to-Token rate for the first day
+    uint256 private _rate;          // The ETH-to-Token rate after the first day
+    address private _pool;          // The address where unsold tokens are sent at finalization
+    IERC20 private _token;          // The token which is sold
 
 
-    /* *** Functions Modifying the State *** */
+    /* *** State-Modifying Functions *** */
 
-    /** @dev Constructor. First contract set up (tokens will also need to be transferred to the contract afterwards).
-     *  @param openingTime Time the sale will start in seconds since the Unix Epoch.
-     *  @param closingTime Time the sale will close in seconds since the Unix Epoch.
-     *  @param firstDayRate ETH-to-Token rate for the first day of the sale.
-     *  @param rate ETH-to-Token rate after the first day of the sale.
-     *  @param wallet The party which will get the funds of the token sale.
-     *  @param pool The party which will get the unsold tokens at closing of the sale.
-     *  @param token The ERC20 token being sold.
+    /** @dev Constructor. First contract set up (tokens will also need to be transferred to the contract afterwards)
+     *  @param openingTime Time the sale will start in seconds since the Unix Epoch
+     *  @param closingTime Time the sale will close in seconds since the Unix Epoch
+     *  @param firstDayRate ETH-to-Token rate for the first day of the sale
+     *  @param rate ETH-to-Token rate after the first day of the sale
+     *  @param wallet The party which will get the funds of the token sale
+     *  @param pool The party which will get the unsold tokens at closing of the sale
+     *  @param token The ERC20 token being sold
      */
     constructor(
         uint256 openingTime,
