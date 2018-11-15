@@ -37,9 +37,9 @@ contract VestingTrustee is Ownable {
 
 
     /* *** Events *** */
-    event NewGrant(address indexed from, address indexed to, uint256 value);
-    event UnlockGrant(address indexed holder, uint256 value);
-    event RevokeGrant(address indexed holder, uint256 refund);
+    event GrantCreated(address indexed from, address indexed to, uint256 value);
+    event GrantClaimed(address indexed holder, uint256 value);
+    event GrantRevoked(address indexed holder, uint256 refund);
 
 
     /* *** Public Functions *** */
@@ -101,7 +101,7 @@ contract VestingTrustee is Ownable {
         // Tokens granted, increase the total amount vested.
         _totalVesting = _totalVesting.add(value);
 
-        emit NewGrant(msg.sender, to, value);
+        emit GrantCreated(msg.sender, to, value);
     }
 
     /** @dev Revoke the grant of tokens of a specifed address and returns tokens
@@ -127,7 +127,7 @@ contract VestingTrustee is Ownable {
         _totalVesting = _totalVesting.sub(refund);
         _token.transfer(msg.sender, refund);
 
-        emit RevokeGrant(holder, refund);
+        emit GrantRevoked(holder, refund);
     }
 
     /** @dev Claim vested tokens and transfer them to their holder. Note that
@@ -153,7 +153,7 @@ contract VestingTrustee is Ownable {
         _totalVesting = _totalVesting.sub(transferable);
         _token.transfer(msg.sender, transferable);
 
-        emit UnlockGrant(msg.sender, transferable);
+        emit GrantClaimed(msg.sender, transferable);
     }
 
     /** @dev Calculate the total amount of tokens that a holder can claim at a
