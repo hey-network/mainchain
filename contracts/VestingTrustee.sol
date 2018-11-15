@@ -11,7 +11,7 @@ import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 
 /** @title VestingTrustee
- * @dev Lends very heavily from SirinLab and Stox's own VestingTrustee contracts
+ * @dev Lends very heavily from SirinLab and Stox's own VestingTrustee contracts.
  */
 contract VestingTrustee is Ownable {
 
@@ -32,8 +32,8 @@ contract VestingTrustee is Ownable {
 
     /* *** Variables *** */
     mapping (address => Grant) public grants; // Grants by holder address
-    IERC20 private _token;                    // The address of the ERC20 token to vest.
-    uint256 private _totalVesting;            // Total tokens available for vesting.
+    IERC20 private _token;                    // The address of the ERC20 token to vest
+    uint256 private _totalVesting;            // Total tokens available for vesting
 
 
     /* *** Events *** */
@@ -159,9 +159,9 @@ contract VestingTrustee is Ownable {
 
     /** @dev Calculate the total amount of tokens that a holder can claim at a
      *  given time, from the total amount vested for this holder.
-     *  @param holder address The address of the holder.
-     *  @param time uint256 The specific time.
-     *  @return a uint256 representing a holder's total amount of vested tokens.
+     *  @param holder address The address of the holder
+     *  @param time uint256 The specific time
+     *  @return a uint256 representing a holder's total amount of vested tokens
      */
     function claimableTokens(
         address holder,
@@ -204,7 +204,7 @@ contract VestingTrustee is Ownable {
 
     /* *** Private Functions *** */
 
-    /** @dev Calculate amount of vested tokens at a specifc timefor a given grant
+    /** @dev Calculate amount of vested tokens at a given time for a given grant.
      *  @param grant Grant The vesting grant
      *  @param time uint256 The time to be checked
      *  @return An uint256 representing the amount of claimable tokens
