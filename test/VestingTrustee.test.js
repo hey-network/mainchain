@@ -1,5 +1,6 @@
 const expectEvent = require('./helpers/expectEvent');
 const shouldFail = require('./helpers/shouldFail');
+const { shouldBeAround } = require('./helpers/shouldBeAround');
 const { ether } = require('./helpers/ether');
 const { ethGetBalance } = require('./helpers/web3');
 const { advanceBlock } = require('./helpers/advanceToBlock');
@@ -247,18 +248,126 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
             ]
           },
         ].forEach(function (grant) {
-          context(`grant: ${grant.tokens}, startOffset: ${grant.startOffset}, cliffOffset: ${grant.cliffOffset}, ` +
-            `endOffset: ${grant.endOffset}`, async function () {
+            context(`grant: ${grant.tokens}, startOffset: ${grant.startOffset}, cliffOffset: ${grant.cliffOffset}, ` +
+              `endOffset: ${grant.endOffset}`, async function () {
 
-            beforeEach(async function () {
-              await vestingTrustee.createGrant(grantee, grant.tokens, now + grant.startOffset, now + grant.cliffOffset,
-                now + grant.endOffset, false, { from: owner });
-            });
-
-            grant.results.forEach(async function (res) {
-              it(`should allow to claim ${res.claimable} out of ${grant.tokens} at time offset ${res.offset}`, async function () {
-                (await vestingTrustee.claimableTokens(grantee, now + res.offset)).should.be.bignumber.equal(res.claimable);
+              beforeEach(async function () {
+                await vestingTrustee.createGrant(grantee, grant.tokens, now + grant.startOffset, now + grant.cliffOffset,
+                  now + grant.endOffset, false, { from: owner });
               });
+
+              grant.results.forEach(async function (res) {
+                it(`should allow to claim ${res.claimable} out of ${grant.tokens} at time offset ${res.offset}`, async function () {
+                  (await vestingTrustee.claimableTokens(grantee, now + res.offset)).should.be.bignumber.equal(res.claimable);
+                });
+              });
+            });
+          });
+      });
+
+      describe('claimTokens', async function () {
+        // We'd allow (up to) 10 tokens vesting error, due to possible timing differences during the tests.
+        const MAX_ERROR = 10;
+
+        it('should not allow claiming a non-existing grant', async function () {
+          let grant = await getGrant(anyone);
+
+          grant.value.should.be.equal(0);
+          grant.start.should.be.equal(0);
+          grant.cliff.should.be.equal(0);
+          grant.end.should.be.equal(0);
+
+          await shouldFail.reverting(vestingTrustee.claimTokens({ from: anyone }));
+        });
+
+        it('should not allow claiming a revoked grant', async function () {
+          await vestingTrustee.createGrant(grantee, balance, now, now + MONTH, now + YEAR, true, { from: owner });
+          await vestingTrustee.revokeGrant(grantee, { from: owner });
+
+          await shouldFail.reverting(vestingTrustee.claimTokens({ from: grantee }));
+        });
+
+        [
+          {
+            tokens: 1000, startOffset: 0, cliffOffset: MONTH, endOffset: YEAR, results: [
+            { diff: 0, unlocked: 0 },
+            // 1 day before the cliff.
+            { diff: MONTH - DAY, unlocked: 0 },
+            // At the cliff.
+            { diff: DAY, unlocked: 83 },
+            // 1 second after the cliff and previous unlock/withdraw.
+            { diff: 1, unlocked: 0 },
+            // 1 month after the cliff.
+            { diff: MONTH - 1, unlocked: 83 },
+            // At half of the vesting period.
+            { diff: 4 * MONTH, unlocked: 1000 / 2 - 2 * 83 },
+            // At the end of the vesting period.
+            { diff: 6 * MONTH, unlocked: 1000 / 2 },
+            // After the vesting period, with everything already unlocked and withdrawn.
+            { diff: DAY, unlocked: 0 }
+            ]
+          },
+          {
+            tokens: 1000, startOffset: 0, cliffOffset: MONTH, endOffset: YEAR, results: [
+            { diff: 0, unlocked: 0 },
+            // 1 day after the vesting period.
+            { diff: YEAR + DAY, unlocked: 1000 },
+            // 1 year after the vesting period.
+            { diff: YEAR - DAY, unlocked: 0 }
+            ]
+          },
+          {
+            tokens: 1000000, startOffset: 0, cliffOffset: 0, endOffset: 4 * YEAR, results: [
+            { diff: 0, unlocked: 0 },
+            { diff: YEAR, unlocked: 1000000 / 4 },
+            { diff: YEAR, unlocked: 1000000 / 4 },
+            { diff: YEAR, unlocked: 1000000 / 4 },
+            { diff: YEAR, unlocked: 1000000 / 4 },
+            { diff: YEAR, unlocked: 0 }
+            ]
+          }
+        ].forEach(async function (grant) {
+            context(`grant: ${grant.tokens}, startOffset: ${grant.startOffset}, cliffOffset: ${grant.cliffOffset}, ` +
+              `endOffset: ${grant.endOffset}`, async function () {
+
+              beforeEach(async function () {
+                await vestingTrustee.createGrant(grantee, grant.tokens, now + grant.startOffset, now + grant.cliffOffset, now +
+                  grant.endOffset, false, { from: owner });
+              });
+
+            it('should unlock tokens according to the schedule', async function () {
+              for (let res of grant.results) {
+                console.log(`\texpecting ${res.unlocked} tokens unlocked and transferred after another ` +
+                  `${res.diff} seconds`);
+
+                // Get previous state.
+                let totalVesting = (await vestingTrustee.totalVesting()).toNumber();
+                let vestingTrusteeBalance = (await token.balanceOf(vestingTrustee.address)).toNumber();
+                let userBalance = (await token.balanceOf(grantee)).toNumber();
+                let transferred = (await getGrant(grantee)).transferred;
+
+                // Jump forward in time by the requested diff.
+                await time.increase(res.diff);
+
+                // Should revert if nothing can be unlocked yet, to avoid having
+                // grantee wasting transaction fees.
+                if (res.unlocked === 0) {
+                  await shouldFail.reverting(vestingTrustee.claimTokens({from: grantee}));
+                } else {
+                  await vestingTrustee.claimTokens({from: grantee});
+                }
+
+                // Verify new state.
+                let totalVesting2 = (await vestingTrustee.totalVesting()).toNumber();
+                let vestingTrusteeBalance2 = (await token.balanceOf(vestingTrustee.address)).toNumber();
+                let userBalance2 = (await token.balanceOf(grantee)).toNumber();
+                let transferred2 = (await getGrant(grantee)).transferred;
+
+                shouldBeAround(totalVesting2, totalVesting - res.unlocked, MAX_ERROR);
+                shouldBeAround(vestingTrusteeBalance2, vestingTrusteeBalance - res.unlocked, MAX_ERROR);
+                shouldBeAround(userBalance2, userBalance + res.unlocked, MAX_ERROR);
+                shouldBeAround(transferred2, transferred + res.unlocked, MAX_ERROR);
+              }
             });
           });
         });
