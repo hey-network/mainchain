@@ -45,7 +45,7 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
       vestingTrustee = await VestingTrustee.new(token.address, { from: owner });
     });
 
-    let getGrant = async (address) => {
+    let getGrant = async function (address) {
       let grant = await vestingTrustee.grants(address);
 
       return {
@@ -59,7 +59,7 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
     }
 
     describe('deployment and provisioning', async function () {
-      it('should be ownable', async () => {
+      it('should be ownable', async function () {
         (await vestingTrustee.owner()).should.be.equal(owner);
       });
 
@@ -76,16 +76,16 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
       });
 
       let balance = 1000;
-      context(`with ${balance} tokens provisioned to the contract`, async () => {
-          beforeEach(async () => {
+      context(`with ${balance} tokens provisioned to the contract`, async function () {
+          beforeEach(async function () {
             await token.transfer(vestingTrustee.address, balance, { from: owner });
           });
 
-          it(`should have a token balance equal to ${balance}`, async () => {
+          it(`should have a token balance equal to ${balance}`, async function () {
             (await token.balanceOf(await vestingTrustee.address)).should.be.bignumber.equal(balance);
           });
 
-          it('should be provisionable with additional tokens', async () => {
+          it('should be provisionable with additional tokens', async function () {
             let value = 10;
             await token.transfer(vestingTrustee.address, value, { from: owner });
             (await token.balanceOf(await vestingTrustee.address)).should.be.bignumber.equal(balance + value);
@@ -93,7 +93,7 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
       });
     });
 
-    let balance = 10000;
+    let balance = 10 ** 12;
     let value = 1000;
     context(`with a provisioned token balance of ${balance}`, async function () {
       beforeEach(async function () {
@@ -188,11 +188,79 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
         });
       });
 
-      // Note: this test should be placed somewhere else, for now we keep it
-      // as it contributes to 100% test coverage on the contract.
       describe('claimableTokens', async function () {
-        it('should return 0 for an address that is not a grantee', async function () {
-          (await vestingTrustee.claimableTokens(anyone, now)).should.be.bignumber.equal(0);
+        it('should return 0 for non existing grant', async function () {
+          let grant = await getGrant(anyone);
+
+          grant.value.should.be.equal(0);
+          grant.start.should.be.equal(0);
+          grant.cliff.should.be.equal(0);
+          grant.end.should.be.equal(0);
+
+          (await vestingTrustee.claimableTokens(anyone, now + 100 * YEAR)).should.be.bignumber.equal(0);
+        });
+
+        [
+          {
+            tokens: 1000, startOffset: 0, cliffOffset: MONTH, endOffset: YEAR, results: [
+            { offset: 0, claimable: 0 },
+            { offset: MONTH - 1, claimable: 0 },
+            { offset: MONTH, claimable: Math.floor(1000 / 12) },
+            { offset: 2 * MONTH, claimable: 2 * Math.floor(1000 / 12) },
+            { offset: 0.5 * YEAR, claimable: 1000 / 2 },
+            { offset: YEAR, claimable: 1000 },
+            { offset: YEAR + DAY, claimable: 1000 }
+            ]
+          },
+          {
+            tokens: 10000, startOffset: 0, cliffOffset: 0, endOffset: 4 * YEAR, results: [
+            { offset: 0, claimable: 0 },
+            { offset: MONTH, claimable: Math.floor(10000 / 12 / 4) },
+            { offset: 0.5 * YEAR, claimable: 10000 / 8 },
+            { offset: YEAR, claimable: 10000 / 4 },
+            { offset: 2 * YEAR, claimable: 10000 / 2 },
+            { offset: 3 * YEAR, claimable: 10000 * 0.75 },
+            { offset: 4 * YEAR, claimable: 10000 },
+            { offset: 4 * YEAR + MONTH, claimable: 10000 }
+            ]
+          },
+          {
+            tokens: 10000, startOffset: 0, cliffOffset: YEAR, endOffset: 4 * YEAR, results: [
+            { offset: 0, claimable: 0 },
+            { offset: MONTH, claimable: 0 },
+            { offset: 0.5 * YEAR, claimable: 0 },
+            { offset: YEAR, claimable: 10000 / 4 },
+            { offset: 2 * YEAR, claimable: 10000 / 2 },
+            { offset: 3 * YEAR, claimable: 10000 * 0.75 },
+            { offset: 4 * YEAR, claimable: 10000 },
+            { offset: 4 * YEAR + MONTH, claimable: 10000 }
+            ]
+          },
+          {
+            tokens: 100000000, startOffset: 0, cliffOffset: 0, endOffset: 2 * YEAR, results: [
+            { offset: 0, claimable: 0 },
+            { offset: MONTH, claimable: Math.floor(100000000 / 12 / 2) },
+            { offset: 0.5 * YEAR, claimable: 100000000 / 4 },
+            { offset: YEAR, claimable: 100000000 / 2 },
+            { offset: 2 * YEAR, claimable: 100000000 },
+            { offset: 3 * YEAR, claimable: 100000000 }
+            ]
+          },
+        ].forEach(function (grant) {
+          context(`grant: ${grant.tokens}, startOffset: ${grant.startOffset}, cliffOffset: ${grant.cliffOffset}, ` +
+            `endOffset: ${grant.endOffset}`, async function () {
+
+            beforeEach(async function () {
+              await vestingTrustee.createGrant(grantee, grant.tokens, now + grant.startOffset, now + grant.cliffOffset,
+                now + grant.endOffset, false, { from: owner });
+            });
+
+            grant.results.forEach(async function (res) {
+              it(`should allow to claim ${res.claimable} out of ${grant.tokens} at time offset ${res.offset}`, async function () {
+                (await vestingTrustee.claimableTokens(grantee, now + res.offset)).should.be.bignumber.equal(res.claimable);
+              });
+            });
+          });
         });
       });
 
