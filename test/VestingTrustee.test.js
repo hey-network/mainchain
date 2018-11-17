@@ -161,6 +161,7 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
           await vestingTrustee.createGrant(grantee, value, start, cliff, end, false, { from: owner });
 
           (await vestingTrustee.totalVesting()).should.be.bignumber.equal(totalVesting + value);
+          (await vestingTrustee.claimableTokens(grantee, now)).should.be.bignumber.equal(0);
           let grant = await getGrant(grantee);
           grant.value.should.be.equal(value);
           grant.start.should.be.equal(start);
@@ -176,7 +177,7 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
           await vestingTrustee.createGrant(grantee2, value2, start2, cliff2, end2, false, { from: owner });
 
           (await vestingTrustee.totalVesting()).should.be.bignumber.equal(totalVesting + value + value2);
-          (await vestingTrustee.claimableTokens(grantee, now)).should.be.bignumber.equal(0);
+          (await vestingTrustee.claimableTokens(grantee2, now)).should.be.bignumber.equal(0);
           let grant2 = await getGrant(grantee2);
           grant2.value.should.be.equal(value2);
           grant2.start.should.be.equal(start2);
