@@ -305,6 +305,18 @@ Note that the access control helper `KYCVerifierRole` can be tested with `npm ru
 
 ### VestingTrustee
 
+The Vesting Trustee smart contract is responsible for the vesting of tokens granted to early contributors, some pre-sale participants, and the Hey team. It protects their tokens while at the same time making sure these tokens can only be withdrawn after a given lock period.
+
+This smart contract contains a mapping of `Grant`s, each parameterised with their own vested tokens amount and vesting time. Grants can be created and revoked anytime by the contract owner.
+
+The vesting scheme includes a cliff mechanism. Before the cliff date, no tokens can be withdrawn by the grantee. After the cliff date, tokens can progressively be withdrawn, with an amount limited by a linear interpolation between the vesting start and end times. After the vesting end time, the full amount of granted tokens can then be withdrawn. Here is a mathematical description of the tokens that can be claimed and withdrawn by a grantee at a given time *t* for a grant of *V* tokens:
+
+![Vesting equation](https://raw.githubusercontent.com/hey-network/mainchain/master/_readme_assets/vesting.png)
+
+Note that when a grant is revoked by the contract owner, the corresponding tokens amount is transferred back to the contract owner address.
+
+The smart contract is initially provisioned with tokens by the contract owner, so that grants can be rightly created.
+
 #### Description
 
 #### Testing of specifications

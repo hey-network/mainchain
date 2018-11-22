@@ -1,0 +1,7 @@
+\textup{claimableTokens}(t) = \left\{\begin{matrix}
+0 & if & t < t_{cliff}\\
+\\
+V * \frac{t-t_{start}}{t_{start}-t_{end}} &  if & t_{cliff} \leq t < t_{end}\\
+\\
+V & if & t \geq t_{end}
+\end{matrix}\right.
