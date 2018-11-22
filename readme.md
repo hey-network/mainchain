@@ -305,7 +305,17 @@ Note that the access control helper `KYCVerifierRole` can be tested with `npm ru
 
 ### VestingTrustee
 
-#### Making sense of the linear / cliff vesting scheme
+#### Description
+
+#### Testing of specifications
+
+The full Vesting Trustee test suite can be run with the command `npm run test:vesting-trustee`. Each specification of the Vesting Trustee can also be verified individually with its dedicated test:
+
+| # | Description | Test command |
+| --- | ------------- | ------------- |
+| 1 | TODO | `npm run test:vesting-trustee:TODO` |
+
+#### Visualisation of the linear vesting scheme
 
 To visualise the evolving tokens vesting over time, simply run `test:vesting-trustee:charts`. This will provide ASCII charts such as the following, to help grasp the mechanism of linearity.
 
