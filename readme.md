@@ -485,6 +485,17 @@ All actions performed below should originate from the TGEAdmin account. After de
 
 This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). ~~The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).~~
 
-
 ### Second phase
 This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
+
+### Code verification
+
+We allow participants to verify the smart contracts code directly on Etherscan. For this we use [Solidity Flattener](https://github.com/BlockCatIO/solidity-flattener) installed using `pip3 install solidity_flattener`, running the following command:
+
+```
+solidity_flattener TokenSale.sol --solc-paths="openzeppelin-solidity/contracts=ABSOLUTE_PATH_TO_REPO/node_modules/openzeppelin-solidity/contracts"
+```
+
+This is encapsulated with the npm commands `npm run flatten:token`, `npm run flatten:token-sale`, `npm run flatten:vesting-trustee`. These commands output `*.flat.sol` files that can then be used in Etherscan.
+
+> Currently, there is verification mismatch to be clarified on Etherscan. Note that the flattened outputs are produced with the wrong Solidity pragma version, this is potentially the reason for the mismatch.

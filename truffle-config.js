@@ -1,3 +1,6 @@
+var HDWalletProvider = require("truffle-hdwallet-provider");
+const MNEMONIC = "MNEMONIC_HERE";
+
 // -------------------------------------------------------------------
 // From https://gist.github.com/mxpaul/f2168f5c951306a06ef833efa0eb56ce
 // Emulate mocha --grep option to run only matching tests
@@ -24,7 +27,15 @@ module.exports = {
       host: "127.0.0.1",
       port: 8545,
       network_id: "*" // Match any network id
-    }
+    },
+		ropsten: {
+	    provider: function() {
+	      return new HDWalletProvider(MNEMONIC, "https://ropsten.infura.io/v3/INFURA_KEY_HERE")
+	    },
+	    network_id: 3,
+			gasPrice: 5*1e9,
+	    gas: 3*1e6      // max gas used by any transaction (4M is the max)
+	  }
   },
   mocha: mochaConf,
 };

@@ -38,6 +38,9 @@
     "test:gateway": "truffle test --network test test/Gateway.test.js",
     "test:kyc-verifier-role": "truffle test --network test test/KYCVerifierRole.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
+    "flatten:token": "solidity_flattener ./contracts/Token.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> Token.flat.sol",
+    "flatten:token-sale": "solidity_flattener ./contracts/TokenSale.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> TokenSale.flat.sol",
+    "flatten:vesting-trustee": "solidity_flattener ./contracts/VestingTrustee.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> VestingTrustee.flat.sol",
     "mythril:token": "npm run mythrill contracts/Token.sol",
     "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
     "mythril:gateway": "npm run mythrill contracts/Gateway.sol",
@@ -47,8 +50,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "truffle": "4.1.12",
     "openzeppelin-solidity": "2.0.0",
+    "truffle": "4.1.12",
+    "truffle-hdwallet-provider": "0.0.6",
     "web3": "1.0.0-beta.35"
   },
   "devDependencies": {
