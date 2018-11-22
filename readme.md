@@ -305,6 +305,8 @@ Note that the access control helper `KYCVerifierRole` can be tested with `npm ru
 
 ### VestingTrustee
 
+#### Description
+
 The Vesting Trustee smart contract is responsible for the vesting of tokens granted to early contributors, some pre-sale participants, and the Hey team. It protects their tokens while at the same time making sure these tokens can only be withdrawn after a given lock period.
 
 This smart contract contains a mapping of `Grant`s, each parameterised with their own vested tokens amount and vesting time. Grants can be created and revoked anytime by the contract owner.
@@ -317,15 +319,18 @@ Note that when a grant is revoked by the contract owner, the corresponding token
 
 The smart contract is initially provisioned with tokens by the contract owner, so that grants can be rightly created.
 
-#### Description
-
 #### Testing of specifications
 
 The full Vesting Trustee test suite can be run with the command `npm run test:vesting-trustee`. Each specification of the Vesting Trustee can also be verified individually with its dedicated test:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
-| 1 | TODO | `npm run test:vesting-trustee:TODO` |
+| 1 | Allows the contract owner to create a grant | `npm run test:vesting-trustee:create` |
+| 2 | Computes the right amount of claimable tokens over time | `npm run test:vesting-trustee:claimable` |
+| 3 | Allows progressive release of tokens over time | `npm run test:vesting-trustee:claim` |
+| 4 | Allows the contract owner to revoke a revokable grant | `npm run test:vesting-trustee:revoke` |
+
+Note that testing of the claiming logic relies on a series of different vesting configurations, where we sample time during the vesting period to ponctually measure tokens that can be claimed and effectively withdrawn.
 
 #### Visualisation of the linear vesting scheme
 
@@ -412,9 +417,15 @@ Claimable tokens over time (vested: 100, cliff days: 75, total days: 100)
    0.00 ┼──────────────────────────────────────────────────────────────────────────╯
 ```
 
+#### Attribution
+
+The Vesting Trustee contract borrows heavily from (i.e. is a refacto of) the smart contracts used by [SirinLab](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol),  [Stox](https://github.com/stx-technologies/stox-token/blob/20925fd8b97746f085b95af03173d65a2ddaa504/contracts/Trustee.sol) and [KIN] (https://medium.com/kinblog/kin-foundation-vesting-trustee-smart-contract-7fce911516d0).
+
+We have renamed several functions and variables to improve overall readability, while also reverting on claims that yield 0 tokens (either because the grantee does not exist of because no tokens can be claimed yet). We have done this latter change to avoid spilling on transaction fees when doing precocious claims.
+
 ### Gateway
 
-TODO. Note that the ValidatorsManager contract has been taken out of the test coverages calculations as it is not in Hey's direct focus to test all validators co-opting features of this contract.
+Not in scope for the Token Generation Event. The ValidatorsManager contract has been taken out of the test coverages calculations as it is not in Hey's direct focus to test all validators co-opting features of this contract.
 
 ## 🚀 Deployment
 
