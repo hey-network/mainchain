@@ -1,6 +1,8 @@
+// A simple script to verify connectivity with and addresses of a Ledger Nano S.
+
 require('babel-polyfill');
 const Web3 = require('web3');
-const LedgerWalletProvider = require("truffle-ledger-provider");
+const LedgerWalletProvider = require('truffle-ledger-provider');
 
 const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
 const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
@@ -10,8 +12,9 @@ const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
 // 1. Connect your Ledger Nano S
 // 2. Input the PIN
 // 3. Open the Ethereum app
-// 4. Make sure you've got Ropsten ETH on your account to send a transaction
-// 5. Enjoy!
+// 4. Enable the Contract and Display modes from Settings
+// 5. Make sure you've got Ropsten ETH on your account to send a transaction
+// 6. Enjoy!
 
 // An important note on derivation paths:
 // Here and on the Ledger Ethereum Chrome Wallet (browser extension), the default
@@ -40,11 +43,11 @@ async function test() {
   // Trial transaction to test Ledger connectivity
   const signature = await web3.eth.signTransaction({
     from: accounts[0],
-    gasPrice: "20000000000",
-    gas: "21000",
+    gasPrice: '20000000000',
+    gas: '21000',
     to: '0x3535353535353535353535353535353535353535',
-    value: "100000000",
-    data: ""
+    value: '100000000',
+    data: ''
   });
 
   console.log(signature);
@@ -53,11 +56,11 @@ async function test() {
   try {
     const txHash = await web3.eth.sendTransaction({
       from: accounts[0],
-      gasPrice: "20000000000",
-      gas: "21000",
+      gasPrice: '20000000000',
+      gas: '21000',
       to: '0x3535353535353535353535353535353535353535',
-      value: "100000000",
-      data: ""
+      value: '100000000',
+      data: ''
     });
   } catch (error) {
     // This is a known limitation when using Infura, and does not prevent the tx.
