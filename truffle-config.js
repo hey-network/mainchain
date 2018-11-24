@@ -13,9 +13,12 @@ const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 
 // Ledger hardware wallet config
 const LedgerWalletProvider = require("truffle-ledger-provider");
 const ledgerOptions = {
-  networkId: 3, // ropsten testnet
-  accountsOffset: 0 // use the first address on ledger
+  networkId: 3, // Ropsten testnet
+  path: "44'/60'/0'/0", // Ledger default derivation path, before BIP44
+  accountsOffset: 0, // Start from first address to derive accounts
+  accountsLength: 5, // Load 5 accounts
 };
+// https://github.com/LedgerHQ/ledgerjs/issues/115
 
 // -------------------------------------------------------------------
 // From https://gist.github.com/mxpaul/f2168f5c951306a06ef833efa0eb56ce
