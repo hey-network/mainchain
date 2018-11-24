@@ -4,6 +4,8 @@ require('babel-polyfill');
 const Web3 = require('web3');
 const LedgerWalletProvider = require('truffle-ledger-provider');
 
+const DERIVATION_PATH =  "44'/60'/0'/0";
+
 const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
 const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
 
@@ -17,24 +19,35 @@ const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
 // 6. Enjoy!
 
 // An important note on derivation paths:
-// Here and on the Ledger Ethereum Chrome Wallet (browser extension), the default
+// In implementation A and on the Ledger Ethereum Chrome Wallet, the default
 // key derivation path is 44'/60'/0'/0. On Ledger Live however, an additional zero
 // is added to the path as per the BIP44 recommendation. See the full description here:
 // https://github.com/MyCryptoHQ/MyCrypto/issues/2070
 // Since we stick to the ancient derivation path because of the way web3 works here,
 // we need to use accounts retrieved from web3. So, no need to send ETH to the Ledger
-// Live addresses, since they won't be usable from Web3.
+// Live addresses, since they won't be usable from Web3. Again, all these comments
+// apply only to implementation A, and are not relevant for B which uses BIP44.
 
 async function test() {
-  const ledgerOptions = {
-    networkId: 3, // Ropsten testnet
-    path: "44'/60'/0'/0", // Ledger default derivation path, before BIP44
-    accountsOffset: 0, // Start from first address to derive accounts
-    accountsLength: 5, // Load 5 accounts
-  };
-  const provider = new LedgerWalletProvider(ledgerOptions, INFURA_ENDPOINT);
+  // IMPLEMENTATION A (not BIP44, not working with Truffle)
+  // const provider = new LedgerWalletProvider(
+  //   {
+  //     networkId: 3, // Ropsten testnet
+  //     path: DERIVATION_PATH,
+  //     accountsOffset: 0, // Start from first address to derive accounts
+  //     accountsLength: 5, // Load 5 accounts
+  //   },
+  //   INFURA_ENDPOINT
+  // );
 
-  const web3 = new Web3(provider.engine);
+  // IMPLEMENTATION B (BIP 44, uses 0x's implementation, works with Truffle)
+  const provider = require("truffle-ledger-wallet-provider").default(
+    INFURA_ENDPOINT,
+    3,
+    DERIVATION_PATH,
+  );
+
+  const web3 = new Web3(provider);
   const accounts = await web3.eth.getAccounts();
 
   // List the accounts available, derived from default path.
@@ -73,8 +86,8 @@ async function test() {
   }
 
   // Exit gracefully by stopping the provider engine, as it would otherwise hang
-  // forever waiting for new input.
-  provider.engine.stop()
+  // forever waiting for new input (for implementation A, call .engine.stop())
+  provider.stop()
 }
 
 test();
