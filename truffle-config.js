@@ -1,5 +1,21 @@
-var HDWalletProvider = require("truffle-hdwallet-provider");
-const MNEMONIC = "MNEMONIC_HERE";
+// Support for ES6 syntax in Ledger npm module
+require('babel-polyfill');
+
+// Infura remote node config
+const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
+const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
+
+// Mnemonic wallet config
+const HDWalletProvider = require("truffle-hdwallet-provider");
+// Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
+const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 'utf-8' }).trim();
+
+// Ledger hardware wallet config
+const LedgerWalletProvider = require("truffle-ledger-provider");
+const ledgerOptions = {
+  networkId: 3, // ropsten testnet
+  accountsOffset: 0 // use the first address on ledger
+};
 
 // -------------------------------------------------------------------
 // From https://gist.github.com/mxpaul/f2168f5c951306a06ef833efa0eb56ce
@@ -25,16 +41,24 @@ module.exports = {
   networks: {
     development: {
       host: "127.0.0.1",
-      port: 8545,
+			port: 8545,
       network_id: "*" // Match any network id
     },
 		ropsten: {
 	    provider: function() {
-	      return new HDWalletProvider(MNEMONIC, "https://ropsten.infura.io/v3/INFURA_KEY_HERE")
+	      return new HDWalletProvider(MNEMONIC, INFURA_ENDPOINT)
 	    },
 	    network_id: 3,
 			gasPrice: 5*1e9,
-	    gas: 3*1e6      // max gas used by any transaction (4M is the max)
+	    gas: 4*1e6
+	  },
+		ropstenLedger: {
+			provider: function() {
+	      return new LedgerWalletProvider(ledgerOptions, INFURA_ENDPOINT)
+	    },
+	    network_id: 3,
+			gasPrice: 5*1e9,
+	    gas: 4*1e6
 	  }
   },
   mocha: mochaConf,
