@@ -4,9 +4,9 @@
 
 # Hey mainchain contracts
 
-This repository hosts the source code of the Ethereum smart contracts deployed by Hey on the **mainchain**.
+This repository hosts the source code of the ethereum smart contracts deployed by *Hey* on the **mainchain**.
 
-> 📘 If you are looking for the **full description** of Hey's project, consult our **[Manifesto](https://manifesto.hey.network)**.
+> 📘 If you are looking for the **full description** of Hey's project, please consult our **[manifesto](https://manifesto.hey.network)**.
 
 #### Table of contents
 
@@ -25,7 +25,7 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 - [Open-source components](#-open-source-components)
   - [Code used as-is](#code-used-as-is)
   - [Code used as basis](#code-used-as-basis)
-- [Contracts deep-dives](#-contracts-deep-dives)
+- [Contracts deep dives](#-contracts-deep-dives)
   - [Token](#token)
   - [Token Sale](#tokensale)
   - [Vesting Trustee](#vestingtrustee)
@@ -36,11 +36,11 @@ This repository hosts the source code of the Ethereum smart contracts deployed b
 
 
 ## ⚠️ Disclaimers
-This code and its readme are **still work in progress** and should be considered as such until official communication is made from the Hey team that it has been reviewed and audited. Audit results will be made publicly available once their recommendation has been processed.
+This code and its readme remains works in progress and should be considered as such until the *Hey* team releases official communication conveying that the information has been reviewed and audited. Audit results will be made publicly available once the auditor's recommendations have been processed.
 
-Through this document, elements that are **~~stricken through~~** should be considered **even more work in progress** as they are still subject to potentially significant changes.
+Elements within this document that are **~~stricken through~~** should be considered as **under construction**, as these particular components may be subject to significant change.
 
-A **bug bounty** program will run for product-specific smart contracts (both on the sidechain and mainchain). Contact us at [bounty@hey.network](mailto:bounty@hey.network) if you are a Solidity nerd and are excited by this opportunity.
+A **bug bounty** program will run for product-specific smart contracts (both on the sidechain and mainchain). Contact us at [bounty@hey.network](mailto:bounty@hey.network) if you are excited by this opportunity.
 
 
 ## 📮 Contracts addresses
@@ -50,65 +50,65 @@ Will be populated after production deployment.
 
 ### Preliminary analysis
 
-Prior to the audit, a series of tools have been used to improve overall code quality and robustness.
+Prior to the audit, a series of tools were used to improve overall code quality and ensure robustness.
 
 #### Solium
 
 The [Solium](https://github.com/duaraghav8/Solium) linter can be run with `npm run lint`. The following warnings remain and are acceptable, hence they have been silenced by selectively disabling solium on the corresponding lines:
-- `TokenSale.sol:65`: usage of `block.timestamp`, required for the TimedCrowdsale behaviour
-- `VestingTrustee.sol:187`: usage of `block.timestamp`, required for the vesting behaviour
-- `ECVerify.sol:11`: assigning to function parameter (`hash`) argument, kept for simpler code readability, and to stick with the version retrieved from Loom's example
-- `ECVerify.sol:25`: usage of Inline Assembly to decompose signature byte, kept as it is a generally accepted practice to simply extract the `(r, s, v)` parameters, and to stick with the version retrieved from Loom's example
+- `TokenSale.sol:65`: usage of `block.timestamp`, required for the TimedCrowdsale behavior.
+- `VestingTrustee.sol:187`: usage of `block.timestamp`, required for the vesting behavior.
+- `ECVerify.sol:11`: assigning to function parameter (`hash`) argument, kept for simpler code readability and to comply with the version retrieved from Loom's example.
+- `ECVerify.sol:25`: usage of Inline Assembly to decompose signature byte, kept as it is a generally accepted practice to simply extract the `(r, s, v)` parameters and in order to comply with the version retrieved from Loom's example.
 
 #### Mythril
 
-The [Mythril](https://mythril.ai/) static analyzer can be run with `npm run mythril`, or independently for each contract (see the full list in `package.json`, for example you can run `npm run mythril:token`). Please consult the related doc to install this tool on your machine.
+The [Mythril](https://mythril.ai/) static analyzer can either be run with `npm run mythril` or independently for each contract (see the full list in `package.json`—for example, you can run `npm run mythril:token`). Please consult the related documentation to install this tool on your machine.
 
-For the Token contract, the following warnings were emitted and are acceptable:
-- Integer Overflow (SWC ID: 101) in file `Token.sol:9`: acceptable as the `decimals()` value is set once and for all at deployment with a predictable result
-- Message call to external contract (SWC ID: 107) in file `EmergencyERC20Drain.sol:18`: acceptable as this function can only be called by the contract owner, whom we assume is not malicious
-- Integer Overflow (SWC ID: 101) in file `SafeMath.sol:51`: acceptable as the SafeMath library's purpose is precisely to securely handle this error
+For the token contract, the following warnings were emitted and are acceptable:
+- Integer Overflow (SWC ID: 101) in file `Token.sol:9`: acceptable as the `decimals()` value is set once and for all at deployment with a predictable result.
+- Message call to external contract (SWC ID: 107) in file `EmergencyERC20Drain.sol:18`: acceptable as this function can only be called by the contract owner, whom we assume is not malicious.
+- Integer Overflow (SWC ID: 101) in file `SafeMath.sol:51`: acceptable as the SafeMath library's purpose is precisely to securely handle this error.
 
 Note that there is a `--max-depth` issue to get the tool running for some contracts, which still needs to be investigated jointly with auditors to understand how to fix the configuration.
 
 #### Other tools
 
-The code repository has also been checked with [SmartCheck](https://tool.smartdec.net/) and [Securify](https://securify.chainsecurity.com/), two online security tools. [Oyente](https://github.com/melonproject/oyente) could not be deployed on this repository as it uses old `EVM` and `solc` versions which makes it unable to run the code. This will also be investigated with auditors to make the most out of the available toolkits.
+The code repository has also been checked with [SmartCheck](https://tool.smartdec.net/) and [Securify](https://securify.chainsecurity.com/), two online security tools. [Oyente](https://github.com/melonproject/oyente) could not be deployed on this repository as it uses old `EVM` and `solc` versions which makes it unable to run the code. This issue will also be investigated alongside auditors in order to take greatest advantage of available toolkits.
 
 ### Audit
-Will be updated after audit.
+Will be updated following the audit.
 
 ## 🔭 Codebase overview
 
 ### Design principles
 
-The majority of the mainchain codebase relies on standard, open-source contracts. The Token Generation Event (TGE) smart contracts are mostly out-of-box OpenZeppelin's library contracts, while the Gateway contract leverage Loom Network's example.
+The majority of the mainchain codebase relies on standard, open-source contracts. The Token Generation Event (TGE) smart contracts are mostly out-of-box OpenZeppelin's library contracts, while the Gateway contract leverages Loom Network's example.
 
-This approach has been chosen deliberately so that the Hey Team can:
-- Get a faster time-to-market
-- Decrease security auditing complexity and cost while minimising the likelihood of bugs
-- Increase TGE's participants' trust
-- Spend more time and energy on specificities of the Hey product that are mostly present on the sidechain contracts ecosystem, and which are the differentiating factor and competitive advantage of Hey as a platform
+This approach has been chosen deliberately, so that the *Hey* team can:
+- Achieve a faster time-to-market.
+- Decrease security auditing complexity and cost while minimizing the likelihood of bugs.
+- Increase TGE's participants' trust.
+- Spend more time and energy on specifics of the *Hey* product that are mostly present on the sidechain contracts ecosystem, and which are the differentiating factor and competitive advantage of *Hey* as a platform.
 
-The Hey Team has taken great care to track provenance of open-source components, and has made sure to thoroughly review each component internally to get a deep grasp of their interface and implementation.
+The *Hey* team has taken great care to track provenance of open-source components, and has made sure to thoroughly review each component internally in order to ensure a deep understanding of their interfaces and implementations.
 
 ### Contracts overview
 
 This repository consists of four main contracts.
 
-The two main contracts supporting Hey's platform are:
-- The **Token**, which is a plain ERC20 token using OpenZeppelin's `SimpleToken` [implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/67dac7ae9960fd1790671a315cde56c901db5271/contracts/examples/SimpleToken.sol)
-- The **Gateway**, which allows users to redeem Hey tokens when providing the rightly signed message (see full architecture). This is a stripped-down version of Loom Network's `Transfer Gateway` [implementation](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol) to keep only ERC20 withdrawal capabilities.
+The two main contracts supporting *Hey*'s platform are:
+- The **token**, which is a plain ERC20 token, using OpenZeppelin's `SimpleToken` [implementation](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/67dac7ae9960fd1790671a315cde56c901db5271/contracts/examples/SimpleToken.sol)
+- The **Gateway**, which allows users to redeem HEY tokens when providing the accurately signed message (see full architecture). This is a stripped-down version of Loom Network's `Transfer Gateway` [implementation](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol), simplified in order to retain solely ERC20 withdrawal capabilities.
 
-Besides, two smart contracts are dedicated to the Token Generation Event (TGE):
-- The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from Hey's team. This is heavily inspired by SirinLab and Stox's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
-- The **TokenSale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol) with limited customisation.
+In addition to these two principle contracts, two additional smart contracts are employed. Both are dedicated to the Token Generation Event (TGE):
+- The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from *Hey*'s team. This is heavily inspired by SirinLab and Stox's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
+- The **TokenSale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol), including limited customization.
 
-If you are looking for the social network-related features (e.g., Karma management), please checkout the **sidechain** repository.
+If you are looking for the social-network-related features (e.g., Karma management), please look into the **sidechain** repository.
 
 
 ### Architecture diagrams
-These diagrams express the inheritance and usage relationships amongst contracts. Contracts in blue are the ones that effectively get deployed on the mainchain, composing from higher-level contracts.
+These diagrams express the inheritance and usage relationships amongst contracts. Contracts in blue are those that are deployed effectively on the mainchain, building upon higher-level contracts.
 
 #### VestingTrustee, Token, TokenSale
 
@@ -122,12 +122,12 @@ These diagrams express the inheritance and usage relationships amongst contracts
 
 ### Dependencies
 
-Make sure the following npm modules are installed, by running `npm install`:
+Make sure the following npm modules are installed by running `npm install`:
 - truffle (`v4.1.12`)
 - openzeppelin-solidity (`v2.0.0`)
 - web3 (`v1.0.0-beta.35`)
 
-Furthermore, we use the following modules during testing (installed simultaneously with above packages):
+Furthermore, we use the following modules during testing (installed alongside above packages):
 - yaeti
 - typedarray-to-buffer
 - chai
@@ -139,12 +139,12 @@ Furthermore, we use the following modules during testing (installed simultaneous
 No need to run `ganache-cli`, as we use the built-in `test` network from Truffle. Simply run `npm run test` or `npm t` to launch the full test suite.
 
 ## 💪 Open-source components
-The vast majority of Hey's mainchain contracts leverage existing, previously audited open-source contract libraries. This table recaps the exact version of each open-source component used in the contracts:
+The vast majority of *Hey*'s mainchain contracts leverage existing, previously-audited open-source contract libraries. The following tables recap the exact version of each open-source component used in the contracts:
 
 
 ### Code used as-is
 
-This table lists all `*.sol` contract files imported directly or indirectly (from other imported contracts) by the deployed Hey contracts. These files have been used as-is with no modifications.
+The following table below lists all `*.sol` contract files imported directly or indirectly (i.e. from other imported contracts) by the deployed *Hey* contracts. These files have been used as-is with no modifications.
 
 | Domain | File        | Provider           | Source  |
 | ------------- | ------------- | ------------- |------------- |
@@ -168,15 +168,15 @@ This table lists all `*.sol` contract files imported directly or indirectly (fro
 
 ### Code used as basis
 
-This table lists all `*.sol` contract files that served as a source of inspiration for the deployed Hey contracts.
+The following table below lists all `*.sol` contract files that served as a source of inspiration for the deployed *Hey* contracts.
 
 | Domain | File   | Provider           | Source  | Modifications brought |
 | ----- | ------- | ------------- |------------- |------ |
-| Token | SimpleToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set tokens parameters (`supply`, `name`, `symbol`), add security features |
-| Token | ZilliqaToken.sol | Zilliqa | [source](https://github.com/Zilliqa/Zilliqa-ERC20-Token/blob/master/contracts/ZilliqaToken.sol) | Use `validDestination` modifier, removing check on zero address (is in ERC20 already) |
-| TGE | PauserRole.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/access/roles/PauserRole.sol) | Change role name to `KYCVerifierRole` |
-| TGE | SirinVestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Make `Ownable` i.o. `Claimable`, improve functions and variable names, adhere to latest Solidity best practices |
-| Gateway | Gateway.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Keep only ERC20 transfer capabilities, locked to Hey Token address |
+| Token | SimpleToken.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/examples/SimpleToken.sol) | Set token parameters (`supply`, `name`, `symbol`), added security features |
+| Token | ZilliqaToken.sol | Zilliqa | [source](https://github.com/Zilliqa/Zilliqa-ERC20-Token/blob/master/contracts/ZilliqaToken.sol) | Used `validDestination` modifier, removed check on zero address (already in ERC20) |
+| TGE | PauserRole.sol | OpenZeppelin | [source](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/access/roles/PauserRole.sol) | Changed role name to `KYCVerifierRole` |
+| TGE | SirinVestingTrustee.sol | SirinLab | [source](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol) | Made `Ownable` i.o. `Claimable`, improve functions and variable names, adhered to latest Solidity best practices |
+| Gateway | Gateway.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/master/truffle-ethereum/contracts/Gateway.sol)  | Kept only ERC20 transfer capabilities, locked to HEY token address |
 
 ## 📄 Contracts deep-dives
 
@@ -184,7 +184,7 @@ This table lists all `*.sol` contract files that served as a source of inspirati
 
 #### Description
 
-##### ERC20 behaviour
+##### ERC20 behavior
 
 The Hey Token conforms to the [ERC20 standard](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md), directly extending OpenZeppelin's related library.
 
@@ -199,16 +199,16 @@ The Hey Token has the following parameters:
 | Decimals | 18 | |
 | Total supply | 1,000,000,000 | Minted to owner address at creation |
 
-##### Customisations
+##### Customizations
 
 The Hey Token extends the ERC20 specifications to include two additional security features:
 
-- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), prevents the sending of Hey Tokens to the Hey Token contract itself. It does so with a modifier added to the `transfer()` and `transferFrom()` functions.
-- `EmergencyERC20Drain`: as per [Zilliqa's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), allows the owner to drain any other ERC20 tokens sent to the contract by mistake by transferring them to the owner address. It does so with the `drain()` function.
+- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), this feature prevents the sending of HEY tokens to the HEY Token contract itself. It does so by adding a modifier to the `transfer()` and `transferFrom()` functions.
+- `EmergencyERC20Drain`: as per [Zilliqa's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), this feature allows the owner to drain any other ERC20 tokens mistakenly sent to the contract by transferring said tokens to the owner's address. It does so by using the `drain()` function.
 
 #### Testing of specifications
 
-The full Hey Token test suite can be run with the command `npm run test:token`. Each specification of the Hey Token can also be verified individually with its dedicated test:
+The full HEY token test suite can be run by using the following command: `npm run test:token`. Each specification of the HEY token can also be verified individually by using its dedicated test:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
@@ -220,46 +220,46 @@ The full Hey Token test suite can be run with the command `npm run test:token`. 
 | 6 | Conforms to ERC20 transfers interface | `npm run test:token:transferable` |
 | 7 | Allows owner to drain other ERC20 tokens sent by mistake | `npm run test:token:drainable` |
 
-Note that it is necessary to test (6) since the Hey Token extends the `transfer()` and `transferFrom()` functions to implement the `validDestination` behaviour.
+Note that it is necessary to test (6), as the HEY token extends the `transfer()` and `transferFrom()` functions in order to implement the `validDestination` behavior.
 
 ### TokenSale
 
 #### Description
 
-##### Crowdsale behaviour
+##### Crowdsale behavior
 
-The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviours implemented in OpenZeppelin's standard contracts:
+The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviors implemented in OpenZeppelin's standard contracts, including:
 - `TimedCrowdsale`: the Token Sale only accept payments between `startTime` and `endTime`.
 - `FinalizableCrowdsale`: the Token Sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
 - `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
 
 
-The following behaviours have also been implemented (not directly available from OpenZeppelin libraries):
-- `EvolvingRate`: the ETH-to-tokens rate evolves from 5500 during the first day of the TGE to 5000 afterwards.
+The following behaviors have also been implemented (not directly available from OpenZeppelin libraries):
+- `EvolvingRate`: the ETH-to-tokens rate evolves from 5,500 during the first day of the TGE to 5,000 afterwards.
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
-- `KYC`: the Token Sale only allows contributions from addresses authorised by the contract owner for KYC reasons.
+- `KYC`: the Token Sale only allows contributions from addresses authorized by the contract owner for KYC reasons.
 
-Note that the Token Sale does not implement explicitly the `CappedCrowdsale` behaviour, but it enforces it indirectly by being endowed with a fixed amount of tokens transferred to it during the initialisation phase.
+Note that the Token Sale does not explicitly implement the `CappedCrowdsale` behavior, but rather enforces it indirectly by virtue of its endowment with a fixed number of tokens that are transferred during the initialization phase.
 
-The name `TokenSale` has been chosen to be as close as possible to the standard `Crowdsale` name, which is already reserved for the corresponding OpenZeppelin's library (cannot be redeclared since it is already in use).
+The name `TokenSale` has been chosen in order to ensure that it is as similar as possible to the standard `Crowdsale` name, which is already reserved for the corresponding OpenZeppelin's library. The name cannot be redeclared, as it is already in use—thus the selection of `TokenSale`.
 
-##### Customisations
+##### Customizations
 
-###### Finalisation
+###### Finalization
 
-When it is deployed, the Token Sale contract expects a `pool` address to be provided as constructor argument. When the `finalize()` function is called after sale closing, any remaining tokens not sold to sale participants will automatically be transferred to the Pool address.
+When it is deployed, the Token Sale Contract expects a `pool` address to be provided as constructor argument. When the `finalize()` function is called—that is, after the sale has closed—any unsold tokens will be automatically transferred to the Pool's address.
 
 This customisation is implemented by extending the internal `_finalization()` function.
 
-In the Pool, tokens will be made available for users to redeem. Note that the Pool is anyway endowed with 30% of the total token supply, and the remaining tokens are an increment to this amount.
+In the Pool, tokens will be made available for users to redeem. Note that the Pool will be endowed with 30% of the total token supply regardless of token sale results. In the case of unsold tokens, they are merely added to this original 30%.
 
-We expect that there will be remaining tokens even in the case that a hard cap is reached, primarily for rounding reasons.
+The ¨*Hey* team expects that tokens will remain following the ICO even in the case that the hard cap is reached, mainly based on rounding requirements.
 
 ###### Pausable payments
 
 At any time, the owner of the contract can call the `pause()` function. This prevents any new incoming purchase of tokens.
 
-This customisation is implemented by extending the internal `_preValidatePurchase()` function and inheriting from the `Pausable` contract from OpenZeppelin's standard library.
+This customization is implemented by extending the internal `_preValidatePurchase()` function and inheriting from the `Pausable` contract from OpenZeppelin's standard library.
 
 ###### Evolving rate
 
