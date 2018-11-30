@@ -16,8 +16,8 @@ const TokenSale = artifacts.require('TokenSale');
 const Token = artifacts.require('Token');
 
 contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser, anyone]) {
-  const firstDayRate = new BigNumber(5500);
-  const rate = new BigNumber(5000);
+  const firstDayRate = new BigNumber(4400);
+  const rate = new BigNumber(4000);
   const tokenSupply = new BigNumber('1e27'); // 9 + 18
   const value = ether(3);
   const expectedFirstDayTokenAmount = firstDayRate.mul(value);

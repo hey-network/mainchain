@@ -15,8 +15,8 @@ const OPENING_TIME = Date.now();
 const DURATION = 7 * 24 * 3600;
 const CLOSING_TIME = OPENING_TIME + DURATION;
 // Rate parameters
-const FIRST_DAY_RATE = 5500;
-const RATE = 5000;
+const FIRST_DAY_RATE = 4400;
+const RATE = 4000;
 // Funnelling addresses parameters
 const WALLET = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
 const POOL = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
