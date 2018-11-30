@@ -19,12 +19,21 @@ const CLOSING_TIME = OPENING_TIME + DURATION;
 const FIRST_DAY_RATE = 4400;
 const RATE = 4000;
 // Distribution and addresses parameters
-const WALLET = require("./distribution/wallet");
-const POOL = require("./distribution/pool");
+const {
+  POOL,
+  CONTRIBUTORS,
+  INVESTORS,
+  ADVISORS,
+  WALLET,
+} = require("./distribution/addresses");
+const {
+  TOKEN_SALE_ENDOWMENT,
+  POOL_ENDOWMENT,
+  CONTRIBUTORS_ENDOWMENT,
+  INVESTORS_ENDOWMENT,
+  ADVISORS_ENDOWMENT,
+} = require("./distribution/endowments");
 const PRESALE_CONTRIBUTIONS = require("./distribution/presaleContributions");
-const TOTAL_SUPPLY = 1e9 * ONE_TOKEN;
-const TOKEN_SALE_ENDOWMENT = 0.5 * TOTAL_SUPPLY;
-const POOL_ENDOWMENT = 0.3 * TOTAL_SUPPLY;
 
 // Deployment script
 module.exports = function(deployer) {
@@ -59,6 +68,27 @@ module.exports = function(deployer) {
       POOL_ENDOWMENT,
     );
     await assertTokenBalance(token, POOL, 'Pool', POOL_ENDOWMENT);
+
+    // Endow the Contributors address with its required share of tokens.
+    await token.transfer(
+      CONTRIBUTORS,
+      CONTRIBUTORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, CONTRIBUTORS, 'Contributors', CONTRIBUTORS_ENDOWMENT);
+
+    // Endow the Investors address with its required share of tokens.
+    await token.transfer(
+      INVESTORS,
+      INVESTORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, INVESTORS, 'Investors', INVESTORS_ENDOWMENT);
+
+    // Endow the Advisors address with its required share of tokens.
+    await token.transfer(
+      ADVISORS,
+      ADVISORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, ADVISORS, 'Advisors', ADVISORS_ENDOWMENT);
 
     // Distribute tokens to presale contributors and other addresses that have
     // a claim on tokens that they can receive directly.
