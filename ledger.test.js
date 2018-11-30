@@ -1,7 +1,6 @@
 /**
   *  @dev Simple scripts to verify connectivity and addresses of a Ledger Nano S.
   *  @author Thomas Vanderstraeten - <thomas@get-hey.com>
-  *  Note that this requires an Infura API key saved in an .infura file.
   *
   *  HOW-TO:
   *  0. Go through the readme below to understand derivation path subtleties
@@ -10,7 +9,8 @@
   *  3. Open the Ethereum app on the device
   *  4. Enable the Contract and Display modes in the device Settings
   *  5. Make sure you've got Ropsten ETH on your account to send a transaction
-  *  6. Enjoy!
+  *  6. Make sure you've got a valid Infura API key saved in a .infura file
+  *  7. Enjoy!
   *
   *  NOTE ON DERIVATION PATHS:
   *  In implementation A and on the Ledger Ethereum Chrome Wallet, the default BIP39
