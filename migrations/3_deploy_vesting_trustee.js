@@ -5,12 +5,12 @@
  */
 
 const asyncForEach = require("./helpers/asyncForEach");
+const assertTokenBalance = require("./helpers/assertTokenBalance");
 
 const Token = artifacts.require("./Token.sol");
 const VestingTrustee = artifacts.require("./VestingTrustee.sol");
 
-const GRANTS = require("./distribution/grants");
-const TOTAL_VESTING = GRANTS.reduce((a, b) => ({value: a.value + b.value})).value;
+const { GRANTS, TOTAL_VESTING } = require("./distribution/grants");
 
 // Deployment script
 module.exports = function(deployer) {
@@ -29,6 +29,7 @@ module.exports = function(deployer) {
       vestingTrustee.address,
       TOTAL_VESTING,
     );
+    await assertTokenBalance(token, vestingTrustee.address, 'Vesting Trustee', TOTAL_VESTING);
 
     // Create each grant individually
     await asyncForEach(GRANTS, async (grant) => {

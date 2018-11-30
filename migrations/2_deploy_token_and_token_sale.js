@@ -5,6 +5,7 @@
  */
 
 const asyncForEach = require("./helpers/asyncForEach");
+const assertTokenBalance = require("./helpers/assertTokenBalance");
 const ONE_TOKEN = require("./helpers/oneToken");
 
 const Token = artifacts.require("./Token.sol");
@@ -17,14 +18,13 @@ const CLOSING_TIME = OPENING_TIME + DURATION;
 // Rate parameters
 const FIRST_DAY_RATE = 4400;
 const RATE = 4000;
-// Funnelling addresses parameters
-const WALLET = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
-const POOL = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
-// Distribution parameters
+// Distribution and addresses parameters
+const WALLET = require("./distribution/wallet");
+const POOL = require("./distribution/pool");
+const PRESALE_CONTRIBUTIONS = require("./distribution/presaleContributions");
 const TOTAL_SUPPLY = 1e9 * ONE_TOKEN;
 const TOKEN_SALE_ENDOWMENT = 0.5 * TOTAL_SUPPLY;
 const POOL_ENDOWMENT = 0.3 * TOTAL_SUPPLY;
-const PRESALE_CONTRIBUTIONS = require("./distribution/presaleContributions");
 
 // Deployment script
 module.exports = function(deployer) {
@@ -51,12 +51,14 @@ module.exports = function(deployer) {
       tokenSale.address,
       TOKEN_SALE_ENDOWMENT,
     );
+    await assertTokenBalance(token, tokenSale.address, 'Token Sale', TOKEN_SALE_ENDOWMENT);
 
     // Endow the Pool address with its required share of tokens.
     await token.transfer(
       POOL,
       POOL_ENDOWMENT,
     );
+    await assertTokenBalance(token, POOL, 'Pool', POOL_ENDOWMENT);
 
     // Distribute tokens to presale contributors and other addresses that have
     // a claim on tokens that they can receive directly.
@@ -65,6 +67,7 @@ module.exports = function(deployer) {
         contribution.address,
         contribution.amount,
       );
+      await assertTokenBalance(token, contribution.address, 'Presale', contribution.amount);
     });
   });
 };
