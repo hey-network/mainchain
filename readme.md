@@ -271,7 +271,7 @@ This customisation is implemented by overriding the internal `_getTokenAmount()`
 
 ###### Minimum contribution
 
-Token purchases are only allowed if the amount sent is equal to or above 0.1 ETH.
+Token purchases are only allowed if the amount sent is equal to or above 10 ETH during the first 24 hours of the sale, and then equal or above to 0.1 ETH afterwards.
 
 This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `msg.value`.
 
@@ -297,7 +297,7 @@ The full Token Sale test suite can be run with the command `npm run test:token-s
 | 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
 | 3 | Evolves rate from 4400 to 4000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
-| 5 | Expects a minimum contribution of 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
+| 5 | Requires minimum contribution of 10 ETH then 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
 | 6 | Allows contribution only from authorised addresses | `npm run test:token-sale:kyc` |
 | 7 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
