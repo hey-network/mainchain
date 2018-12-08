@@ -6,7 +6,6 @@ const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encodi
 const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
 
 // Mnemonic wallet config
-const HDWalletProvider = require("truffle-hdwallet-provider");
 // Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
 const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 'utf-8' }).trim();
 
@@ -16,7 +15,6 @@ const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 
 // this standard. As a result the transactions will emanate from the same address
 // as the one seen in the Ledger Live application (and different from the addresses
 // seen in the Ledger Ether Chrome Wallet).
-const providerFactory = require("truffle-ledger-wallet-provider").default;
 const ledgerDerivationPath = "44'/60'/0'/0";
 
 // -------------------------------------------------------------------
@@ -48,7 +46,7 @@ module.exports = {
     },
 		ropsten: {
 	    provider: function() {
-	      return new HDWalletProvider(MNEMONIC, INFURA_ENDPOINT);
+	      return new require("truffle-hdwallet-provider")(MNEMONIC, INFURA_ENDPOINT);
 	    },
 	    network_id: 3,
 			gasPrice: 5*1e9,
@@ -56,7 +54,7 @@ module.exports = {
 	  },
 		ropstenLedger: {
 			provider: function() {
-        return providerFactory(
+        return require("truffle-ledger-wallet-provider").default(
           INFURA_ENDPOINT,
           3, // Ropsten testnet
           ledgerDerivationPath,
