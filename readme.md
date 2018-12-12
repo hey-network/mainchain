@@ -253,7 +253,7 @@ This customisation is implemented by extending the internal `_finalization()` fu
 
 In the Pool, tokens will be made available for users to redeem. Note that the Pool will be endowed with 30% of the total token supply regardless of token sale results. In the case of unsold tokens, they are merely added to this original 30%.
 
-The ¨*Hey* team expects that tokens will remain following the ICO even in the case that the hard cap is reached, mainly based on rounding requirements.
+The *Hey* team expects that tokens will remain following the ICO even in the case that the hard cap is reached, mainly based on rounding requirements.
 
 ###### Pausable payments
 
