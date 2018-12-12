@@ -29,8 +29,9 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
 
     /* *** Sale Parameters *** */
     // Constants
-    uint256 public constant MINIMUM_CONTRIBUTION = 0.1 ether; // Minimum contribution
-    uint256 public constant FIRST_DAY_DURATION = 24 hours;    // Duration of the first sale day
+    uint256 public constant FIRST_DAY_DURATION = 24 hours;             // Duration of the first sale day
+    uint256 public constant FIRST_DAY_MINIMUM_CONTRIBUTION = 10 ether; // Minimum ETH contribution for the first day
+    uint256 public constant MINIMUM_CONTRIBUTION = 0.1 ether;          // Minimum ETH contribution after the first day
     // Initialized at contract deployment
     uint256 private _openingTime;   // When the sale starts
     uint256 private _firstDayRate;  // The ETH-to-Token rate for the first day
@@ -125,8 +126,13 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
     {
         super._preValidatePurchase(beneficiary, weiAmount);
         require(!paused(), "cannot purchase when contract is paused");
-        require(msg.value >= MINIMUM_CONTRIBUTION, "contribution must be above minium authorized");
         require(kycAuthorized(beneficiary), "beneficiary must be KYC authorized");
+
+        if (block.timestamp < (_openingTime.add(FIRST_DAY_DURATION))) {
+            require(msg.value >= FIRST_DAY_MINIMUM_CONTRIBUTION, "contribution must be above minimum authorized");
+        } else {
+            require(msg.value >= MINIMUM_CONTRIBUTION, "contribution must be above minimum authorized");
+        }
     }
 
     /** @dev Override of OpenZeppelin's standard function to reflect the

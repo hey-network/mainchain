@@ -16,12 +16,18 @@ const TokenSale = artifacts.require('TokenSale');
 const Token = artifacts.require('Token');
 
 contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser, anyone]) {
-  const firstDayRate = new BigNumber(5500);
-  const rate = new BigNumber(5000);
-  const tokenSupply = new BigNumber('1e27'); // 9 + 18
-  const value = ether(3);
+  // Total supply
+  const tokenSupply = new BigNumber('1e27'); // 1 billion with 18 decimals (9 + 18)
+  // Default value sent by participants
+  const value = ether(11);
+  // Rates
+  const firstDayRate = new BigNumber(4400);
+  const rate = new BigNumber(4000);
   const expectedFirstDayTokenAmount = firstDayRate.mul(value);
   const expectedTokenAmount = rate.mul(value);
+  // Minimum contributions
+  const firstDayEthMinimumContribution = 10;
+  const firstDayMinimumContribution = ether(firstDayEthMinimumContribution);
   const ethMinimumContribution = 0.1;
   const minimumContribution = ether(ethMinimumContribution);
 
@@ -200,22 +206,44 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
         });
 
         describe('minimum contribution', function () {
-          it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
-            await time.increaseTo(this.openingTime);
-            await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
-            await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+          context('when within 24 hours after the opening time before and closing time', async function () {
+            it(`rejects payments with a value below ${firstDayEthMinimumContribution} ETH`, async function () {
+              await time.increaseTo(this.openingTime);
+              await shouldFail.reverting(this.tokenSale.send(ether(firstDayEthMinimumContribution - 0.001)));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(firstDayEthMinimumContribution - 0.001)) }));
+            });
+
+            it(`accepts payments with a value equal to ${firstDayEthMinimumContribution} ETH`, async function () {
+              await time.increaseTo(this.openingTime);
+              await this.tokenSale.send(firstDayMinimumContribution);
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: firstDayMinimumContribution });
+            });
+
+            it(`accepts payments with a value above ${firstDayEthMinimumContribution} ETH`, async function () {
+              await time.increaseTo(this.openingTime);
+              await this.tokenSale.send(ether(firstDayEthMinimumContribution + 0.001));
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(firstDayEthMinimumContribution + 0.001)) });
+            });
           });
 
-          it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
-            await time.increaseTo(this.openingTime);
-            await this.tokenSale.send(minimumContribution);
-            await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
-          });
+          context('when more than 24 hours after the opening time before and closing time', async function () {
+            it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
+              await time.increaseTo(this.openingTime + time.duration.hours(24));
+              await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+            });
 
-          it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
-            await time.increaseTo(this.openingTime);
-            await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
-            await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
+            it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
+              await time.increaseTo(this.openingTime + time.duration.hours(24));
+              await this.tokenSale.send(minimumContribution);
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
+            });
+
+            await time.increaseTo(this.openingTime + time.duration.hours(24));
+            it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
+              await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
+            });
           });
         });
 

@@ -235,7 +235,7 @@ The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard
 
 
 The following behaviors have also been implemented (not directly available from OpenZeppelin libraries):
-- `EvolvingRate`: the ETH-to-tokens rate evolves from 5,500 during the first day of the TGE to 5,000 afterwards.
+- `EvolvingRate`: the ETH-to-tokens rate evolves from 4400 during the first day of the TGE to 4000 afterwards.
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
 - `KYC`: the Token Sale only allows contributions from addresses authorized by the contract owner for KYC reasons.
 
@@ -265,13 +265,13 @@ This customization is implemented by extending the internal `_preValidatePurchas
 
 When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` to be provided as constructor argument. These express the ether-to-tokens rates that will be applicable respectively during and after the first 24 hours after the sale opening time.
 
-The chosen parameters are 5500 for firstDayRate and 5000 for `rate` (that is, a 10% tokens bonus for first-day purchases).
+The chosen parameters are 4400 for firstDayRate and 4000 for `rate` (that is, a 10% tokens bonus for first-day purchases).
 
-This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 5000.
+This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 4000.
 
 ###### Minimum contribution
 
-Token purchases are only allowed if the amount sent is equal to or above 0.1 ETH.
+Token purchases are only allowed if the amount sent is equal to or above 10 ETH during the first 24 hours of the sale, and then equal or above to 0.1 ETH afterwards.
 
 This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `msg.value`.
 
@@ -295,9 +295,9 @@ The full Token Sale test suite can be run with the command `npm run test:token-s
 | --- | ------------- | ------------- |
 | 1 | Conforms to standard Crowdsale behaviour | `npm run test:token-sale:standard` |
 | 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
-| 3 | Evolves rate from 5500 to 5000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
+| 3 | Evolves rate from 4400 to 4000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
-| 5 | Expects a minimum contribution of 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
+| 5 | Requires minimum contribution of 10 ETH then 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
 | 6 | Allows contribution only from authorised addresses | `npm run test:token-sale:kyc` |
 | 7 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
@@ -464,8 +464,8 @@ All actions performed below should originate from the TGEAdmin account. After de
 2. **Deploy TokenSale**, with constructor parameters:
     - `openingTime`: ~~TBC~~
     - `closingTime`: ~~TBC~~
-    - `firstDayRate`: 5500
-    - `rate`: 5000
+    - `firstDayRate`: 4400
+    - `rate`: 4000
     - `wallet`: Wallet account address
     - `pool`: Pool account address
     - `token`: Token contract address (from previous step)

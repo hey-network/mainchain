@@ -1,71 +1,103 @@
+/** @title Hey Token and Token Sale deployment
+ *  @author Thomas Vanderstraeten - <thomas@get-hey.com>
+ *  @dev Token and Token Sale deployment script. Note that all variables will
+ *  be settled with their actual production values at the time of deployment.
+ */
+
+const asyncForEach = require("./helpers/asyncForEach");
+const assertTokenBalance = require("./helpers/assertTokenBalance");
+const ONE_TOKEN = require("./helpers/oneToken");
+
 const Token = artifacts.require("./Token.sol");
 const TokenSale = artifacts.require("./TokenSale.sol");
 
-// All variables to be setup for production at time of deploy
-const openingTime = Date.now();
-const duration = 7 * 24 * 3600;
-const closingTime = openingTime + duration;
-const firstDayRate = 5500;
-const rate = 5000;
-const wallet = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
-const pool = '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B';
+// Timing parameters
+const OPENING_TIME = Date.now();
+const DURATION = 7 * 24 * 3600;
+const CLOSING_TIME = OPENING_TIME + DURATION;
+// Rate parameters
+const FIRST_DAY_RATE = 4400;
+const RATE = 4000;
+// Distribution and addresses parameters
+const {
+  POOL,
+  CONTRIBUTORS,
+  INVESTORS,
+  ADVISORS,
+  WALLET,
+} = require("./distribution/addresses");
+const {
+  TOKEN_SALE_ENDOWMENT,
+  POOL_ENDOWMENT,
+  CONTRIBUTORS_ENDOWMENT,
+  INVESTORS_ENDOWMENT,
+  ADVISORS_ENDOWMENT,
+} = require("./distribution/endowments");
+const PRESALE_CONTRIBUTIONS = require("./distribution/presaleContributions");
 
-// Should be decreased with pre-sale amounts as well as grants amounts
-// once these are finalized
-const decimals = 1e18;
-const tokenSaleEndowment = 0.5*1e9*decimals;
-const poolEndowment = 0.3*1e9*decimals;
-
-// Contributions from the pre-sale (incl. fiat contributions), all hard-coded
-const presaleContributions = [
-  {
-    address: '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B',
-    amount: 100000*decimals,
-  },
-  {
-    address: '0x7b8f7244FFb5E9aF4e3E0467fDb5EE39333aFC1B',
-    amount: 250000*decimals,
-  }
-];
-
+// Deployment script
 module.exports = function(deployer) {
   deployer.then(async () => {
+    // Deploy the Token contract; the whole total supply gets minted to the
+    // deployer address (who becomes the owner of the Token contract).
     await deployer.deploy(Token);
     const token = await Token.deployed();
 
+    // Deploy the Token Sale contract.
     await deployer.deploy(TokenSale,
-      openingTime,
-      closingTime,
-      firstDayRate,
-      rate,
-      wallet,
-      pool,
+      OPENING_TIME,
+      CLOSING_TIME,
+      FIRST_DAY_RATE,
+      RATE,
+      WALLET,
+      POOL,
       token.address,
     );
     const tokenSale = await TokenSale.deployed();
 
+    // Endow the Token Sale contract with the tokens that it will distribute.
     await token.transfer(
       tokenSale.address,
-      tokenSaleEndowment,
+      TOKEN_SALE_ENDOWMENT,
     );
+    await assertTokenBalance(token, tokenSale.address, 'Token Sale', TOKEN_SALE_ENDOWMENT);
 
+    // Endow the Pool address with its required share of tokens.
     await token.transfer(
-      pool,
-      poolEndowment,
+      POOL,
+      POOL_ENDOWMENT,
     );
+    await assertTokenBalance(token, POOL, 'Pool', POOL_ENDOWMENT);
 
-    await asyncForEach(presaleContributions, async (contribution) => {
+    // Endow the Contributors address with its required share of tokens.
+    await token.transfer(
+      CONTRIBUTORS,
+      CONTRIBUTORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, CONTRIBUTORS, 'Contributors', CONTRIBUTORS_ENDOWMENT);
+
+    // Endow the Investors address with its required share of tokens.
+    await token.transfer(
+      INVESTORS,
+      INVESTORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, INVESTORS, 'Investors', INVESTORS_ENDOWMENT);
+
+    // Endow the Advisors address with its required share of tokens.
+    await token.transfer(
+      ADVISORS,
+      ADVISORS_ENDOWMENT,
+    );
+    await assertTokenBalance(token, ADVISORS, 'Advisors', ADVISORS_ENDOWMENT);
+
+    // Distribute tokens to presale contributors and other addresses that have
+    // a claim on tokens that they can receive directly.
+    await asyncForEach(PRESALE_CONTRIBUTIONS, async (contribution) => {
       await token.transfer(
         contribution.address,
         contribution.amount,
       );
+      await assertTokenBalance(token, contribution.address, 'Presale', contribution.amount);
     });
   });
-};
-
-// Helper function
-async function asyncForEach(array, callback) {
-  for (let index = 0; index < array.length; index++) {
-    await callback(array[index], index, array);
-  }
 };
