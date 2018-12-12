@@ -34,16 +34,6 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
   before(async function () {
     // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
     await advanceBlock();
-    // Temporary workaround: ensure all accounts involved have enough ETH for the
-    // entire test suite, as it gets gradually depleted. Replace by a higher
-    // starting value when command to do so has been identified.
-    web3.eth.sendTransaction({from: web3.eth.accounts[7], to: owner, value: ether(33)});
-    web3.eth.sendTransaction({from: web3.eth.accounts[7], to: participant, value: ether(33)});
-    web3.eth.sendTransaction({from: web3.eth.accounts[7], to: purchaser, value: ether(33)});
-
-    web3.eth.sendTransaction({from: web3.eth.accounts[8], to: owner, value: ether(33)});
-    web3.eth.sendTransaction({from: web3.eth.accounts[8], to: participant, value: ether(33)});
-    web3.eth.sendTransaction({from: web3.eth.accounts[8], to: purchaser, value: ether(33)});
   });
 
   it('requires a non-null token', async function () {
