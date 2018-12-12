@@ -1,14 +1,6 @@
 // Support for ES6 syntax in Ledger npm module
 require('babel-polyfill');
 
-// Infura remote node config
-const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
-const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
-
-// Mnemonic wallet config
-// Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
-const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 'utf-8' }).trim();
-
 // Working Ledger provider, that relies on 0x's protocol subprovider implementation.
 // Note very interestingly that despite the fact that the derivation path is not
 // BIP44, it is somehow extended in the underlying implementation to conform with
@@ -46,6 +38,12 @@ module.exports = {
     },
 		ropsten: {
 	    provider: function() {
+				// Mnemonic wallet config
+				// Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
+				const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 'utf-8' }).trim();
+				// Infura remote node config
+				const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
+				const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
 	      return new require("truffle-hdwallet-provider")(MNEMONIC, INFURA_ENDPOINT);
 	    },
 	    network_id: 3,
