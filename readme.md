@@ -6,7 +6,7 @@
 
 This repository hosts the source code of the ethereum smart contracts deployed by *Hey* on the **mainchain**.
 
-> 📘 If you are looking for the **full description** of Hey's project, please consult our **[manifesto](https://manifesto.hey.network)**.
+> 📘 If you are looking for the **full description** of *Hey*'s project, please consult our **[manifesto](https://manifesto.hey.network)**.
 
 #### Table of contents
 
@@ -102,7 +102,7 @@ The two main contracts supporting *Hey*'s platform are:
 
 In addition to these two principle contracts, two additional smart contracts are employed. Both are dedicated to the Token Generation Event (TGE):
 - The **VestingTrustee**, which locks tokens from early pre-sale contributors as well as from *Hey*'s team. This is heavily inspired by SirinLab and Stox's `VestingTrustee` [contract](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol).
-- The **TokenSale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviours. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol), including limited customization.
+- The **TokenSale** (TGE-specific contract), implementing the `TimedCrowdsale`, `FinalizableCrowdsale`, and `Pausable` behaviors. This is mostly an extension of OpenZeppelin's default `Crowdsale` [contract](https://github.com/OpenZeppelin/openzeppelin-solidity/blob/master/contracts/crowdsale/Crowdsale.sol), including limited customization.
 
 If you are looking for the social-network-related features (e.g., Karma management), please look into the **sidechain** repository.
 
@@ -186,11 +186,11 @@ The following table below lists all `*.sol` contract files that served as a sour
 
 ##### ERC20 behavior
 
-The Hey Token conforms to the [ERC20 standard](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md), directly extending OpenZeppelin's related library.
+The HEY token conforms to the [ERC20 standard](https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md), directly extending OpenZeppelin's related library.
 
 ##### ERC20 parameters
 
-The Hey Token has the following parameters:
+The HEY token has the following parameters:
 
 | Parameter | Value       | Comment |
 | ------------- | ------------- | ------------- |
@@ -201,9 +201,9 @@ The Hey Token has the following parameters:
 
 ##### Customizations
 
-The Hey Token extends the ERC20 specifications to include two additional security features:
+The HEY token extends the ERC20 specifications to include two additional security features:
 
-- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), this feature prevents the sending of HEY tokens to the HEY Token contract itself. It does so by adding a modifier to the `transfer()` and `transferFrom()` functions.
+- `validDestination`: as per [Consensys' Best Practices](https://consensys.github.io/smart-contract-best-practices/tokens/), this feature prevents the sending of HEY tokens to the HEY token contract itself. It does so by adding a modifier to the `transfer()` and `transferFrom()` functions.
 - `EmergencyERC20Drain`: as per [Zilliqa's Token Contract](https://github.com/Zilliqa/Zilliqa-ERC20-Token), this feature allows the owner to drain any other ERC20 tokens mistakenly sent to the contract by transferring said tokens to the owner's address. It does so by using the `drain()` function.
 
 #### Testing of specifications
@@ -216,7 +216,7 @@ The full HEY token test suite can be run by using the following command: `npm ru
 | 2 | Symbol is `HEY` | `npm run test:token:symbol` |
 | 3 | Number of decimals is `18` | `npm run test:token:decimals` |
 | 4 | Total supply is `1,000,000,000` | `npm run test:token:supply` |
-| 5 | Cannot receive Hey Tokens (`validDestination` behaviour) | `npm run test:token:valid-destination` |
+| 5 | Cannot receive HEY tokens (`validDestination` behavior) | `npm run test:token:valid-destination` |
 | 6 | Conforms to ERC20 transfers interface | `npm run test:token:transferable` |
 | 7 | Allows owner to drain other ERC20 tokens sent by mistake | `npm run test:token:drainable` |
 
@@ -228,14 +228,14 @@ Note that it is necessary to test (6), as the HEY token extends the `transfer()`
 
 ##### Crowdsale behavior
 
-The Hey Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviors implemented in OpenZeppelin's standard contracts, including:
+The HEY Token Sale contract is primarily an extension of OpenZeppelin's standard `Crowdsale` contract. It also includes standard crowdsale behaviors implemented in OpenZeppelin's standard contracts, including:
 - `TimedCrowdsale`: the Token Sale only accept payments between `startTime` and `endTime`.
 - `FinalizableCrowdsale`: the Token Sale implements a `finalize()` function that triggers a custom action after the sale has closed (see below).
 - `Pausable`: the Token Sale can be paused by the owner to reject any new incoming payments.
 
 
 The following behaviors have also been implemented (not directly available from OpenZeppelin libraries):
-- `EvolvingRate`: the ETH-to-tokens rate evolves from 4400 during the first day of the TGE to 4000 afterwards.
+- `EvolvingRate`: the ETH-to-tokens rate evolves from 4,400 during the first day of the TGE to 4,000 afterwards.
 - `MinimumContribution`: the Token Sale only allows contributions when payments are equal to or above 0.1 ETH.
 - `KYC`: the Token Sale only allows contributions from addresses authorized by the contract owner for KYC reasons.
 
@@ -249,7 +249,7 @@ The name `TokenSale` has been chosen in order to ensure that it is as similar as
 
 When it is deployed, the Token Sale Contract expects a `pool` address to be provided as constructor argument. When the `finalize()` function is called—that is, after the sale has closed—any unsold tokens will be automatically transferred to the Pool's address.
 
-This customisation is implemented by extending the internal `_finalization()` function.
+This customization is implemented by extending the internal `_finalization()` function.
 
 In the Pool, tokens will be made available for users to redeem. Note that the Pool will be endowed with 30% of the total token supply regardless of token sale results. In the case of unsold tokens, they are merely added to this original 30%.
 
@@ -257,48 +257,48 @@ The *Hey* team expects that tokens will remain following the ICO even in the cas
 
 ###### Pausable payments
 
-At any time, the owner of the contract can call the `pause()` function. This prevents any new incoming purchase of tokens.
+The owner of the contract can call the `pause()` function at any time. This prevents any purchase of new tokens.
 
-This customization is implemented by extending the internal `_preValidatePurchase()` function and inheriting from the `Pausable` contract from OpenZeppelin's standard library.
+This customization is implemented by extending the internal `_preValidatePurchase()` function and inheriting the `Pausable` contract from OpenZeppelin's standard library.
 
 ###### Evolving rate
 
-When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` to be provided as constructor argument. These express the ether-to-tokens rates that will be applicable respectively during and after the first 24 hours after the sale opening time.
+When it is deployed, the Token Sale contract expects `firstDayRate` and `rate` to be provided as constructor arguments. These express the ether-to-tokens rates that will be applicable respectively during and after the first 24 hours after the sale opening time.
 
-The chosen parameters are 4400 for firstDayRate and 4000 for `rate` (that is, a 10% tokens bonus for first-day purchases).
+The chosen parameters are 4,400 for firstDayRate and 4,000 for `rate` (that is, a 10% token bonus for first-day purchasers).
 
-This customisation is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract: it will always return a static rate of 4000.
+This customization is implemented by overriding the internal `_getTokenAmount()` function and adding a public `getCurrentRate()` function in order to reflect the rate at any given time. Note that we do not override the standard `rate()` function from the parent `Crowdsale` contract. Rather, it will always return a static rate of 4,000.
 
 ###### Minimum contribution
 
-Token purchases are only allowed if the amount sent is equal to or above 10 ETH during the first 24 hours of the sale, and then equal or above to 0.1 ETH afterwards.
+Token purchases are allowed only if the amount sent is equal to or above 10 ETH during the first 24 hours of the sale, and then equal or above to 0.1 ETH afterwards.
 
-This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `msg.value`.
+This customization is implemented by extending the internal `_preValidatePurchase()` function to add a check on `msg.value`.
 
 ###### KYC
 
-The Token Sale contract only allows contributions from a set of authorised addresses, for KYC reasons. The set of addresses is a mapping `authorizedAccounts` of `address` to `bool`, which is populated by the Token Sale contract owner (and other authorised KYC verifiers) in batch before and during the TGE period using the `grantKYCAuthorizations()` function.
+For KYC reasons, the Token Sale contract only allows contributions from a set of authorized addresses, for KYC reasons. The set of addresses is a mapping `authorizedAccounts` of `address` to `bool`, which is populated by the Token Sale contract owner (and other authorized KYC verifiers) in batch before and during the TGE period using the `grantKYCAuthorizations()` function.
 
-This customisation is implemented by extending the internal `_preValidatePurchase()` function to add a check on `beneficiary`. Note that we do only check the beneficiary address, as KYC will be done on these addresses (not on addresses purchasing on behalf of other addresses).
+This customization is implemented by extending the internal `_preValidatePurchase()` function to add a check on `beneficiary`. Note that we only check the beneficiary address, as KYC will be done on these addresses (not on addresses purchasing on behalf of other addresses).
 
 We also create a `KYCVerifierRole` based exactly on `PauserRole` and other similar access control contracts available in OpenZeppelin's standard library.
 
-Note that since KYC is an asynchronous process (requiring potential manual actions), the Hey TGE will be advertised publicly at least one month before contributions can start, so that interested participants can already perform KYC and get their address authorised. This way they can be sure that they can benefit from the 10% first-day bonus of the TGE, without a fear of suffering delay because of the process.
+Note that since KYC is an asynchronous process (requiring potential manual actions), the *Hey* TGE will be publicly advertised at least one month prior to contribution commencement, so that interested parties are able to perform KYC and ensure their addresses are authorized in advance of the token sale. Given this advanced notice, the *Hey* team can ensure that interested participants can benefit from the TGE's 10% first-day bonus without fear of missing out based on process delays.
 
-The Hey team notably cannot guarantee that participants performing KYC during the first 24h after the Token Sale has started will get their KYC performed in due time to benefit from the first-day bonus. Hence participants should do their KYC early on.
+Notably, the *Hey* team cannot guarantee that participants performing KYC during the first 24 hours following token sale commencement will obtain authorization in time to benefit from the 10% first-day bonus. With that said, participants should plan on performing their KYC in advance of the token sale. Hence participants should do their KYC early on.
 
-#### Testing of specifications
+#### Specification testing
 
-The full Token Sale test suite can be run with the command `npm run test:token-sale`. Each specification of the Token Sale can also be verified individually with its dedicated test:
+The full Token Sale test suite can be run with the command `npm run test:token-sale`. Each specification of the Token Sale can also be verified individually with its dedicated test, outlined as follows:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
-| 1 | Conforms to standard Crowdsale behaviour | `npm run test:token-sale:standard` |
-| 2 | Conforms to standard TimedCrowdsale behaviour | `npm run test:token-sale:timed` |
-| 3 | Evolves rate from 4400 to 4000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
+| 1 | Conforms to standard Crowdsale behavior | `npm run test:token-sale:standard` |
+| 2 | Conforms to standard TimedCrowdsale behavior | `npm run test:token-sale:timed` |
+| 3 | Evolves rate from 4,400 to 4,000 tokens/ETH after 24 hours | `npm run test:token-sale:evolving-rate` |
 | 4 | Allows to pause incoming payments | `npm run test:token-sale:pausable` |
-| 5 | Requires minimum contribution of 10 ETH then 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
-| 6 | Allows contribution only from authorised addresses | `npm run test:token-sale:kyc` |
+| 5 | Requires a minimum contribution of 10 ETH then 0.1 ETH | `npm run test:token-sale:minimum-contribution` |
+| 6 | Allows contribution only from authorized addresses | `npm run test:token-sale:kyc` |
 | 7 | Sends remaining tokens to pool at finalisation | `npm run test:token-sale:finalizable` |
 
 Note that the access control helper `KYCVerifierRole` can be tested with `npm run test:kyc-verifier-role`.
@@ -307,21 +307,21 @@ Note that the access control helper `KYCVerifierRole` can be tested with `npm ru
 
 #### Description
 
-The Vesting Trustee smart contract is responsible for the vesting of tokens granted to early contributors, some pre-sale participants, and the Hey team. It protects their tokens while at the same time making sure these tokens can only be withdrawn after a given lock period.
+The Vesting Trustee smart contract is responsible for the vesting of tokens granted to early contributors, some pre-sale participants, and the *Hey* team. The contract protects noted parties' tokens while ensuring said tokens can be withdrawn only following a given lock period.
 
-This smart contract contains a mapping of `Grant`s, each parameterised with their own vested tokens amount and vesting time. Grants can be created and revoked anytime by the contract owner.
+This smart contract contains a mapping of `Grant`s, each parameterised with its own vested token amount and vesting time. Grants can be created and revoked at any time by the contract owner.
 
-The vesting scheme includes a cliff mechanism. Before the cliff date, no tokens can be withdrawn by the grantee. After the cliff date, tokens can progressively be withdrawn, with an amount limited by a linear interpolation between the vesting start and end times. After the vesting end time, the full amount of granted tokens can then be withdrawn. Here is a mathematical description of the tokens that can be claimed and withdrawn by a grantee at a given time *t* for a grant of *V* tokens:
+The vesting scheme includes a cliff mechanism. Before the cliff date, no tokens can be withdrawn by the grantee. After the cliff date, tokens can be withdrawn progressively, with an amount limited by a linear interpolation between the vesting start and end times. Following the vesting end time, the full amount of granted tokens can then be withdrawn. Here is a mathematical description of the tokens that can be claimed and withdrawn by a grantee at a given time *t* for a grant of *V* tokens:
 
 ![Vesting equation](https://raw.githubusercontent.com/hey-network/mainchain/master/_readme_assets/vesting.png)
 
-Note that when a grant is revoked by the contract owner, the corresponding tokens amount is transferred back to the contract owner address.
+Note that when a grant is revoked by the contract owner, the corresponding token amount is transferred back to the contract owner's address.
 
-The smart contract is initially provisioned with tokens by the contract owner, so that grants can be rightly created.
+The smart contract is initially provisioned with tokens by the contract owner, so that grant can be rightly created.
 
-#### Testing of specifications
+#### Specification testing
 
-The full Vesting Trustee test suite can be run with the command `npm run test:vesting-trustee`. Each specification of the Vesting Trustee can also be verified individually with its dedicated test:
+The full Vesting Trustee test suite can be run with the command `npm run test:vesting-trustee`. Each specification of the Vesting Trustee can also be verified individually with its dedicated test, outlined as follows:
 
 | # | Description | Test command |
 | --- | ------------- | ------------- |
@@ -330,11 +330,11 @@ The full Vesting Trustee test suite can be run with the command `npm run test:ve
 | 3 | Allows progressive release of tokens over time | `npm run test:vesting-trustee:claim` |
 | 4 | Allows the contract owner to revoke a revokable grant | `npm run test:vesting-trustee:revoke` |
 
-Note that testing of the claiming logic relies on a series of different vesting configurations, where we sample time during the vesting period to ponctually measure tokens that can be claimed and effectively withdrawn.
+Note that testing the claiming logic relies on a series of different vesting configurations, wherein we sample time during the vesting period to ponctually measure tokens that can be claimed and effectively withdrawn.
 
 #### Visualisation of the linear vesting scheme
 
-To visualise the evolving tokens vesting over time, simply run `test:vesting-trustee:charts`. This will provide ASCII charts such as the following, to help grasp the mechanism of linearity.
+To visualise the evolving token vesting over time, simply run `test:vesting-trustee:charts`. This will provide ASCII charts such as the following, which should assist in understanding the linearity mechanism.
 
 ```
 Claimable tokens over time (vested: 100, cliff days: 25, total days: 100)
@@ -421,44 +421,44 @@ Claimable tokens over time (vested: 100, cliff days: 75, total days: 100)
 
 The Vesting Trustee contract borrows heavily from (i.e. is a refacto of) the smart contracts used by [SirinLab](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol),  [Stox](https://github.com/stx-technologies/stox-token/blob/20925fd8b97746f085b95af03173d65a2ddaa504/contracts/Trustee.sol) and [KIN](https://medium.com/kinblog/kin-foundation-vesting-trustee-smart-contract-7fce911516d0).
 
-We have renamed several functions and variables to improve overall readability, while also reverting on claims that yield 0 tokens (either because the grantee does not exist of because no tokens can be claimed yet). We have done this latter change to avoid spilling on transaction fees when doing precocious claims.
+We have renamed several functions and variables to improve overall readability, while also reverting on claims that yield 0 tokens (either because the grantee does not exist or because no tokens can yet be claimed). The latter change has been implemented in order to avoid spilling on transaction fees while carrying out precocious claims.
 
 ### Gateway
 
-Not in scope for the Token Generation Event. The ValidatorsManager contract has been taken out of the test coverages calculations as it is not in Hey's direct focus to test all validators co-opting features of this contract.
+The Gateway is not in scope for the Token Generation Event. The ValidatorsManager contract has been taken out of the test coverage calculations as it is not in *Hey*'s direct focus to test all validator's co-opting features of this contract.
 
 ## 🚀 Deployment
 
 ### First phase
-The first deployment phase intends on making the platform fully ready for the TGE. It does not include yet the Gateway contract deployment as it will still be pending thorough code review and auditing by then (as this audit will be partly supported by funds collected during the TGE).
+The first deployment phase intends on making the platform fully ready for the TGE. It does not yet include the Gateway contract deployment; it will remain pending throughout code review and auditing, as this audit will be supported in part by funds collected during the TGE.
 
 #### Prerequisites
-- Connection to the Ethereum mainnet
-- Latest version of contracts builds (run compilation with `truffle compile`)
-- Fully green specs (run tests with `npm t`)
-- Secured control of TGEAdmin account, with enough ETH on account for contract deployment
-- Secured control of Pool account
-- Secured control of Team account
-- Secured control of Wallet account
-- List of presale buyers non-vested addresses with number of tokens per account (`PRESALE_NON_VESTED` tokens in total)
-- List of presale buyers vested addresses with number of tokens purchased per address and vesting period if any (`PRESALE_VESTED` tokens in total)
+- Connection to the Ethereum mainnet.
+- Latest version of contracts builds (run compilation with `truffle compile`).
+- Fully green specs (run tests with `npm t`).
+- Secured control of TGEAdmin account, with enough ETH on account for contract deployment.
+- Secured control of Pool account.
+- Secured control of Team account.
+- Secured control of Wallet account.
+- List of presale buyers' non-vested addresses, including number of tokens per account (`PRESALE_NON_VESTED` tokens in total).
+- List of presale buyers' vested addresses, including the number of tokens purchased per address and the vesting period, if any (`PRESALE_VESTED` tokens in total).
 
 #### Outcome
-- Token contract deployed
-- TokenSale contract deployed
-- VestingTrustee contract deployed
-- 1,000,000,000 tokens minted
-- 300,000,000 tokens on Pool account
-- `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers accounts
-- `PRESALE_VESTED` (for presale buyers) + ~~200,000,000~~ (for the Hey team, contributors and advisors) tokens controlled by the VestingTrustee contract, with a balance per vested account
-- (500,000,000 - `PRESALE`) of tokens controlled by the TokenSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`
-- TokenSale contract ready to accept ETH payments against HEY tokens
-- TokenSale contract funnelling incoming ETH to Wallet account
-- TokenSale contract configured to send potential remaining tokens post-TGE to Pool account
+- Token contract deployed.
+- TokenSale contract deployed.
+- VestingTrustee contract deployed.
+- 1,000,000,000 tokens minted.
+- 300,000,000 tokens on Pool account.
+- `PRESALE_NON_VESTED` tokens distributed amongst presale non-vested buyers' accounts.
+- `PRESALE_VESTED` (for presale buyers) + ~~200,000,000~~ tokens (for the *Hey* team, contributors, and advisors) controlled by the VestingTrustee contract, with a balance per vested account.
+- (500,000,000 - `PRESALE`) of tokens controlled by the TokenSale contract, where `PRESALE` = `PRESALE_NON_VESTED` + `PRESALE_VESTED`.
+- TokenSale contract ready to accept ETH payments against HEY tokens.
+- TokenSale contract funnelling incoming ETH to Wallet account.
+- TokenSale contract configured to send potential tokens remaining post-TGE to Pool account.
 
 #### Choreography
 
-All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure as it is still able to call `pause()` and `finalize()` on the TokenSale contract, as well as `drain()` on the Token contract. The deployment script is the following:
+All actions performed below should originate from the TGEAdmin account. After deployment, this address should be kept secure, as it remains able to call `pause()` and `finalize()` on the TokenSale contract, as well as `drain()` on the Token contract. The deployment script is as follows:
 
 1. **Deploy Token** (no constructor parameters needed)
 2. **Deploy TokenSale**, with constructor parameters:
@@ -486,11 +486,11 @@ All actions performed below should originate from the TGEAdmin account. After de
 This deployment script is executed via a `nodejs` script using an `HDWallet` over an Infura proxy (TBC: ideally, sign transactions from Ledger hardware wallet rather than sourcing from ENV). ~~The full deployment script code is in [this file](TODO). This script and its outcome are tested in [this file](TODO).~~
 
 ### Second phase
-This phase will be further documented as the code review and audit progresses. Initally, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway will be deployed, it will benefit from an `allowance` granted to it by the Pool account so that it can distribute tokens on its behalf.
+This phase will be further documented as the code review and audit progress. Initially, the tokens to be controlled by the Gateway will be stored on the Pool account. When the Gateway is deployed, it will benefit from an `allowance` granted by the Pool account so that The Gateway can distribute tokens on the Pool's behalf.
 
 ### Code verification
 
-We allow participants to verify the smart contracts code directly on Etherscan. For this we use [Solidity Flattener](https://github.com/BlockCatIO/solidity-flattener) installed using `pip3 install solidity_flattener`, running the following command:
+We allow participants to verify the smart contracts code directly on Etherscan. For this, we use [Solidity Flattener](https://github.com/BlockCatIO/solidity-flattener) installed using `pip3 install solidity_flattener`, running the following command:
 
 ```
 solidity_flattener TokenSale.sol --solc-paths="openzeppelin-solidity/contracts=ABSOLUTE_PATH_TO_REPO/node_modules/openzeppelin-solidity/contracts"
@@ -498,4 +498,4 @@ solidity_flattener TokenSale.sol --solc-paths="openzeppelin-solidity/contracts=A
 
 This is encapsulated with the npm commands `npm run flatten:token`, `npm run flatten:token-sale`, `npm run flatten:vesting-trustee`. These commands output `*.flat.sol` files that can then be used in Etherscan.
 
-> Currently, there is verification mismatch to be clarified on Etherscan. Note that the flattened outputs are produced with the wrong Solidity pragma version, this is potentially the reason for the mismatch.
+> Currently, there is verification mismatch to be clarified on Etherscan. Note that the flattened outputs are produced with the wrong Solidity pragma version. This is, potentially, the reason behind the mismatch.
