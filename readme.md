@@ -419,7 +419,7 @@ Claimable tokens over time (vested: 100, cliff days: 75, total days: 100)
 
 #### Attribution
 
-The Vesting Trustee contract borrows heavily from (i.e. is a refacto of) the smart contracts used by [SirinLab](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol),  [Stox](https://github.com/stx-technologies/stox-token/blob/20925fd8b97746f085b95af03173d65a2ddaa504/contracts/Trustee.sol) and [KIN](https://medium.com/kinblog/kin-foundation-vesting-trustee-smart-contract-7fce911516d0).
+The Vesting Trustee contract borrows heavily from (i.e. is a refactoring of) the smart contracts used by [SirinLab](https://github.com/sirin-labs/crowdsale-smart-contract/blob/master/contracts/SirinVestingTrustee.sol),  [Stox](https://github.com/stx-technologies/stox-token/blob/20925fd8b97746f085b95af03173d65a2ddaa504/contracts/Trustee.sol) and [KIN](https://medium.com/kinblog/kin-foundation-vesting-trustee-smart-contract-7fce911516d0).
 
 We have renamed several functions and variables to improve overall readability, while also reverting on claims that yield 0 tokens (either because the grantee does not exist or because no tokens can yet be claimed). The latter change has been implemented in order to avoid spilling on transaction fees while carrying out precocious claims.
 
