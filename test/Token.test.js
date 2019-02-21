@@ -1,21 +1,16 @@
-const shouldFail = require('./helpers/shouldFail');
-const expectEvent = require('./helpers/expectEvent');
-const { ZERO_ADDRESS } = require('./helpers/constants');
-
 const Token = artifacts.require('Token');
 const ERC20Mock = artifacts.require('ERC20Mock');
 
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
+const { BN, constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 contract('Token', function ([_, owner, recipient, anotherAccount]) {
-  const TOTAL_SUPPLY = 1e9*1e18;
-  const DECIMALS = 18;
-  const NAME = "HeyToken";
-  const SYMBOL = "HEY";
+  const TOTAL_SUPPLY = new BN('1000000000000000000000000000');
+  const SMALL_AMOUNT = new BN(100);
+  const DECIMALS = new BN(18);
+  const ZERO = new BN(0);
+  const NAME = 'HeyToken';
+  const SYMBOL = 'HEY';
 
   beforeEach(async function () {
     this.token = await Token.new({ from: owner });
@@ -50,7 +45,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
       const to = recipient;
 
       describe('when the sender does not have enough balance', function () {
-        const amount = TOTAL_SUPPLY * 1.1;
+        const amount = TOTAL_SUPPLY.addn(1);
 
         it('reverts', async function () {
           await shouldFail.reverting(this.token.transfer(to, amount, { from: owner }));
@@ -63,7 +58,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
         it('transfers the requested amount', async function () {
           await this.token.transfer(to, amount, { from: owner });
 
-          (await this.token.balanceOf(owner)).should.be.bignumber.equal(0);
+          (await this.token.balanceOf(owner)).should.be.bignumber.equal(ZERO);
 
           (await this.token.balanceOf(to)).should.be.bignumber.equal(amount);
         });
@@ -93,7 +88,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
         it('reverts', async function () {
           // 'token' does not exist outside 'it' because of the way our before
           // each test hook is defined.
-          const to = this.token.address
+          const to = this.token.address;
           await shouldFail.reverting(this.token.transfer(to, TOTAL_SUPPLY, { from: owner }));
         });
       });
@@ -119,7 +114,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
           it('transfers the requested amount', async function () {
             await this.token.transferFrom(owner, to, amount, { from: spender });
 
-            (await this.token.balanceOf(owner)).should.be.bignumber.equal(0);
+            (await this.token.balanceOf(owner)).should.be.bignumber.equal(ZERO);
 
             (await this.token.balanceOf(to)).should.be.bignumber.equal(amount);
           });
@@ -127,7 +122,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
           it('decreases the spender allowance', async function () {
             await this.token.transferFrom(owner, to, amount, { from: spender });
 
-            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(0);
+            (await this.token.allowance(owner, spender)).should.be.bignumber.equal(ZERO);
           });
 
           it('emits a transfer event', async function () {
@@ -142,9 +137,9 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
         });
 
         describe('when the owner does not have enough balance', function () {
-          const amount = TOTAL_SUPPLY * 1.1;
-
+          const amount = TOTAL_SUPPLY.addn(1);
           it('reverts', async function () {
+            (await this.token.balanceOf(owner)).should.be.bignumber.equal(TOTAL_SUPPLY);
             await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
           });
         });
@@ -152,7 +147,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
 
       describe('when the spender does not have enough approved balance', function () {
         beforeEach(async function () {
-          await this.token.approve(spender, TOTAL_SUPPLY * 0.9, { from: owner });
+          await this.token.approve(spender, TOTAL_SUPPLY.subn(1), { from: owner });
         });
 
         describe('when the owner has enough balance', function () {
@@ -164,7 +159,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
         });
 
         describe('when the owner does not have enough balance', function () {
-          const amount = TOTAL_SUPPLY * 1.1;
+          const amount = TOTAL_SUPPLY.addn(1);
 
           it('reverts', async function () {
             await shouldFail.reverting(this.token.transferFrom(owner, to, amount, { from: spender }));
@@ -210,7 +205,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
   // validDestination modifier).
   describe('drain', function () {
     context('when another ERC20 token has been deposited to the contract', function () {
-      const amount = 100;
+      const amount = SMALL_AMOUNT;
 
       beforeEach(async function () {
         this.otherToken = await ERC20Mock.new(anotherAccount, amount);
@@ -223,7 +218,7 @@ contract('Token', function ([_, owner, recipient, anotherAccount]) {
 
           await this.token.drain(this.otherToken.address, amount, { from: owner });
 
-          (await this.otherToken.balanceOf(this.token.address)).should.be.bignumber.equal(0);
+          (await this.otherToken.balanceOf(this.token.address)).should.be.bignumber.equal(ZERO);
           (await this.otherToken.balanceOf(owner)).should.be.bignumber.equal(amount);
         });
       });

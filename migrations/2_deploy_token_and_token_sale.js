@@ -4,9 +4,11 @@
  *  be settled with their actual production values at the time of deployment.
  */
 
+const BigNumber = require('bignumber.js');
+const toBN = (n) => new BigNumber(n.toString());
+
 const asyncForEach = require("./helpers/asyncForEach");
 const assertTokenBalance = require("./helpers/assertTokenBalance");
-const ONE_TOKEN = require("./helpers/oneToken");
 
 const Token = artifacts.require("./Token.sol");
 const TokenSale = artifacts.require("./TokenSale.sol");

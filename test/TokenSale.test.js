@@ -1,64 +1,51 @@
-const expectEvent = require('./helpers/expectEvent');
-const shouldFail = require('./helpers/shouldFail');
-const { ether } = require('./helpers/ether');
-const { ethGetBalance } = require('./helpers/web3');
-const { advanceBlock } = require('./helpers/advanceToBlock');
-const time = require('./helpers/time');
-const { ZERO_ADDRESS } = require('./helpers/constants');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
+const { balance, BN, constants, expectEvent, shouldFail, ether, time } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 const TokenSale = artifacts.require('TokenSale');
 const Token = artifacts.require('Token');
 
 contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser, anyone]) {
   // Total supply
-  const tokenSupply = new BigNumber('1e27'); // 1 billion with 18 decimals (9 + 18)
+  const tokenSupply = new BN('1000000000000000000000000000'); // 1 billion with 18 decimals (9 + 18)
   // Default value sent by participants
-  const value = ether(11);
+  const value = ether(new BN(11));
   // Rates
-  const firstDayRate = new BigNumber(4400);
-  const rate = new BigNumber(4000);
+  const zero = new BN(0);
+  const firstDayRate = new BN(4400);
+  const rate = new BN(4000);
   const expectedFirstDayTokenAmount = firstDayRate.mul(value);
   const expectedTokenAmount = rate.mul(value);
   // Minimum contributions
   const firstDayEthMinimumContribution = 10;
-  const firstDayMinimumContribution = ether(firstDayEthMinimumContribution);
   const ethMinimumContribution = 0.1;
-  const minimumContribution = ether(ethMinimumContribution);
-
-  before(async function () {
-    // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
-    await advanceBlock();
-  });
+  const firstDayMinimumContribution = ether(new BN(firstDayEthMinimumContribution));
+  const minimumContribution = ether(new BN(ethMinimumContribution));
 
   it('requires a non-null token', async function () {
+    this.openingTime = (await time.latest()).add(time.duration.weeks(1));
+    this.closingTime = this.openingTime.add(time.duration.days(28));
     await shouldFail.reverting(TokenSale.new(
-      this.openingTime, this.closingTime, 0, rate, wallet, pool, ZERO_ADDRESS, { from: owner }
+      this.openingTime, this.closingTime, zero, rate, wallet, pool, ZERO_ADDRESS, { from: owner }
     ));
   });
 
   context('with token', async function () {
     beforeEach(async function () {
-      this.openingTime = (await time.latest()) + time.duration.weeks(1);
-      this.closingTime = this.openingTime + time.duration.days(28);
+      this.openingTime = (await time.latest()).add(time.duration.weeks(1));
+      this.closingTime = this.openingTime.add(time.duration.days(28));
       this.afterClosingTime = this.closingTime + time.duration.seconds(1);
       this.token = await Token.new({ from: owner });
     });
 
     it('requires a non-zero first day rate', async function () {
       await shouldFail.reverting(TokenSale.new(
-        this.openingTime, this.closingTime, 0, rate, wallet, pool, this.token.address, { from: owner }
+        this.openingTime, this.closingTime, zero, rate, wallet, pool, this.token.address, { from: owner }
       ));
     });
 
     it('requires a non-zero rate', async function () {
       await shouldFail.reverting(TokenSale.new(
-        this.openingTime, this.closingTime, firstDayRate, 0, wallet, pool, this.token.address, { from: owner }
+        this.openingTime, this.closingTime, firstDayRate, zero, wallet, pool, this.token.address, { from: owner }
       ));
     });
 
@@ -166,7 +153,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
           context('after 24 hours after opening time', async function () {
             beforeEach(async function () {
-              await time.increaseTo(this.openingTime + time.duration.hours(24));
+              await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
             });
 
             describe('rate', function () {
@@ -209,8 +196,8 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
           context('when within 24 hours after the opening time before and closing time', async function () {
             it(`rejects payments with a value below ${firstDayEthMinimumContribution} ETH`, async function () {
               await time.increaseTo(this.openingTime);
-              await shouldFail.reverting(this.tokenSale.send(ether(firstDayEthMinimumContribution - 0.001)));
-              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(firstDayEthMinimumContribution - 0.001)) }));
+              await shouldFail.reverting(this.tokenSale.send(ether(new BN(firstDayEthMinimumContribution - 0.001))));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(firstDayEthMinimumContribution - 0.001))) }));
             });
 
             it(`accepts payments with a value equal to ${firstDayEthMinimumContribution} ETH`, async function () {
@@ -221,28 +208,28 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
             it(`accepts payments with a value above ${firstDayEthMinimumContribution} ETH`, async function () {
               await time.increaseTo(this.openingTime);
-              await this.tokenSale.send(ether(firstDayEthMinimumContribution + 0.001));
-              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(firstDayEthMinimumContribution + 0.001)) });
+              await this.tokenSale.send(ether(new BN(firstDayEthMinimumContribution + 0.001)));
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(firstDayEthMinimumContribution + 0.001))) });
             });
           });
 
           context('when more than 24 hours after the opening time before and closing time', async function () {
             it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
-              await time.increaseTo(this.openingTime + time.duration.hours(24));
-              await shouldFail.reverting(this.tokenSale.send(ether(ethMinimumContribution - 0.001)));
-              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution - 0.001)) }));
+              await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
+              await shouldFail.reverting(this.tokenSale.send(ether(new BN(ethMinimumContribution - 0.001))));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(ethMinimumContribution - 0.001))) }));
             });
 
             it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
-              await time.increaseTo(this.openingTime + time.duration.hours(24));
+              await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
               await this.tokenSale.send(minimumContribution);
               await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
             });
 
-            await time.increaseTo(this.openingTime + time.duration.hours(24));
+            await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
             it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
-              await this.tokenSale.send(ether(ethMinimumContribution + 0.001));
-              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(ethMinimumContribution + 0.001)) });
+              await this.tokenSale.send(ether(new BN(ethMinimumContribution + 0.001)));
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(ethMinimumContribution + 0.001))) });
             });
           });
         });
@@ -267,7 +254,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
                 it('reverts on zero-valued payments', async function () {
                   await shouldFail.reverting(
-                    this.tokenSale.send(0, { from: purchaser })
+                    this.tokenSale.send(zero, { from: purchaser })
                   );
                 });
               });
@@ -279,7 +266,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
                 it('reverts on zero-valued payments', async function () {
                   await shouldFail.reverting(
-                    this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
+                    this.tokenSale.buyTokens(participant, { value: zero, from: purchaser })
                   );
                 });
 
@@ -308,10 +295,9 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
               });
 
               it('should forward funds to wallet', async function () {
-                const pre = await ethGetBalance(wallet);
-                await this.tokenSale.sendTransaction({ value, from: participant });
-                const post = await ethGetBalance(wallet);
-                post.minus(pre).should.be.bignumber.equal(value);
+                (await balance.difference(wallet, () =>
+                  this.tokenSale.sendTransaction({ value, from: participant }))
+                ).should.be.bignumber.equal(value);
               });
             });
 
@@ -332,17 +318,16 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
               });
 
               it('should forward funds to wallet', async function () {
-                const pre = await ethGetBalance(wallet);
-                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-                const post = await ethGetBalance(wallet);
-                post.minus(pre).should.be.bignumber.equal(value);
+                (await balance.difference(wallet, () =>
+                  this.tokenSale.buyTokens(participant, { value, from: purchaser }))
+                ).should.be.bignumber.equal(value);
               });
             });
           });
 
           context('when more than 24 hours after the opening time before and closing time', async function () {
             beforeEach(async function () {
-              await time.increaseTo(this.openingTime + time.duration.hours(24));
+              await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
             });
 
             describe('rate', function () {
@@ -359,7 +344,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
                 it('reverts on zero-valued payments', async function () {
                   await shouldFail.reverting(
-                    this.tokenSale.send(0, { from: purchaser })
+                    this.tokenSale.send(zero, { from: purchaser })
                   );
                 });
               });
@@ -371,7 +356,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
                 it('reverts on zero-valued payments', async function () {
                   await shouldFail.reverting(
-                    this.tokenSale.buyTokens(participant, { value: 0, from: purchaser })
+                    this.tokenSale.buyTokens(participant, { value: zero, from: purchaser })
                   );
                 });
 
@@ -400,10 +385,9 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
               });
 
               it('should forward funds to wallet', async function () {
-                const pre = await ethGetBalance(wallet);
-                await this.tokenSale.sendTransaction({ value, from: participant });
-                const post = await ethGetBalance(wallet);
-                post.minus(pre).should.be.bignumber.equal(value);
+                (await balance.difference(wallet, () =>
+                  this.tokenSale.sendTransaction({ value, from: participant }))
+                ).should.be.bignumber.equal(value);
               });
             });
 
@@ -424,10 +408,9 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
               });
 
               it('should forward funds to wallet', async function () {
-                const pre = await ethGetBalance(wallet);
-                await this.tokenSale.buyTokens(participant, { value, from: purchaser });
-                const post = await ethGetBalance(wallet);
-                post.minus(pre).should.be.bignumber.equal(value);
+                (await balance.difference(wallet, () =>
+                  this.tokenSale.buyTokens(participant, { value, from: purchaser }))
+                ).should.be.bignumber.equal(value);
               });
             });
           });
@@ -443,11 +426,11 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
             it('should forward remaining tokens to pool', async function () {
               const remaining = await this.token.balanceOf(this.tokenSale.address);
-              const pre = await this.token.balanceOf(pool);
               await this.tokenSale.finalize({ from: anyone });
-              const post = await this.token.balanceOf(pool);
-              (await this.token.balanceOf(this.tokenSale.address)).should.be.bignumber.equal(0);
-              post.minus(pre).should.be.bignumber.equal(remaining);
+              (await this.token.balanceOf(this.tokenSale.address)).should.be.bignumber.equal(zero);
+              (await balance.difference(pool, () =>
+                this.tokenSale.buyTokens(participant, { value, from: purchaser }))
+              ).should.be.bignumber.equal(remaining);
             });
           });
         });
