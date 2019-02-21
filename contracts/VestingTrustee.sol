@@ -4,7 +4,7 @@
  *  However, keep in mind that smart contracts still rely on experimental technology.
  */
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/token/ERC20/IERC20.sol";
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
@@ -52,7 +52,7 @@ contract VestingTrustee is Ownable {
     )
         public
     {
-        require(token != address(0), "token cannot be zero address");
+        require(address(token) != address(0), "token cannot be zero address");
 
         _token = token;
     }
@@ -228,7 +228,7 @@ contract VestingTrustee is Ownable {
      *     Start       Cliff      End
      */
     function _calculateClaimableTokens(
-        Grant grant,
+        Grant memory grant,
         uint256 time
     )
         private

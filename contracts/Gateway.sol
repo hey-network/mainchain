@@ -4,7 +4,7 @@
  *  However, keep in mind that smart contracts still rely on experimental technology.
  */
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/math/SafeMath.sol";
 import "./gateway/ValidatorsManager.sol";
@@ -28,7 +28,7 @@ contract Gateway is ERC20Receiver, ValidatorsManager {
 
     constructor (
         address _tokenAddress,
-        address[] _validators,
+        address[] memory _validators,
         uint8 _threshold_num,
         uint8 _threshold_denom
     )
@@ -40,7 +40,7 @@ contract Gateway is ERC20Receiver, ValidatorsManager {
 
     function withdrawERC20(
         uint256 amount,
-        bytes signature
+        bytes calldata signature
     )
         external
         isVerifiedByValidator(amount, signature)

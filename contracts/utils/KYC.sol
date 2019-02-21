@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "./KYCVerifierRole.sol";
 
@@ -28,7 +28,7 @@ contract KYC is KYCVerifierRole {
      * @param accounts Array of addresses that have been KYC authorized.
      */
     function grantKYCAuthorizations(
-        address[] accounts
+        address[] memory accounts
     )
         public
         onlyKYCVerifier
@@ -44,7 +44,7 @@ contract KYC is KYCVerifierRole {
      * @param accounts The addresses that have been KYC reverted.
      */
     function revertKYCAuthorizations(
-        address[] accounts
+        address[] memory accounts
     )
         public
         onlyKYCVerifier

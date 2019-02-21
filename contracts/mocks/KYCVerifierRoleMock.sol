@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "../utils/KYCVerifierRole.sol";
 
@@ -7,6 +7,7 @@ contract KYCVerifierRoleMock is KYCVerifierRole {
         _removeKYCVerifier(account);
     }
 
+    // solium-disable-next-line no-empty-blocks
     function onlyKYCVerifierMock() public view onlyKYCVerifier {
     }
 

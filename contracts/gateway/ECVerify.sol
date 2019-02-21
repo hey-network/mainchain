@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 library ECVerify {
 
@@ -11,7 +11,7 @@ library ECVerify {
     // solium-disable-next-line security/no-assign-params
     function recover(
         bytes32 hash,
-        bytes signature
+        bytes memory signature
     )
     internal
     pure

@@ -4,7 +4,7 @@
  *  However, keep in mind that smart contracts still rely on experimental technology.
  */
 
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/crowdsale/validation/TimedCrowdsale.sol";
 import "openzeppelin-solidity/contracts/crowdsale/distribution/FinalizableCrowdsale.sol";
@@ -56,8 +56,8 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
         uint256 closingTime,
         uint256 firstDayRate,
         uint256 rate,
-        address wallet,
-        address pool,
+        address payable wallet,
+        address payable pool,
         IERC20 token
     )
         public
@@ -128,6 +128,7 @@ contract TokenSale is TimedCrowdsale, FinalizableCrowdsale, Pausable, KYC {
         require(!paused(), "cannot purchase when contract is paused");
         require(kycAuthorized(beneficiary), "beneficiary must be KYC authorized");
 
+        // solium-disable-next-line security/no-block-members
         if (block.timestamp < (_openingTime.add(FIRST_DAY_DURATION))) {
             require(msg.value >= FIRST_DAY_MINIMUM_CONTRIBUTION, "contribution must be above minimum authorized");
         } else {

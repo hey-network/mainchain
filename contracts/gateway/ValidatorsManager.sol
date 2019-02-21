@@ -1,4 +1,4 @@
-pragma solidity ^0.4.24;
+pragma solidity ^0.5.0;
 
 import "openzeppelin-solidity/contracts/ownership/Ownable.sol";
 import "./ECVerify.sol";
@@ -21,7 +21,7 @@ contract ValidatorsManager is Ownable {
 
     constructor (
         address _tokenAddress,
-        address[] _validators,
+        address[] memory _validators,
         uint8 _threshold_num,
         uint8 _threshold_denom
     )
@@ -44,7 +44,7 @@ contract ValidatorsManager is Ownable {
 
     modifier isVerifiedByValidator(
         uint256 num,
-        bytes sig
+        bytes memory sig
     )
     {
         // prevent replay attacks by adding the nonce in the sig
@@ -77,9 +77,9 @@ contract ValidatorsManager is Ownable {
 
     function addValidator(
         address validator,
-        uint8[] v,
-        bytes32[] r,
-        bytes32[] s
+        uint8[] calldata v,
+        bytes32[] calldata r,
+        bytes32[] calldata s
     )
         external
     {
@@ -98,9 +98,9 @@ contract ValidatorsManager is Ownable {
 
     function removeValidator(
         address validator,
-        uint8[] v,
-        bytes32[] r,
-        bytes32[] s
+        uint8[] calldata v,
+        bytes32[] calldata r,
+        bytes32[] calldata s
     )
         external
     {
@@ -122,9 +122,9 @@ contract ValidatorsManager is Ownable {
     //, so we need to send v,r,s params
     function checkThreshold(
         bytes32 message,
-        uint8[] v,
-        bytes32[] r,
-        bytes32[] s
+        uint8[] memory v,
+        bytes32[] memory r,
+        bytes32[] memory s
     )
         private
         view
