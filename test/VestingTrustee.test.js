@@ -1,26 +1,11 @@
-const expectEvent = require('./helpers/expectEvent');
-const shouldFail = require('./helpers/shouldFail');
 const { shouldBeAround } = require('./helpers/shouldBeAround');
-const { ether } = require('./helpers/ether');
-const { ethGetBalance } = require('./helpers/web3');
-const { advanceBlock } = require('./helpers/advanceToBlock');
-const time = require('./helpers/time');
-const { ZERO_ADDRESS } = require('./helpers/constants');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
+const { balance, BN, constants, expectEvent, shouldFail, ether, time } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
 
 const VestingTrustee = artifacts.require('VestingTrustee');
 const Token = artifacts.require('Token');
 
 contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, grantee4, anyone]) {
-  // before(async function () {
-  //   // Advance to the next block to correctly read time in the solidity "now" function interpreted by ganache
-  //   await advanceBlock();
-  // });
   const SECOND = 1;
   const MINUTE = 60 * SECOND;
   const HOUR = 60 * MINUTE;
@@ -28,6 +13,8 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
   const WEEK = 7 * DAY;
   const MONTH = 30 * DAY;
   const YEAR = 12 * MONTH;
+
+  const zero = new BN(0);
 
   describe('deployment', async function () {
     it('requires a non-null token', async function () {
@@ -69,14 +56,14 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
       });
 
       it('should start with a zero total vesting initially', async function () {
-        (await trustee.totalVesting()).should.be.bignumber.equal(0);
+        (await trustee.totalVesting()).should.be.bignumber.equal(zero);
       });
 
       it('should start with a zero token balance initially', async function () {
-        (await token.balanceOf(await trustee.address)).should.be.bignumber.equal(0);
+        (await token.balanceOf(await trustee.address)).should.be.bignumber.equal(zero);
       });
 
-      let balance = 1000;
+      let balance = new BN(1000);
       context(`with ${balance} tokens provisioned to the contract`, async function () {
           beforeEach(async function () {
             await token.transfer(trustee.address, balance, { from: owner });
@@ -87,15 +74,15 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
           });
 
           it('should be provisionable with additional tokens', async function () {
-            let value = 10;
+            let value = new BN(10);
             await token.transfer(trustee.address, value, { from: owner });
             (await token.balanceOf(await trustee.address)).should.be.bignumber.equal(balance + value);
           });
       });
     });
 
-    let balance = 10 ** 12;
-    let value = 1000;
+    let balance = new BN(10 ** 12);
+    let value = new BN(1000);
     context(`with a provisioned token balance of ${balance}`, async function () {
       beforeEach(async function () {
         await token.transfer(trustee.address, balance, { from: owner });
@@ -151,40 +138,40 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
           await shouldFail.reverting(trustee.createGrant(grantee4, 1, now, now, now + YEAR, false, { from: owner }));
         });
 
-        it('should record a grant and increase grants count and total vesting', async function () {
+        it.only('should record a grant and increase grants count and total vesting', async function () {
           let totalVesting = (await trustee.totalVesting());
-          totalVesting.should.be.bignumber.equal(0);
+          totalVesting.should.be.bignumber.equal(zero);
 
           let value = 1000;
           let start = now;
           let cliff = now + MONTH;
           let end = now + YEAR;
-          await trustee.createGrant(grantee, value, start, cliff, end, false, { from: owner });
+          await trustee.createGrant(grantee, new BN(value), start, cliff, end, false, { from: owner });
 
-          (await trustee.totalVesting()).should.be.bignumber.equal(totalVesting + value);
-          (await trustee.claimableTokens(grantee, now)).should.be.bignumber.equal(0);
+          (await trustee.totalVesting()).should.be.bignumber.equal(totalVesting + new BN(value));
+          (await trustee.claimableTokens(grantee, now)).should.be.bignumber.equal(zero);
           let grant = await getGrant(grantee);
           grant.value.should.be.equal(value);
           grant.start.should.be.equal(start);
           grant.cliff.should.be.equal(cliff);
           grant.end.should.be.equal(end);
-          grant.transferred.should.be.equal(0);
+          grant.transferred.should.be.equal(zero);
           grant.revokable.should.be.equal(false);
 
           let value2 = 2300;
           let start2 = now + 2 * MONTH;
           let cliff2 = now + 6 * MONTH;
           let end2 = now + YEAR;
-          await trustee.createGrant(grantee2, value2, start2, cliff2, end2, false, { from: owner });
+          await trustee.createGrant(grantee2, new BN(value2), start2, cliff2, end2, false, { from: owner });
 
-          (await trustee.totalVesting()).should.be.bignumber.equal(totalVesting.toNumber() + value + value2);
-          (await trustee.claimableTokens(grantee2, now)).should.be.bignumber.equal(0);
+          (await trustee.totalVesting()).should.be.bignumber.equal(totalVesting.toNumber() + new BN(value) + new BN(value2));
+          (await trustee.claimableTokens(grantee2, now)).should.be.bignumber.equal(zero);
           let grant2 = await getGrant(grantee2);
           grant2.value.should.be.equal(value2);
           grant2.start.should.be.equal(start2);
           grant2.cliff.should.be.equal(cliff2);
           grant2.end.should.be.equal(end2);
-          grant2.transferred.should.be.equal(0);
+          grant2.transferred.should.be.equal(zero);
           grant2.revokable.should.be.equal(false);
         });
       });
@@ -193,12 +180,12 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
         it('should return 0 for non existing grant', async function () {
           let grant = await getGrant(anyone);
 
-          grant.value.should.be.equal(0);
-          grant.start.should.be.equal(0);
-          grant.cliff.should.be.equal(0);
-          grant.end.should.be.equal(0);
+          grant.value.should.be.equal(zero);
+          grant.start.should.be.equal(zero);
+          grant.cliff.should.be.equal(zero);
+          grant.end.should.be.equal(zero);
 
-          (await trustee.claimableTokens(anyone, now + 100 * YEAR)).should.be.bignumber.equal(0);
+          (await trustee.claimableTokens(anyone, now + 100 * YEAR)).should.be.bignumber.equal(zero);
         });
 
         [
@@ -272,10 +259,10 @@ contract('VestingTrustee', function ([_, owner, grantee, grantee2, grantee3, gra
         it('should not allow claiming a non-existing grant', async function () {
           let grant = await getGrant(anyone);
 
-          grant.value.should.be.equal(0);
-          grant.start.should.be.equal(0);
-          grant.cliff.should.be.equal(0);
-          grant.end.should.be.equal(0);
+          grant.value.should.be.equal(zero);
+          grant.start.should.be.equal(zero);
+          grant.cliff.should.be.equal(zero);
+          grant.end.should.be.equal(zero);
 
           await shouldFail.reverting(trustee.claimTokens({ from: anyone }));
         });

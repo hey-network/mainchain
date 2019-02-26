@@ -19,7 +19,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
   const firstDayEthMinimumContribution = 10;
   const ethMinimumContribution = 0.1;
   const firstDayMinimumContribution = ether(new BN(firstDayEthMinimumContribution));
-  const minimumContribution = ether(new BN(ethMinimumContribution));
+  const minimumContribution = ether(ethMinimumContribution.toString());
 
   it('requires a non-null token', async function () {
     this.openingTime = (await time.latest()).add(time.duration.weeks(1));
@@ -193,11 +193,12 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
         });
 
         describe('minimum contribution', function () {
-          context('when within 24 hours after the opening time before and closing time', async function () {
+          context('when within 24 hours after the opening time and before closing time', async function () {
             it(`rejects payments with a value below ${firstDayEthMinimumContribution} ETH`, async function () {
               await time.increaseTo(this.openingTime);
-              await shouldFail.reverting(this.tokenSale.send(ether(new BN(firstDayEthMinimumContribution - 0.001))));
-              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(firstDayEthMinimumContribution - 0.001))) }));
+              const amount = ether(new BN(firstDayEthMinimumContribution - 0.001));
+              await shouldFail.reverting(this.tokenSale.send(amount));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: amount }));
             });
 
             it(`accepts payments with a value equal to ${firstDayEthMinimumContribution} ETH`, async function () {
@@ -208,16 +209,20 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
 
             it(`accepts payments with a value above ${firstDayEthMinimumContribution} ETH`, async function () {
               await time.increaseTo(this.openingTime);
-              await this.tokenSale.send(ether(new BN(firstDayEthMinimumContribution + 0.001)));
-              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(firstDayEthMinimumContribution + 0.001))) });
+              const amount = ether(new BN(firstDayEthMinimumContribution + 0.001));
+              await this.tokenSale.send(amount);
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: amount });
             });
           });
 
-          context('when more than 24 hours after the opening time before and closing time', async function () {
+          context('when more than 24 hours after the opening time and before closing time', async function () {
             it(`rejects payments with a value below ${ethMinimumContribution} ETH`, async function () {
               await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
-              await shouldFail.reverting(this.tokenSale.send(ether(new BN(ethMinimumContribution - 0.001))));
-              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(ethMinimumContribution - 0.001))) }));
+              // Note that for such small numbers (with decimals), we can't use
+              // casting to BN and must use Strings instead.
+              const amount = ether((ethMinimumContribution - 0.001).toString());
+              await shouldFail.reverting(this.tokenSale.send(amount));
+              await shouldFail.reverting(this.tokenSale.buyTokens(participant, { from: purchaser, value: amount }));
             });
 
             it(`accepts payments with a value equal to ${ethMinimumContribution} ETH`, async function () {
@@ -226,16 +231,17 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
               await this.tokenSale.buyTokens(participant, { from: purchaser, value: minimumContribution });
             });
 
-            await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
             it(`accepts payments with a value above ${ethMinimumContribution} ETH`, async function () {
-              await this.tokenSale.send(ether(new BN(ethMinimumContribution + 0.001)));
-              await this.tokenSale.buyTokens(participant, { from: purchaser, value: (ether(new BN(ethMinimumContribution + 0.001))) });
+              await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
+              const amount = ether((ethMinimumContribution + 0.001).toString());
+              await this.tokenSale.send(amount);
+              await this.tokenSale.buyTokens(participant, { from: purchaser, value: amount });
             });
           });
         });
 
         describe('standard crowdsale behaviour', function () {
-          context('when within 24 hours after the opening time before and closing time', async function () {
+          context('when within 24 hours after the opening time and before closing time', async function () {
             beforeEach(async function () {
               await time.increaseTo(this.openingTime);
             });
@@ -325,7 +331,7 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
             });
           });
 
-          context('when more than 24 hours after the opening time before and closing time', async function () {
+          context('when more than 24 hours after the opening time and before closing time', async function () {
             beforeEach(async function () {
               await time.increaseTo(this.openingTime.add(time.duration.hours(24)));
             });
@@ -425,12 +431,12 @@ contract('TokenSale', function ([_, owner, participant, wallet, pool, purchaser,
             });
 
             it('should forward remaining tokens to pool', async function () {
+              // Note that we can't use OZ's balance helper method here since
+              // we're dealing with an ERC20 token balance.
               const remaining = await this.token.balanceOf(this.tokenSale.address);
               await this.tokenSale.finalize({ from: anyone });
               (await this.token.balanceOf(this.tokenSale.address)).should.be.bignumber.equal(zero);
-              (await balance.difference(pool, () =>
-                this.tokenSale.buyTokens(participant, { value, from: purchaser }))
-              ).should.be.bignumber.equal(remaining);
+              (await this.token.balanceOf(pool)).should.be.bignumber.equal(remaining);
             });
           });
         });
