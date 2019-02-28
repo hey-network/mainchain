@@ -44,7 +44,8 @@ A **bug bounty** program will run for product-specific smart contracts (both on 
 
 
 ## 📮 Contracts addresses
-Will be populated after production deployment.
+Currently the Token contract has already been deployed:
+- The Token contract lives at this address: [0xe9c9e7e1dabea830c958c39d6b25964a6f52143a](https://etherscan.io/token/0xe9c9e7e1dabea830c958c39d6b25964a6f52143a)
 
 ## 🔒 Security analysis
 

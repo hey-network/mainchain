@@ -14,17 +14,16 @@ const Token = artifacts.require("./Token.sol");
 
 // Distribution and addresses parameters
 const {
-  POOL,
   CUSTODIAN,
 } = require("./distribution/addresses");
 const {
-  POOL_ENDOWMENT,
   CUSTODIAN_ENDOWMENT,
 } = require("./distribution/endowments");
 
 // Deployment script
 module.exports = function(deployer, network, accounts) {
   const owner = accounts[0];
+  console.log(owner);
 
   deployer.then(async () => {
     // Deploy the Token contract; the whole total supply gets minted to the
@@ -32,14 +31,7 @@ module.exports = function(deployer, network, accounts) {
     await deployer.deploy(Token);
     const token = await Token.deployed();
 
-    // Endow the Team address with its required share of tokens.
-    await token.transfer(
-      POOL,
-      POOL_ENDOWMENT,
-    );
-    await assertTokenBalance(token, POOL, 'Pool', POOL_ENDOWMENT);
-
-    // Ensure the Custodian address owns the right remaining amount of tokens
+    // Ensure the Custodian address owns the right amount of tokens
     await token.transfer(
       CUSTODIAN,
       CUSTODIAN_ENDOWMENT,

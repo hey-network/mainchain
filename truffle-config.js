@@ -36,17 +36,30 @@ module.exports = {
 			port: 8545,
       network_id: '*' // Match any network id
     },
-		ropsten: {
+		rinkeby: {
 	    provider: function() {
 				// Mnemonic wallet config
-				// Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
+				// Reading mnemonic from file, for address 0xe6Aaa7987b192194b81bE4EC1d0e77037eA7a6f6
 				const { mnemonic, infura } = require('./secrets');
-				const endpoint = `https://ropsten.infura.io/v3/${infura}`;
+				const endpoint = `https://rinkeby.infura.io/v3/${infura}`;
 				const HDWalletProvider = require('truffle-hdwallet-provider');
 				return new HDWalletProvider(mnemonic, endpoint);
 	    },
-	    network_id: 3,
+	    network_id: 4,
 			gasPrice: 5*1e9,
+	    gas: 4*1e6
+	  },
+		live: {
+	    provider: function() {
+				// Mnemonic wallet config
+				// Reading mnemonic from file, for address 0xe6Aaa7987b192194b81bE4EC1d0e77037eA7a6f6
+				const { mnemonic, infura } = require('./secrets');
+				const endpoint = `https://mainnet.infura.io/v3/${infura}`;
+				const HDWalletProvider = require('truffle-hdwallet-provider');
+				return new HDWalletProvider(mnemonic, endpoint);
+	    },
+	    network_id: 1,
+			gasPrice: 12*1e9,
 	    gas: 4*1e6
 	  },
 		ropstenLedger: {
