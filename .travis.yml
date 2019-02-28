@@ -23,7 +23,8 @@ before_install:
   - npm install -g npm@latest
   - npm install -g ganache-cli
   - npm install -g truffle
-  - npm install -g solidity-coverage
+  # Temporarily disabled as this bin has not been updated for Solc 5.0+
+  # - npm install -g solidity-coverage
 
 install:
   - npm install
@@ -36,7 +37,8 @@ before_script:
 
 script:
   - npm run test
-  - solidity-coverage
+  # Temporarily disabled as this bin has not been updated for Solc 5.0+
+  # - solidity-coverage
 
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
