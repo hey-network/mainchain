@@ -4,14 +4,11 @@ const {
   getSignature
 } = require('./helpers/signer');
 
+const { BN, constants, expectEvent, shouldFail } = require('openzeppelin-test-helpers');
+const { ZERO_ADDRESS } = constants;
+
 const Gateway = artifacts.require('Gateway');
 const Token = artifacts.require('Token');
-
-const BigNumber = web3.BigNumber;
-
-require('chai')
-  .use(require('chai-bignumber')(BigNumber))
-  .should();
 
 contract('Gateway', function([_, owner, redeemer]) {
   beforeEach(async function() {
