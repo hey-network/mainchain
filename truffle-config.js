@@ -40,11 +40,10 @@ module.exports = {
 	    provider: function() {
 				// Mnemonic wallet config
 				// Reading mnemonic from file, for address 0xf4cf72cefa8c3daa761663118459120da3aaa248
-				const MNEMONIC = require('child_process').execSync('cat .mnemonic', { encoding: 'utf-8' }).trim();
-				// Infura remote node config
-				const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
-				const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
-	      return new require('truffle-hdwallet-provider')(MNEMONIC, INFURA_ENDPOINT);
+				const { mnemonic, infura } = require('./secrets');
+				const endpoint = `https://ropsten.infura.io/v3/${infura}`;
+				const HDWalletProvider = require('truffle-hdwallet-provider');
+				return new HDWalletProvider(mnemonic, endpoint);
 	    },
 	    network_id: 3,
 			gasPrice: 5*1e9,

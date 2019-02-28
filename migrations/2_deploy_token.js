@@ -14,6 +14,7 @@ const Token = artifacts.require("./Token.sol");
 
 // Distribution and addresses parameters
 const {
+  OWNER,
   POOL,
   TEAM,
 } = require("./distribution/addresses");
@@ -25,7 +26,7 @@ const {
 
 // Deployment script
 module.exports = function(deployer, network, accounts) {
-  const OWNER = accounts[0];
+  const owner = (network === 'development') ? accounts[0] : OWNER;
 
   deployer.then(async () => {
     // Deploy the Token contract; the whole total supply gets minted to the
@@ -48,6 +49,6 @@ module.exports = function(deployer, network, accounts) {
     await assertTokenBalance(token, TEAM, 'Team', TEAM_ENDOWMENT);
 
     // Ensure the Owner address owns the right remaining amount of tokens
-    await assertTokenBalance(token, OWNER, 'Owner', OWNER_ENDOWMENT);
+    await assertTokenBalance(token, owner, 'Owner', OWNER_ENDOWMENT);
   });
 };
