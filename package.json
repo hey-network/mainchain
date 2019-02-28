@@ -38,9 +38,7 @@
     "test:gateway": "scripts/test.sh test/Gateway.test.js",
     "test:kyc-verifier-role": "scripts/test.sh test/KYCVerifierRole.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
-    "flatten:token": "solidity_flattener ./contracts/Token.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> Token.flat.sol",
-    "flatten:token-sale": "solidity_flattener ./contracts/TokenSale.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> TokenSale.flat.sol",
-    "flatten:vesting-trustee": "solidity_flattener ./contracts/VestingTrustee.sol --solc-paths=openzeppelin-solidity/contracts=$PWD/node_modules/openzeppelin-solidity/contracts >> VestingTrustee.flat.sol",
+    "flatten:token": "./scripts/flatten.pl --contractsdir=contracts --mainsol=Token.sol --outputsol=flattened/Token.sol --verbose --remapdir='contracts/openzeppelin-solidity=node_modules/openzeppelin-solidity'",
     "mythril:token": "npm run mythrill contracts/Token.sol",
     "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
     "mythril:gateway": "npm run mythrill contracts/Gateway.sol",
@@ -54,7 +52,7 @@
     "openzeppelin-solidity": "2.1.2",
     "truffle": "5.0.4",
     "truffle-ledger-wallet-provider": "^1.0.0",
-    "web3": "^1.0.0-beta.36"
+    "web3": "^1.0.0-beta.46"
   },
   "devDependencies": {
     "asciichart": "^1.5.7",
