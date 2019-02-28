@@ -51,8 +51,10 @@ module.exports = {
 	  },
 		ropstenLedger: {
 			provider: function() {
+				const { infura } = require('./secrets');
+				const endpoint = `https://ropsten.infura.io/v3/${infura}`;
         return require('truffle-ledger-wallet-provider').default(
-          INFURA_ENDPOINT,
+          endpoint,
           3, // Ropsten testnet
           ledgerDerivationPath,
         );
