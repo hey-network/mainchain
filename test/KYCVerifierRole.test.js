@@ -1,4 +1,4 @@
-const { shouldBehaveLikePublicRole } = require('../node_modules/openzeppelin-solidity/test/access/roles/PublicRole.behavior');
+const { shouldBehaveLikePublicRole } = require('../node_modules/openzeppelin-solidity/test/behaviors/access/roles/PublicRole.behavior');
 const KYCVerifierRoleMock = artifacts.require('KYCVerifierRoleMock');
 
 contract('KYCVerifierRole', function ([_, pauser, otherKYCVerifier, ...otherAccounts]) {
