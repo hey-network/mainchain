@@ -123,16 +123,13 @@ These diagrams express the inheritance and usage relationships amongst contracts
 ### Dependencies
 
 Make sure the following npm modules are installed by running `npm install`:
-- truffle (`v4.1.12`)
-- openzeppelin-solidity (`v2.0.0`)
-- web3 (`v1.0.0-beta.35`)
+- truffle (`v5.0.4`)
+- openzeppelin-solidity (`v2.1.2`)
+- web3 (`v1.0.0-beta.46`)
 
 Furthermore, we use the following modules during testing (installed alongside above packages):
-- yaeti
-- typedarray-to-buffer
 - chai
-- chai-bignumber
-- pify
+- openzeppelin-test-helpers
 
 ### Running tests
 
@@ -148,23 +145,23 @@ The following table below lists all `*.sol` contract files imported directly or 
 
 | Domain | File        | Provider           | Source  |
 | ------------- | ------------- | ------------- |------------- |
-| Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Token | ERC20Detailed.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Token | IERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Token | SafeERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| TGE | TimedCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| TGE | FinalizableCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Token | ERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Token | ERC20Detailed.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Token | IERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Token | SafeERC20.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| TGE | Crowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| TGE | TimedCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| TGE | FinalizableCrowdsale.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
 | Gateway | ValidatorsManagerContract.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ValidatorManagerContract.sol) |
 | Gateway | ECVerify.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ECVerify.sol) |
 | Gateway | ERC20Receiver.sol | Loom | [source](https://github.com/loomnetwork/transfer-gateway-example/blob/24ef3c019441c293f2677b273b8eaa37cabc3c91/truffle-ethereum/contracts/ERC20Receiver.sol) |
-| Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | PauserRole.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | Roles.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | Math.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
-| Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.0.0` |
+| Utils | Ownable.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | Pausable.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | PauserRole.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | Roles.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | Math.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | SafeMath.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
+| Utils | ReentrancyGuard.sol | OpenZeppelin | `openzeppelin-solidity v2.1.2` |
 
 ### Code used as basis
 
