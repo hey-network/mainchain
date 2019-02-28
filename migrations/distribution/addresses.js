@@ -1,16 +1,9 @@
+const OWNER = '0x85f7738fa27d9732e5547361a0f13b28f04e9aed';
 const POOL = '0x6c633fdbb47a5836356e3b214c35780e0fe68e66';
 const TEAM = '0x986afd6c747a1ee8e61df5f9aedf424e950d0214';
-const CONTRIBUTORS = '0x9d034e35416cca5fdfaa141869bdfd35a5efde42';
-const INVESTORS = '0xdbe4862d4664c877bd694efc4571b86b34e47be0';
-const ADVISORS = '0x94a7bbfda83e0d0196697c4dab7d7e4f608ba377';
-
-const WALLET = '0x85f7738fa27d9732e5547361a0f13b28f04e9aed';
 
 module.exports = {
+  OWNER,
   POOL,
   TEAM,
-  CONTRIBUTORS,
-  INVESTORS,
-  ADVISORS,
-  WALLET,
 };
