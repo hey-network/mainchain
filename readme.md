@@ -487,12 +487,12 @@ This phase will be further documented as the code review and audit progress. Ini
 
 ### Code verification
 
-We allow participants to verify the smart contracts code directly on Etherscan. For this, we use [Solidity Flattener](https://github.com/BlockCatIO/solidity-flattener) installed using `pip3 install solidity_flattener`, running the following command:
+We allow anyone to verify the smart contracts code directly on Etherscan. For this, we use [Solidity Flattener](https://github.com/bokkypoobah/SolidityFlattener), running the following command:
 
 ```
-solidity_flattener TokenSale.sol --solc-paths="openzeppelin-solidity/contracts=ABSOLUTE_PATH_TO_REPO/node_modules/openzeppelin-solidity/contracts"
+./scripts/flatten.pl --contractsdir=contracts --mainsol=Token.sol --outputsol=flattened/Token.flat.sol --verbose --remapdir='contracts/openzeppelin-solidity=node_modules/openzeppelin-solidity'
 ```
 
-This is encapsulated with the npm commands `npm run flatten:token`, `npm run flatten:token-sale`, `npm run flatten:vesting-trustee`. These commands output `*.flat.sol` files that can then be used in Etherscan.
+This is encapsulated with the npm command `npm run flatten:token`. These commands output `*.flat.sol` files that can then be used in Etherscan. We use Solc `5.0.0` with `no optimization` to obtain the green checkmark.
 
-> Currently, there is verification mismatch to be clarified on Etherscan. Note that the flattened outputs are produced with the wrong Solidity pragma version. This is, potentially, the reason behind the mismatch.
+> Note that since the flattener cannot handle second-level dependencies, the EmergencyERC20Drain sol file needs to be moved to the root level of the contracts folder (and its import path modified) before running the flattener.

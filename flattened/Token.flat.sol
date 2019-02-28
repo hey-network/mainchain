@@ -1,7 +1,6 @@
 /** @title Hey Token
- *  @author Thomas Vanderstraeten - <thomas@get-hey.com>
- *  This smart contract has undertaken X audit and X bounty program.
- *  However, keep in mind that smart contracts still rely on experimental technology.
+ *  @author Thomas Vanderstraeten - <thomas@hey.network>
+ *  Keep in mind that smart contracts still rely on experimental technology.
  */
 
 pragma solidity ^0.5.0;

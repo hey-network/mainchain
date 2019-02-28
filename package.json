@@ -38,7 +38,7 @@
     "test:gateway": "scripts/test.sh test/Gateway.test.js",
     "test:kyc-verifier-role": "scripts/test.sh test/KYCVerifierRole.test.js",
     "mythril": "npm run mythril:token && npm run mythril:token-sale && npm run mythril:gateway && npm run mythril:vesting-trustee",
-    "flatten:token": "./scripts/flatten.pl --contractsdir=contracts --mainsol=Token.sol --outputsol=flattened/Token.sol --verbose --remapdir='contracts/openzeppelin-solidity=node_modules/openzeppelin-solidity'",
+    "flatten:token": "./scripts/flatten.pl --contractsdir=contracts --mainsol=Token.sol --outputsol=flattened/Token.flat.sol --verbose --remapdir='contracts/openzeppelin-solidity=node_modules/openzeppelin-solidity'",
     "mythril:token": "npm run mythrill contracts/Token.sol",
     "mythril:token-sale": "npm run mythrill contracts/TokenSale.sol",
     "mythril:gateway": "npm run mythrill contracts/Gateway.sol",
