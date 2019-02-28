@@ -17,14 +17,14 @@ let mochaConf = {}; // Passed as module.exports.mocha
 
 for (let i = 0; i < process.argv.length; i++) {
 	const arg = process.argv[i];
-	if (arg != '-g' && arg != "--grep" ) continue;
+	if (arg != '-g' && arg != '--grep' ) continue;
 	if (++i >= process.argv.length) {
-		console.error(arg + " option requires argument");
+		console.error(arg + ' option requires argument');
 		process.exit(1);
 	};
 	const re = new RegExp(process.argv[i]);
 	mochaConf.grep = new RegExp(process.argv[i]);
-	console.error("RegExp: " + i + ": " + re);
+	console.error('RegExp: ' + i + ': ' + re);
 	break;
 }
 // -------------------------------------------------------------------
@@ -32,9 +32,9 @@ for (let i = 0; i < process.argv.length; i++) {
 module.exports = {
   networks: {
     development: {
-      host: "localhost",
+      host: 'localhost',
 			port: 8545,
-      network_id: "*" // Match any network id
+      network_id: '*' // Match any network id
     },
 		ropsten: {
 	    provider: function() {
@@ -44,7 +44,7 @@ module.exports = {
 				// Infura remote node config
 				const INFURA_API_KEY = require('child_process').execSync('cat .infura', { encoding: 'utf-8' }).trim();
 				const INFURA_ENDPOINT = `https://ropsten.infura.io/v3/${INFURA_API_KEY}`;
-	      return new require("truffle-hdwallet-provider")(MNEMONIC, INFURA_ENDPOINT);
+	      return new require('truffle-hdwallet-provider')(MNEMONIC, INFURA_ENDPOINT);
 	    },
 	    network_id: 3,
 			gasPrice: 5*1e9,
@@ -52,7 +52,7 @@ module.exports = {
 	  },
 		ropstenLedger: {
 			provider: function() {
-        return require("truffle-ledger-wallet-provider").default(
+        return require('truffle-ledger-wallet-provider').default(
           INFURA_ENDPOINT,
           3, // Ropsten testnet
           ledgerDerivationPath,

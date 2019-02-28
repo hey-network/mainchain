@@ -78,37 +78,37 @@
   "deployedBytecode": "0x",
   "sourceMap": "",
   "deployedSourceMap": "",
-  "source": "pragma solidity ^0.4.24;\n\nimport \"openzeppelin-solidity/contracts/access/Roles.sol\";\n\ncontract KYCVerifierRole {\n    using Roles for Roles.Role;\n\n    event KYCVerifierAdded(address indexed account);\n    event KYCVerifierRemoved(address indexed account);\n\n    Roles.Role private kycVerifiers;\n\n    constructor() internal {\n        _addKYCVerifier(msg.sender);\n    }\n\n    modifier onlyKYCVerifier() {\n        require(isKYCVerifier(msg.sender), \"must be KYC verifier\");\n        _;\n    }\n\n    function isKYCVerifier(address account) public view returns (bool) {\n        return kycVerifiers.has(account);\n    }\n\n    function addKYCVerifier(address account) public onlyKYCVerifier {\n        _addKYCVerifier(account);\n    }\n\n    function renounceKYCVerifier() public {\n        _removeKYCVerifier(msg.sender);\n    }\n\n    function _addKYCVerifier(address account) internal {\n        kycVerifiers.add(account);\n        emit KYCVerifierAdded(account);\n    }\n\n    function _removeKYCVerifier(address account) internal {\n        kycVerifiers.remove(account);\n        emit KYCVerifierRemoved(account);\n    }\n}\n",
+  "source": "pragma solidity ^0.5.0;\n\nimport \"openzeppelin-solidity/contracts/access/Roles.sol\";\n\ncontract KYCVerifierRole {\n    using Roles for Roles.Role;\n\n    event KYCVerifierAdded(address indexed account);\n    event KYCVerifierRemoved(address indexed account);\n\n    Roles.Role private kycVerifiers;\n\n    constructor() internal {\n        _addKYCVerifier(msg.sender);\n    }\n\n    modifier onlyKYCVerifier() {\n        require(isKYCVerifier(msg.sender), \"must be KYC verifier\");\n        _;\n    }\n\n    function isKYCVerifier(address account) public view returns (bool) {\n        return kycVerifiers.has(account);\n    }\n\n    function addKYCVerifier(address account) public onlyKYCVerifier {\n        _addKYCVerifier(account);\n    }\n\n    function renounceKYCVerifier() public {\n        _removeKYCVerifier(msg.sender);\n    }\n\n    function _addKYCVerifier(address account) internal {\n        kycVerifiers.add(account);\n        emit KYCVerifierAdded(account);\n    }\n\n    function _removeKYCVerifier(address account) internal {\n        kycVerifiers.remove(account);\n        emit KYCVerifierRemoved(account);\n    }\n}\n",
   "sourcePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/utils/KYCVerifierRole.sol",
   "ast": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/utils/KYCVerifierRole.sol",
     "exportedSymbols": {
       "KYCVerifierRole": [
-        429
+        1701
       ]
     },
-    "id": 430,
+    "id": 1702,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 327,
+        "id": 1599,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".24"
+          "0.5",
+          ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:23:12"
       },
       {
         "absolutePath": "openzeppelin-solidity/contracts/access/Roles.sol",
         "file": "openzeppelin-solidity/contracts/access/Roles.sol",
-        "id": 328,
+        "id": 1600,
         "nodeType": "ImportDirective",
-        "scope": 430,
-        "sourceUnit": 524,
-        "src": "26:58:2",
+        "scope": 1702,
+        "sourceUnit": 1796,
+        "src": "25:58:12",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -118,38 +118,38 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 429,
+        "id": 1701,
         "linearizedBaseContracts": [
-          429
+          1701
         ],
         "name": "KYCVerifierRole",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 331,
+            "id": 1603,
             "libraryName": {
               "contractScope": null,
-              "id": 329,
+              "id": 1601,
               "name": "Roles",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 523,
-              "src": "123:5:2",
+              "referencedDeclaration": 1795,
+              "src": "122:5:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Roles_$523",
+                "typeIdentifier": "t_contract$_Roles_$1795",
                 "typeString": "library Roles"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "117:27:2",
+            "src": "116:27:12",
             "typeName": {
               "contractScope": null,
-              "id": 330,
+              "id": 1602,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 436,
-              "src": "133:10:2",
+              "referencedDeclaration": 1708,
+              "src": "132:10:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$436_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$1708_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             }
@@ -157,21 +157,21 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 335,
+            "id": 1607,
             "name": "KYCVerifierAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 334,
+              "id": 1606,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 333,
+                  "id": 1605,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 335,
-                  "src": "173:23:2",
+                  "scope": 1607,
+                  "src": "172:23:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -179,10 +179,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 332,
+                    "id": 1604,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "173:7:2",
+                    "src": "172:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -192,28 +193,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "172:25:2"
+              "src": "171:25:12"
             },
-            "src": "150:48:2"
+            "src": "149:48:12"
           },
           {
             "anonymous": false,
             "documentation": null,
-            "id": 339,
+            "id": 1611,
             "name": "KYCVerifierRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 338,
+              "id": 1610,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 337,
+                  "id": 1609,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 339,
-                  "src": "228:23:2",
+                  "scope": 1611,
+                  "src": "227:23:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -221,10 +222,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 336,
+                    "id": 1608,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "228:7:2",
+                    "src": "227:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -234,32 +236,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "227:25:2"
+              "src": "226:25:12"
             },
-            "src": "203:50:2"
+            "src": "202:50:12"
           },
           {
             "constant": false,
-            "id": 341,
+            "id": 1613,
             "name": "kycVerifiers",
             "nodeType": "VariableDeclaration",
-            "scope": 429,
-            "src": "259:31:2",
+            "scope": 1701,
+            "src": "258:31:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_struct$_Role_$436_storage",
+              "typeIdentifier": "t_struct$_Role_$1708_storage",
               "typeString": "struct Roles.Role"
             },
             "typeName": {
               "contractScope": null,
-              "id": 340,
+              "id": 1612,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 436,
-              "src": "259:10:2",
+              "referencedDeclaration": 1708,
+              "src": "258:10:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$436_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$1708_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             },
@@ -268,9 +270,9 @@
           },
           {
             "body": {
-              "id": 349,
+              "id": 1621,
               "nodeType": "Block",
-              "src": "320:44:2",
+              "src": "319:44:12",
               "statements": [
                 {
                   "expression": {
@@ -280,18 +282,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 345,
+                          "id": 1617,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1531,
-                          "src": "346:3:2",
+                          "referencedDeclaration": 3404,
+                          "src": "345:3:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 346,
+                        "id": 1618,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -299,32 +301,32 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "346:10:2",
+                        "src": "345:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       ],
-                      "id": 344,
+                      "id": 1616,
                       "name": "_addKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 412,
-                      "src": "330:15:2",
+                      "referencedDeclaration": 1684,
+                      "src": "329:15:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 347,
+                    "id": 1619,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -332,50 +334,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "330:27:2",
+                    "src": "329:27:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 348,
+                  "id": 1620,
                   "nodeType": "ExpressionStatement",
-                  "src": "330:27:2"
+                  "src": "329:27:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 350,
+            "id": 1622,
             "implemented": true,
-            "isConstructor": true,
-            "isDeclaredConst": false,
+            "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 342,
+              "id": 1614,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "308:2:2"
+              "src": "307:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 343,
+              "id": 1615,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "320:0:2"
+              "src": "319:0:12"
             },
-            "scope": 429,
-            "src": "297:67:2",
+            "scope": 1701,
+            "src": "296:67:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 361,
+              "id": 1633,
               "nodeType": "Block",
-              "src": "397:86:2",
+              "src": "396:86:12",
               "statements": [
                 {
                   "expression": {
@@ -388,18 +388,18 @@
                             "argumentTypes": null,
                             "expression": {
                               "argumentTypes": null,
-                              "id": 354,
+                              "id": 1626,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1531,
-                              "src": "429:3:2",
+                              "referencedDeclaration": 3404,
+                              "src": "428:3:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 355,
+                            "id": 1627,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -407,32 +407,32 @@
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
                             "referencedDeclaration": null,
-                            "src": "429:10:2",
+                            "src": "428:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_address",
-                              "typeString": "address"
+                              "typeIdentifier": "t_address_payable",
+                              "typeString": "address payable"
                             }
                           }
                         ],
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_address",
-                              "typeString": "address"
+                              "typeIdentifier": "t_address_payable",
+                              "typeString": "address payable"
                             }
                           ],
-                          "id": 353,
+                          "id": 1625,
                           "name": "isKYCVerifier",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 375,
-                          "src": "415:13:2",
+                          "referencedDeclaration": 1647,
+                          "src": "414:13:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 356,
+                        "id": 1628,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -440,7 +440,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "415:25:2",
+                        "src": "414:25:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -449,14 +449,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "6d757374206265204b5943207665726966696572",
-                        "id": 357,
+                        "id": 1629,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "442:22:2",
+                        "src": "441:22:12",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_7968380fa379b162a810bd53fac7b61aae796ac231d528c0b7ffc2e230c8af36",
@@ -476,21 +476,21 @@
                           "typeString": "literal_string \"must be KYC verifier\""
                         }
                       ],
-                      "id": 352,
+                      "id": 1624,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1534,
-                        1535
+                        3407,
+                        3408
                       ],
-                      "referencedDeclaration": 1535,
-                      "src": "407:7:2",
+                      "referencedDeclaration": 3408,
+                      "src": "406:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 358,
+                    "id": 1630,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -498,41 +498,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:58:2",
+                    "src": "406:58:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 359,
+                  "id": 1631,
                   "nodeType": "ExpressionStatement",
-                  "src": "407:58:2"
+                  "src": "406:58:12"
                 },
                 {
-                  "id": 360,
+                  "id": 1632,
                   "nodeType": "PlaceholderStatement",
-                  "src": "475:1:2"
+                  "src": "474:1:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 362,
+            "id": 1634,
             "name": "onlyKYCVerifier",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 351,
+              "id": 1623,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "394:2:2"
+              "src": "393:2:12"
             },
-            "src": "370:113:2",
+            "src": "369:113:12",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 374,
+              "id": 1646,
               "nodeType": "Block",
-              "src": "556:49:2",
+              "src": "555:49:12",
               "statements": [
                 {
                   "expression": {
@@ -540,12 +540,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 371,
+                        "id": 1643,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 364,
-                        "src": "590:7:2",
+                        "referencedDeclaration": 1636,
+                        "src": "589:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -561,32 +561,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 369,
+                        "id": 1641,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "573:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "572:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 370,
+                      "id": 1642,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "has",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 522,
-                      "src": "573:16:2",
+                      "referencedDeclaration": 1794,
+                      "src": "572:16:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address) view returns (bool)"
                       }
                     },
-                    "id": 372,
+                    "id": 1644,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -594,38 +594,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "573:25:2",
+                    "src": "572:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 368,
-                  "id": 373,
+                  "functionReturnParameters": 1640,
+                  "id": 1645,
                   "nodeType": "Return",
-                  "src": "566:32:2"
+                  "src": "565:32:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 375,
+            "id": 1647,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "isKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 365,
+              "id": 1637,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 364,
+                  "id": 1636,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 375,
-                  "src": "512:15:2",
+                  "scope": 1647,
+                  "src": "511:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -633,10 +632,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 363,
+                    "id": 1635,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "512:7:2",
+                    "src": "511:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -646,20 +646,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "511:17:2"
+              "src": "510:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 368,
+              "id": 1640,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 367,
+                  "id": 1639,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 375,
-                  "src": "550:4:2",
+                  "scope": 1647,
+                  "src": "549:4:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -667,10 +666,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 366,
+                    "id": 1638,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "550:4:2",
+                    "src": "549:4:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -680,19 +679,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "549:6:2"
+              "src": "548:6:12"
             },
-            "scope": 429,
-            "src": "489:116:2",
+            "scope": 1701,
+            "src": "488:116:12",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 386,
+              "id": 1658,
               "nodeType": "Block",
-              "src": "675:41:2",
+              "src": "674:41:12",
               "statements": [
                 {
                   "expression": {
@@ -700,12 +699,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 383,
+                        "id": 1655,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 377,
-                        "src": "701:7:2",
+                        "referencedDeclaration": 1649,
+                        "src": "700:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -719,18 +718,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 382,
+                      "id": 1654,
                       "name": "_addKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 412,
-                      "src": "685:15:2",
+                      "referencedDeclaration": 1684,
+                      "src": "684:15:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 384,
+                    "id": 1656,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -738,57 +737,56 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "685:24:2",
+                    "src": "684:24:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 385,
+                  "id": 1657,
                   "nodeType": "ExpressionStatement",
-                  "src": "685:24:2"
+                  "src": "684:24:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 387,
+            "id": 1659,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 380,
+                "id": 1652,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 379,
+                  "id": 1651,
                   "name": "onlyKYCVerifier",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 362,
-                  "src": "659:15:2",
+                  "referencedDeclaration": 1634,
+                  "src": "658:15:12",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "659:15:2"
+                "src": "658:15:12"
               }
             ],
             "name": "addKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 378,
+              "id": 1650,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 377,
+                  "id": 1649,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 387,
-                  "src": "635:15:2",
+                  "scope": 1659,
+                  "src": "634:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -796,10 +794,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 376,
+                    "id": 1648,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "635:7:2",
+                    "src": "634:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -809,26 +808,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "634:17:2"
+              "src": "633:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 381,
+              "id": 1653,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "675:0:2"
+              "src": "674:0:12"
             },
-            "scope": 429,
-            "src": "611:105:2",
+            "scope": 1701,
+            "src": "610:105:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 395,
+              "id": 1667,
               "nodeType": "Block",
-              "src": "760:47:2",
+              "src": "759:47:12",
               "statements": [
                 {
                   "expression": {
@@ -838,18 +836,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 391,
+                          "id": 1663,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1531,
-                          "src": "789:3:2",
+                          "referencedDeclaration": 3404,
+                          "src": "788:3:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 392,
+                        "id": 1664,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -857,32 +855,32 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "789:10:2",
+                        "src": "788:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       ],
-                      "id": 390,
+                      "id": 1662,
                       "name": "_removeKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 428,
-                      "src": "770:18:2",
+                      "referencedDeclaration": 1700,
+                      "src": "769:18:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 393,
+                    "id": 1665,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -890,50 +888,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "770:30:2",
+                    "src": "769:30:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 394,
+                  "id": 1666,
                   "nodeType": "ExpressionStatement",
-                  "src": "770:30:2"
+                  "src": "769:30:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 396,
+            "id": 1668,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "renounceKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 388,
+              "id": 1660,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "750:2:2"
+              "src": "749:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 389,
+              "id": 1661,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "760:0:2"
+              "src": "759:0:12"
             },
-            "scope": 429,
-            "src": "722:85:2",
+            "scope": 1701,
+            "src": "721:85:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 411,
+              "id": 1683,
               "nodeType": "Block",
-              "src": "864:82:2",
+              "src": "863:82:12",
               "statements": [
                 {
                   "expression": {
@@ -941,12 +937,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 404,
+                        "id": 1676,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 398,
-                        "src": "891:7:2",
+                        "referencedDeclaration": 1670,
+                        "src": "890:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -962,32 +958,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 401,
+                        "id": 1673,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "874:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "873:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 403,
+                      "id": 1675,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "add",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 468,
-                      "src": "874:16:2",
+                      "referencedDeclaration": 1740,
+                      "src": "873:16:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 405,
+                    "id": 1677,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -995,15 +991,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "874:25:2",
+                    "src": "873:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 406,
+                  "id": 1678,
                   "nodeType": "ExpressionStatement",
-                  "src": "874:25:2"
+                  "src": "873:25:12"
                 },
                 {
                   "eventCall": {
@@ -1011,12 +1007,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 408,
+                        "id": 1680,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 398,
-                        "src": "931:7:2",
+                        "referencedDeclaration": 1670,
+                        "src": "930:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1030,18 +1026,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 407,
+                      "id": 1679,
                       "name": "KYCVerifierAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 335,
-                      "src": "914:16:2",
+                      "referencedDeclaration": 1607,
+                      "src": "913:16:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 409,
+                    "id": 1681,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1049,37 +1045,36 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "914:25:2",
+                    "src": "913:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 410,
+                  "id": 1682,
                   "nodeType": "EmitStatement",
-                  "src": "909:30:2"
+                  "src": "908:30:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 412,
+            "id": 1684,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "_addKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 399,
+              "id": 1671,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 398,
+                  "id": 1670,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 412,
-                  "src": "838:15:2",
+                  "scope": 1684,
+                  "src": "837:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1087,10 +1082,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 397,
+                    "id": 1669,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "838:7:2",
+                    "src": "837:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1100,26 +1096,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "837:17:2"
+              "src": "836:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 400,
+              "id": 1672,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "864:0:2"
+              "src": "863:0:12"
             },
-            "scope": 429,
-            "src": "813:133:2",
+            "scope": 1701,
+            "src": "812:133:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 427,
+              "id": 1699,
               "nodeType": "Block",
-              "src": "1006:87:2",
+              "src": "1005:87:12",
               "statements": [
                 {
                   "expression": {
@@ -1127,12 +1122,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 420,
+                        "id": 1692,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 414,
-                        "src": "1036:7:2",
+                        "referencedDeclaration": 1686,
+                        "src": "1035:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1148,32 +1143,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 417,
+                        "id": 1689,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "1016:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "1015:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 419,
+                      "id": 1691,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "remove",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 499,
-                      "src": "1016:19:2",
+                      "referencedDeclaration": 1771,
+                      "src": "1015:19:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 421,
+                    "id": 1693,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1181,15 +1176,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1016:28:2",
+                    "src": "1015:28:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 422,
+                  "id": 1694,
                   "nodeType": "ExpressionStatement",
-                  "src": "1016:28:2"
+                  "src": "1015:28:12"
                 },
                 {
                   "eventCall": {
@@ -1197,12 +1192,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 424,
+                        "id": 1696,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 414,
-                        "src": "1078:7:2",
+                        "referencedDeclaration": 1686,
+                        "src": "1077:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1216,18 +1211,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 423,
+                      "id": 1695,
                       "name": "KYCVerifierRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 339,
-                      "src": "1059:18:2",
+                      "referencedDeclaration": 1611,
+                      "src": "1058:18:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 425,
+                    "id": 1697,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1235,37 +1230,36 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1059:27:2",
+                    "src": "1058:27:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 426,
+                  "id": 1698,
                   "nodeType": "EmitStatement",
-                  "src": "1054:32:2"
+                  "src": "1053:32:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 428,
+            "id": 1700,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "_removeKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 415,
+              "id": 1687,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 414,
+                  "id": 1686,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 428,
-                  "src": "980:15:2",
+                  "scope": 1700,
+                  "src": "979:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1273,10 +1267,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 413,
+                    "id": 1685,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "980:7:2",
+                    "src": "979:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1286,57 +1281,56 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "979:17:2"
+              "src": "978:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 416,
+              "id": 1688,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1006:0:2"
+              "src": "1005:0:12"
             },
-            "scope": 429,
-            "src": "952:141:2",
+            "scope": 1701,
+            "src": "951:141:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 430,
-        "src": "86:1009:2"
+        "scope": 1702,
+        "src": "85:1009:12"
       }
     ],
-    "src": "0:1096:2"
+    "src": "0:1095:12"
   },
   "legacyAST": {
     "absolutePath": "/Users/thomasvanderstraeten/code/hey/mainchain/contracts/utils/KYCVerifierRole.sol",
     "exportedSymbols": {
       "KYCVerifierRole": [
-        429
+        1701
       ]
     },
-    "id": 430,
+    "id": 1702,
     "nodeType": "SourceUnit",
     "nodes": [
       {
-        "id": 327,
+        "id": 1599,
         "literals": [
           "solidity",
           "^",
-          "0.4",
-          ".24"
+          "0.5",
+          ".0"
         ],
         "nodeType": "PragmaDirective",
-        "src": "0:24:2"
+        "src": "0:23:12"
       },
       {
         "absolutePath": "openzeppelin-solidity/contracts/access/Roles.sol",
         "file": "openzeppelin-solidity/contracts/access/Roles.sol",
-        "id": 328,
+        "id": 1600,
         "nodeType": "ImportDirective",
-        "scope": 430,
-        "sourceUnit": 524,
-        "src": "26:58:2",
+        "scope": 1702,
+        "sourceUnit": 1796,
+        "src": "25:58:12",
         "symbolAliases": [],
         "unitAlias": ""
       },
@@ -1346,38 +1340,38 @@
         "contractKind": "contract",
         "documentation": null,
         "fullyImplemented": true,
-        "id": 429,
+        "id": 1701,
         "linearizedBaseContracts": [
-          429
+          1701
         ],
         "name": "KYCVerifierRole",
         "nodeType": "ContractDefinition",
         "nodes": [
           {
-            "id": 331,
+            "id": 1603,
             "libraryName": {
               "contractScope": null,
-              "id": 329,
+              "id": 1601,
               "name": "Roles",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 523,
-              "src": "123:5:2",
+              "referencedDeclaration": 1795,
+              "src": "122:5:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_Roles_$523",
+                "typeIdentifier": "t_contract$_Roles_$1795",
                 "typeString": "library Roles"
               }
             },
             "nodeType": "UsingForDirective",
-            "src": "117:27:2",
+            "src": "116:27:12",
             "typeName": {
               "contractScope": null,
-              "id": 330,
+              "id": 1602,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 436,
-              "src": "133:10:2",
+              "referencedDeclaration": 1708,
+              "src": "132:10:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$436_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$1708_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             }
@@ -1385,21 +1379,21 @@
           {
             "anonymous": false,
             "documentation": null,
-            "id": 335,
+            "id": 1607,
             "name": "KYCVerifierAdded",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 334,
+              "id": 1606,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 333,
+                  "id": 1605,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 335,
-                  "src": "173:23:2",
+                  "scope": 1607,
+                  "src": "172:23:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1407,10 +1401,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 332,
+                    "id": 1604,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "173:7:2",
+                    "src": "172:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1420,28 +1415,28 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "172:25:2"
+              "src": "171:25:12"
             },
-            "src": "150:48:2"
+            "src": "149:48:12"
           },
           {
             "anonymous": false,
             "documentation": null,
-            "id": 339,
+            "id": 1611,
             "name": "KYCVerifierRemoved",
             "nodeType": "EventDefinition",
             "parameters": {
-              "id": 338,
+              "id": 1610,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 337,
+                  "id": 1609,
                   "indexed": true,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 339,
-                  "src": "228:23:2",
+                  "scope": 1611,
+                  "src": "227:23:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1449,10 +1444,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 336,
+                    "id": 1608,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "228:7:2",
+                    "src": "227:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1462,32 +1458,32 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "227:25:2"
+              "src": "226:25:12"
             },
-            "src": "203:50:2"
+            "src": "202:50:12"
           },
           {
             "constant": false,
-            "id": 341,
+            "id": 1613,
             "name": "kycVerifiers",
             "nodeType": "VariableDeclaration",
-            "scope": 429,
-            "src": "259:31:2",
+            "scope": 1701,
+            "src": "258:31:12",
             "stateVariable": true,
             "storageLocation": "default",
             "typeDescriptions": {
-              "typeIdentifier": "t_struct$_Role_$436_storage",
+              "typeIdentifier": "t_struct$_Role_$1708_storage",
               "typeString": "struct Roles.Role"
             },
             "typeName": {
               "contractScope": null,
-              "id": 340,
+              "id": 1612,
               "name": "Roles.Role",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 436,
-              "src": "259:10:2",
+              "referencedDeclaration": 1708,
+              "src": "258:10:12",
               "typeDescriptions": {
-                "typeIdentifier": "t_struct$_Role_$436_storage_ptr",
+                "typeIdentifier": "t_struct$_Role_$1708_storage_ptr",
                 "typeString": "struct Roles.Role"
               }
             },
@@ -1496,9 +1492,9 @@
           },
           {
             "body": {
-              "id": 349,
+              "id": 1621,
               "nodeType": "Block",
-              "src": "320:44:2",
+              "src": "319:44:12",
               "statements": [
                 {
                   "expression": {
@@ -1508,18 +1504,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 345,
+                          "id": 1617,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1531,
-                          "src": "346:3:2",
+                          "referencedDeclaration": 3404,
+                          "src": "345:3:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 346,
+                        "id": 1618,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1527,32 +1523,32 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "346:10:2",
+                        "src": "345:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       ],
-                      "id": 344,
+                      "id": 1616,
                       "name": "_addKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 412,
-                      "src": "330:15:2",
+                      "referencedDeclaration": 1684,
+                      "src": "329:15:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 347,
+                    "id": 1619,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1560,50 +1556,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "330:27:2",
+                    "src": "329:27:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 348,
+                  "id": 1620,
                   "nodeType": "ExpressionStatement",
-                  "src": "330:27:2"
+                  "src": "329:27:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 350,
+            "id": 1622,
             "implemented": true,
-            "isConstructor": true,
-            "isDeclaredConst": false,
+            "kind": "constructor",
             "modifiers": [],
             "name": "",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 342,
+              "id": 1614,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "308:2:2"
+              "src": "307:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 343,
+              "id": 1615,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "320:0:2"
+              "src": "319:0:12"
             },
-            "scope": 429,
-            "src": "297:67:2",
+            "scope": 1701,
+            "src": "296:67:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 361,
+              "id": 1633,
               "nodeType": "Block",
-              "src": "397:86:2",
+              "src": "396:86:12",
               "statements": [
                 {
                   "expression": {
@@ -1616,18 +1610,18 @@
                             "argumentTypes": null,
                             "expression": {
                               "argumentTypes": null,
-                              "id": 354,
+                              "id": 1626,
                               "name": "msg",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1531,
-                              "src": "429:3:2",
+                              "referencedDeclaration": 3404,
+                              "src": "428:3:12",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_magic_message",
                                 "typeString": "msg"
                               }
                             },
-                            "id": 355,
+                            "id": 1627,
                             "isConstant": false,
                             "isLValue": false,
                             "isPure": false,
@@ -1635,32 +1629,32 @@
                             "memberName": "sender",
                             "nodeType": "MemberAccess",
                             "referencedDeclaration": null,
-                            "src": "429:10:2",
+                            "src": "428:10:12",
                             "typeDescriptions": {
-                              "typeIdentifier": "t_address",
-                              "typeString": "address"
+                              "typeIdentifier": "t_address_payable",
+                              "typeString": "address payable"
                             }
                           }
                         ],
                         "expression": {
                           "argumentTypes": [
                             {
-                              "typeIdentifier": "t_address",
-                              "typeString": "address"
+                              "typeIdentifier": "t_address_payable",
+                              "typeString": "address payable"
                             }
                           ],
-                          "id": 353,
+                          "id": 1625,
                           "name": "isKYCVerifier",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 375,
-                          "src": "415:13:2",
+                          "referencedDeclaration": 1647,
+                          "src": "414:13:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_function_internal_view$_t_address_$returns$_t_bool_$",
                             "typeString": "function (address) view returns (bool)"
                           }
                         },
-                        "id": 356,
+                        "id": 1628,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -1668,7 +1662,7 @@
                         "lValueRequested": false,
                         "names": [],
                         "nodeType": "FunctionCall",
-                        "src": "415:25:2",
+                        "src": "414:25:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_bool",
                           "typeString": "bool"
@@ -1677,14 +1671,14 @@
                       {
                         "argumentTypes": null,
                         "hexValue": "6d757374206265204b5943207665726966696572",
-                        "id": 357,
+                        "id": 1629,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": true,
                         "kind": "string",
                         "lValueRequested": false,
                         "nodeType": "Literal",
-                        "src": "442:22:2",
+                        "src": "441:22:12",
                         "subdenomination": null,
                         "typeDescriptions": {
                           "typeIdentifier": "t_stringliteral_7968380fa379b162a810bd53fac7b61aae796ac231d528c0b7ffc2e230c8af36",
@@ -1704,21 +1698,21 @@
                           "typeString": "literal_string \"must be KYC verifier\""
                         }
                       ],
-                      "id": 352,
+                      "id": 1624,
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        1534,
-                        1535
+                        3407,
+                        3408
                       ],
-                      "referencedDeclaration": 1535,
-                      "src": "407:7:2",
+                      "referencedDeclaration": 3408,
+                      "src": "406:7:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
                         "typeString": "function (bool,string memory) pure"
                       }
                     },
-                    "id": 358,
+                    "id": 1630,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1726,41 +1720,41 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "407:58:2",
+                    "src": "406:58:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 359,
+                  "id": 1631,
                   "nodeType": "ExpressionStatement",
-                  "src": "407:58:2"
+                  "src": "406:58:12"
                 },
                 {
-                  "id": 360,
+                  "id": 1632,
                   "nodeType": "PlaceholderStatement",
-                  "src": "475:1:2"
+                  "src": "474:1:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 362,
+            "id": 1634,
             "name": "onlyKYCVerifier",
             "nodeType": "ModifierDefinition",
             "parameters": {
-              "id": 351,
+              "id": 1623,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "394:2:2"
+              "src": "393:2:12"
             },
-            "src": "370:113:2",
+            "src": "369:113:12",
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 374,
+              "id": 1646,
               "nodeType": "Block",
-              "src": "556:49:2",
+              "src": "555:49:12",
               "statements": [
                 {
                   "expression": {
@@ -1768,12 +1762,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 371,
+                        "id": 1643,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 364,
-                        "src": "590:7:2",
+                        "referencedDeclaration": 1636,
+                        "src": "589:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1789,32 +1783,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 369,
+                        "id": 1641,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "573:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "572:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 370,
+                      "id": 1642,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "has",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 522,
-                      "src": "573:16:2",
+                      "referencedDeclaration": 1794,
+                      "src": "572:16:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_view$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$_t_bool_$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address) view returns (bool)"
                       }
                     },
-                    "id": 372,
+                    "id": 1644,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1822,38 +1816,37 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "573:25:2",
+                    "src": "572:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
                     }
                   },
-                  "functionReturnParameters": 368,
-                  "id": 373,
+                  "functionReturnParameters": 1640,
+                  "id": 1645,
                   "nodeType": "Return",
-                  "src": "566:32:2"
+                  "src": "565:32:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 375,
+            "id": 1647,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": true,
+            "kind": "function",
             "modifiers": [],
             "name": "isKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 365,
+              "id": 1637,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 364,
+                  "id": 1636,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 375,
-                  "src": "512:15:2",
+                  "scope": 1647,
+                  "src": "511:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1861,10 +1854,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 363,
+                    "id": 1635,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "512:7:2",
+                    "src": "511:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -1874,20 +1868,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "511:17:2"
+              "src": "510:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 368,
+              "id": 1640,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 367,
+                  "id": 1639,
                   "name": "",
                   "nodeType": "VariableDeclaration",
-                  "scope": 375,
-                  "src": "550:4:2",
+                  "scope": 1647,
+                  "src": "549:4:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -1895,10 +1888,10 @@
                     "typeString": "bool"
                   },
                   "typeName": {
-                    "id": 366,
+                    "id": 1638,
                     "name": "bool",
                     "nodeType": "ElementaryTypeName",
-                    "src": "550:4:2",
+                    "src": "549:4:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_bool",
                       "typeString": "bool"
@@ -1908,19 +1901,19 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "549:6:2"
+              "src": "548:6:12"
             },
-            "scope": 429,
-            "src": "489:116:2",
+            "scope": 1701,
+            "src": "488:116:12",
             "stateMutability": "view",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 386,
+              "id": 1658,
               "nodeType": "Block",
-              "src": "675:41:2",
+              "src": "674:41:12",
               "statements": [
                 {
                   "expression": {
@@ -1928,12 +1921,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 383,
+                        "id": 1655,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 377,
-                        "src": "701:7:2",
+                        "referencedDeclaration": 1649,
+                        "src": "700:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -1947,18 +1940,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 382,
+                      "id": 1654,
                       "name": "_addKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 412,
-                      "src": "685:15:2",
+                      "referencedDeclaration": 1684,
+                      "src": "684:15:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 384,
+                    "id": 1656,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -1966,57 +1959,56 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "685:24:2",
+                    "src": "684:24:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 385,
+                  "id": 1657,
                   "nodeType": "ExpressionStatement",
-                  "src": "685:24:2"
+                  "src": "684:24:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 387,
+            "id": 1659,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [
               {
                 "arguments": null,
-                "id": 380,
+                "id": 1652,
                 "modifierName": {
                   "argumentTypes": null,
-                  "id": 379,
+                  "id": 1651,
                   "name": "onlyKYCVerifier",
                   "nodeType": "Identifier",
                   "overloadedDeclarations": [],
-                  "referencedDeclaration": 362,
-                  "src": "659:15:2",
+                  "referencedDeclaration": 1634,
+                  "src": "658:15:12",
                   "typeDescriptions": {
                     "typeIdentifier": "t_modifier$__$",
                     "typeString": "modifier ()"
                   }
                 },
                 "nodeType": "ModifierInvocation",
-                "src": "659:15:2"
+                "src": "658:15:12"
               }
             ],
             "name": "addKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 378,
+              "id": 1650,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 377,
+                  "id": 1649,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 387,
-                  "src": "635:15:2",
+                  "scope": 1659,
+                  "src": "634:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2024,10 +2016,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 376,
+                    "id": 1648,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "635:7:2",
+                    "src": "634:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -2037,26 +2030,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "634:17:2"
+              "src": "633:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 381,
+              "id": 1653,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "675:0:2"
+              "src": "674:0:12"
             },
-            "scope": 429,
-            "src": "611:105:2",
+            "scope": 1701,
+            "src": "610:105:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 395,
+              "id": 1667,
               "nodeType": "Block",
-              "src": "760:47:2",
+              "src": "759:47:12",
               "statements": [
                 {
                   "expression": {
@@ -2066,18 +2058,18 @@
                         "argumentTypes": null,
                         "expression": {
                           "argumentTypes": null,
-                          "id": 391,
+                          "id": 1663,
                           "name": "msg",
                           "nodeType": "Identifier",
                           "overloadedDeclarations": [],
-                          "referencedDeclaration": 1531,
-                          "src": "789:3:2",
+                          "referencedDeclaration": 3404,
+                          "src": "788:3:12",
                           "typeDescriptions": {
                             "typeIdentifier": "t_magic_message",
                             "typeString": "msg"
                           }
                         },
-                        "id": 392,
+                        "id": 1664,
                         "isConstant": false,
                         "isLValue": false,
                         "isPure": false,
@@ -2085,32 +2077,32 @@
                         "memberName": "sender",
                         "nodeType": "MemberAccess",
                         "referencedDeclaration": null,
-                        "src": "789:10:2",
+                        "src": "788:10:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       }
                     ],
                     "expression": {
                       "argumentTypes": [
                         {
-                          "typeIdentifier": "t_address",
-                          "typeString": "address"
+                          "typeIdentifier": "t_address_payable",
+                          "typeString": "address payable"
                         }
                       ],
-                      "id": 390,
+                      "id": 1662,
                       "name": "_removeKYCVerifier",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 428,
-                      "src": "770:18:2",
+                      "referencedDeclaration": 1700,
+                      "src": "769:18:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_internal_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 393,
+                    "id": 1665,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2118,50 +2110,48 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "770:30:2",
+                    "src": "769:30:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 394,
+                  "id": 1666,
                   "nodeType": "ExpressionStatement",
-                  "src": "770:30:2"
+                  "src": "769:30:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 396,
+            "id": 1668,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "renounceKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 388,
+              "id": 1660,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "750:2:2"
+              "src": "749:2:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 389,
+              "id": 1661,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "760:0:2"
+              "src": "759:0:12"
             },
-            "scope": 429,
-            "src": "722:85:2",
+            "scope": 1701,
+            "src": "721:85:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "public"
           },
           {
             "body": {
-              "id": 411,
+              "id": 1683,
               "nodeType": "Block",
-              "src": "864:82:2",
+              "src": "863:82:12",
               "statements": [
                 {
                   "expression": {
@@ -2169,12 +2159,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 404,
+                        "id": 1676,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 398,
-                        "src": "891:7:2",
+                        "referencedDeclaration": 1670,
+                        "src": "890:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2190,32 +2180,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 401,
+                        "id": 1673,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "874:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "873:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 403,
+                      "id": 1675,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "add",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 468,
-                      "src": "874:16:2",
+                      "referencedDeclaration": 1740,
+                      "src": "873:16:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 405,
+                    "id": 1677,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2223,15 +2213,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "874:25:2",
+                    "src": "873:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 406,
+                  "id": 1678,
                   "nodeType": "ExpressionStatement",
-                  "src": "874:25:2"
+                  "src": "873:25:12"
                 },
                 {
                   "eventCall": {
@@ -2239,12 +2229,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 408,
+                        "id": 1680,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 398,
-                        "src": "931:7:2",
+                        "referencedDeclaration": 1670,
+                        "src": "930:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2258,18 +2248,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 407,
+                      "id": 1679,
                       "name": "KYCVerifierAdded",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 335,
-                      "src": "914:16:2",
+                      "referencedDeclaration": 1607,
+                      "src": "913:16:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 409,
+                    "id": 1681,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2277,37 +2267,36 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "914:25:2",
+                    "src": "913:25:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 410,
+                  "id": 1682,
                   "nodeType": "EmitStatement",
-                  "src": "909:30:2"
+                  "src": "908:30:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 412,
+            "id": 1684,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "_addKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 399,
+              "id": 1671,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 398,
+                  "id": 1670,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 412,
-                  "src": "838:15:2",
+                  "scope": 1684,
+                  "src": "837:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2315,10 +2304,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 397,
+                    "id": 1669,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "838:7:2",
+                    "src": "837:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -2328,26 +2318,25 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "837:17:2"
+              "src": "836:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 400,
+              "id": 1672,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "864:0:2"
+              "src": "863:0:12"
             },
-            "scope": 429,
-            "src": "813:133:2",
+            "scope": 1701,
+            "src": "812:133:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           },
           {
             "body": {
-              "id": 427,
+              "id": 1699,
               "nodeType": "Block",
-              "src": "1006:87:2",
+              "src": "1005:87:12",
               "statements": [
                 {
                   "expression": {
@@ -2355,12 +2344,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 420,
+                        "id": 1692,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 414,
-                        "src": "1036:7:2",
+                        "referencedDeclaration": 1686,
+                        "src": "1035:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2376,32 +2365,32 @@
                       ],
                       "expression": {
                         "argumentTypes": null,
-                        "id": 417,
+                        "id": 1689,
                         "name": "kycVerifiers",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 341,
-                        "src": "1016:12:2",
+                        "referencedDeclaration": 1613,
+                        "src": "1015:12:12",
                         "typeDescriptions": {
-                          "typeIdentifier": "t_struct$_Role_$436_storage",
+                          "typeIdentifier": "t_struct$_Role_$1708_storage",
                           "typeString": "struct Roles.Role storage ref"
                         }
                       },
-                      "id": 419,
+                      "id": 1691,
                       "isConstant": false,
                       "isLValue": true,
                       "isPure": false,
                       "lValueRequested": false,
                       "memberName": "remove",
                       "nodeType": "MemberAccess",
-                      "referencedDeclaration": 499,
-                      "src": "1016:19:2",
+                      "referencedDeclaration": 1771,
+                      "src": "1015:19:12",
                       "typeDescriptions": {
-                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$436_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$436_storage_ptr_$",
+                        "typeIdentifier": "t_function_internal_nonpayable$_t_struct$_Role_$1708_storage_ptr_$_t_address_$returns$__$bound_to$_t_struct$_Role_$1708_storage_ptr_$",
                         "typeString": "function (struct Roles.Role storage pointer,address)"
                       }
                     },
-                    "id": 421,
+                    "id": 1693,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2409,15 +2398,15 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1016:28:2",
+                    "src": "1015:28:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 422,
+                  "id": 1694,
                   "nodeType": "ExpressionStatement",
-                  "src": "1016:28:2"
+                  "src": "1015:28:12"
                 },
                 {
                   "eventCall": {
@@ -2425,12 +2414,12 @@
                     "arguments": [
                       {
                         "argumentTypes": null,
-                        "id": 424,
+                        "id": 1696,
                         "name": "account",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 414,
-                        "src": "1078:7:2",
+                        "referencedDeclaration": 1686,
+                        "src": "1077:7:12",
                         "typeDescriptions": {
                           "typeIdentifier": "t_address",
                           "typeString": "address"
@@ -2444,18 +2433,18 @@
                           "typeString": "address"
                         }
                       ],
-                      "id": 423,
+                      "id": 1695,
                       "name": "KYCVerifierRemoved",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [],
-                      "referencedDeclaration": 339,
-                      "src": "1059:18:2",
+                      "referencedDeclaration": 1611,
+                      "src": "1058:18:12",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_event_nonpayable$_t_address_$returns$__$",
                         "typeString": "function (address)"
                       }
                     },
-                    "id": 425,
+                    "id": 1697,
                     "isConstant": false,
                     "isLValue": false,
                     "isPure": false,
@@ -2463,37 +2452,36 @@
                     "lValueRequested": false,
                     "names": [],
                     "nodeType": "FunctionCall",
-                    "src": "1059:27:2",
+                    "src": "1058:27:12",
                     "typeDescriptions": {
                       "typeIdentifier": "t_tuple$__$",
                       "typeString": "tuple()"
                     }
                   },
-                  "id": 426,
+                  "id": 1698,
                   "nodeType": "EmitStatement",
-                  "src": "1054:32:2"
+                  "src": "1053:32:12"
                 }
               ]
             },
             "documentation": null,
-            "id": 428,
+            "id": 1700,
             "implemented": true,
-            "isConstructor": false,
-            "isDeclaredConst": false,
+            "kind": "function",
             "modifiers": [],
             "name": "_removeKYCVerifier",
             "nodeType": "FunctionDefinition",
             "parameters": {
-              "id": 415,
+              "id": 1687,
               "nodeType": "ParameterList",
               "parameters": [
                 {
                   "constant": false,
-                  "id": 414,
+                  "id": 1686,
                   "name": "account",
                   "nodeType": "VariableDeclaration",
-                  "scope": 428,
-                  "src": "980:15:2",
+                  "scope": 1700,
+                  "src": "979:15:12",
                   "stateVariable": false,
                   "storageLocation": "default",
                   "typeDescriptions": {
@@ -2501,10 +2489,11 @@
                     "typeString": "address"
                   },
                   "typeName": {
-                    "id": 413,
+                    "id": 1685,
                     "name": "address",
                     "nodeType": "ElementaryTypeName",
-                    "src": "980:7:2",
+                    "src": "979:7:12",
+                    "stateMutability": "nonpayable",
                     "typeDescriptions": {
                       "typeIdentifier": "t_address",
                       "typeString": "address"
@@ -2514,33 +2503,38 @@
                   "visibility": "internal"
                 }
               ],
-              "src": "979:17:2"
+              "src": "978:17:12"
             },
-            "payable": false,
             "returnParameters": {
-              "id": 416,
+              "id": 1688,
               "nodeType": "ParameterList",
               "parameters": [],
-              "src": "1006:0:2"
+              "src": "1005:0:12"
             },
-            "scope": 429,
-            "src": "952:141:2",
+            "scope": 1701,
+            "src": "951:141:12",
             "stateMutability": "nonpayable",
             "superFunction": null,
             "visibility": "internal"
           }
         ],
-        "scope": 430,
-        "src": "86:1009:2"
+        "scope": 1702,
+        "src": "85:1009:12"
       }
     ],
-    "src": "0:1096:2"
+    "src": "0:1095:12"
   },
   "compiler": {
     "name": "solc",
-    "version": "0.4.24+commit.e67f0147.Emscripten.clang"
+    "version": "0.5.0+commit.1d4f565a.Emscripten.clang"
   },
   "networks": {},
-  "schemaVersion": "2.0.1",
-  "updatedAt": "2018-11-30T12:46:46.349Z"
+  "schemaVersion": "3.0.2",
+  "updatedAt": "2019-02-28T09:44:08.678Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
 }
